@@ -1,9 +1,10 @@
 from flask import Flask, render_template
+import os
 
 app = Flask(__name__)
 
 # Simulación de la información de la base de datos (DB)
-# *** ASEGÚRATE DE USAR TUS PROPIAS URLS AQUÍ ***
+# ... (el resto de tu diccionario db_data sigue aquí)
 db_data = {
     # BANNERS
     "url_banner1": "/static/images/banner1.jpg", 
@@ -31,8 +32,12 @@ db_data = {
 
 @app.route("/")
 def index():
-    # Renderiza directamente index.html, que ya no extiende ningún layout.
     return render_template("index.html", **db_data)
 
+
+# ==========================================================
+# CAMBIO CRÍTICO PARA RENDER: Usar la variable de entorno PORT
+# ==========================================================
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port, debug=True)
