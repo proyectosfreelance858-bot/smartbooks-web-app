@@ -54,7 +54,7 @@ def ejecutar_git():
         os.system(comando_commit)
         
         # 3. Ejecutar git push
-        print("Ejecutando: git push origin main")
+        print("Ejecutando: git push origin master")
         os.system("git push origin main")
         
         print("--- Proceso completado ---")
