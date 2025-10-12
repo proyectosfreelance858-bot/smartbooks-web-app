@@ -3,14 +3,14 @@ import psycopg2
 from flask import Flask, render_template
 from dotenv import load_dotenv 
 
-# Cargar variables de entorno del archivo .env para desarrollo local
+# Cargar variables de entorno del archivo .env (SOLO PARA DESARROLLO LOCAL)
+# Render ignora esto y usa la configuración de su interfaz.
 load_dotenv() 
 
 app = Flask(__name__)
 
 # OBTENER LA URL DE CONEXIÓN
-# En Render, esto leerá la variable configurada en la Interfaz.
-# Localmente, leerá del .env
+# Obtiene la variable de entorno ya sea de Render (Producción) o de .env (Local)
 DATABASE_URL = os.environ.get("DATABASE_URL") 
 
 
@@ -22,12 +22,16 @@ def get_db_data():
     conn = None
     data = {}
     
-    # Datos de respaldo si la conexión falla (opcional, pero útil)
-    # Aquí podrías poner valores por defecto para evitar errores si la DB está caída
+    # Valores de respaldo para evitar fallos si la DB está inaccesible
     default_data = {
-        "url_banner1": "URL_NO_CARGADA",
-        "url_editorial1": "URL_NO_CARGADA",
-        "txt_productosmasvendidos1": "PRODUCTO NO DISPONIBLE"
+        "url_banner1": "https://via.placeholder.com/800x200?text=Banner+No+Cargado",
+        "url_banner2": "https://via.placeholder.com/800x200?text=Banner+No+Cargado",
+        "url_editorial1": "https://via.placeholder.com/50x20?text=E1",
+        "url_editorial2": "https://via.placeholder.com/50x20?text=E2",
+        "txt_productosmasvendidos1": "Producto Default 1",
+        "url_productosmasvendidos1": "https://via.placeholder.com/150",
+        "txt_productosmasvendidos2": "Producto Default 2",
+        "url_productosmasvendidos2": "https://via.placeholder.com/150",
     }
 
     try:
@@ -63,18 +67,11 @@ def get_db_data():
 
 @app.route('/')
 def index():
-    # Obtiene todos los datos de la DB
+    # 1. Obtiene todos los datos de la DB
     context = get_db_data()
     
-    # Renderiza la plantilla hija 'home.html'
+    # 2. Renderiza la plantilla hija 'home.html' (que extiende 'layout.html')
     return render_template('home.html', **context)
-
-# Puedes añadir más rutas aquí
-# @app.route('/productos')
-# def productos():
-#     context = get_db_data()
-#     # Aquí podrías usar una plantilla llamada 'productos.html'
-#     return render_template('productos.html', **context)
 
 
 if __name__ == '__main__':
