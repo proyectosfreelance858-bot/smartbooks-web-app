@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %}Inicio - Productos Destacados{% endblock %}
+
+{% block content %}
+
+    <h1>Página de Inicio</h1>
+    
+    <img src="{{ url_banner2 }}" alt="Banner 2 Destacado" style="width: 100%; max-width: 800px; display: block; margin: 20px auto;">
+    
+    <hr>
+    
+    <h2>Nuestros Productos Más Vendidos</h2>
+    
+    <div style="border: 1px solid #eee; padding: 10px; margin: 10px; display: inline-block;">
+        <img src="{{ url_productosmasvendidos1 }}" alt="Producto 1" style="width: 150px; display: block; margin-bottom: 5px;">
+        <h3>{{ txt_productosmasvendidos1 }}</h3>
+    </div>
+    
+    <div style="border: 1px solid #eee; padding: 10px; margin: 10px; display: inline-block;">
+        <img src="{{ url_productosmasvendidos2 }}" alt="Producto 2" style="width: 150px; display: block; margin-bottom: 5px;">
+        <h3>{{ txt_productosmasvendidos2 }}</h3>
+    </div>
+    
+    {% endblock %}

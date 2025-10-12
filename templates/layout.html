@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SmartBooks{% endblock %}</title>
+    <style>
+        /* Estilos básicos para replicar el diseño de la imagen */
+        body { font-family: sans-serif; margin: 0; padding: 0; }
+        header, footer { background-color: #f8f8f8; padding: 10px 20px; border-bottom: 1px solid #ddd; }
+        nav { display: flex; justify-content: space-between; align-items: center; }
+        .logo-menu img { height: 40px; margin-right: 20px; }
+        .menu-links a { text-decoration: none; color: #333; margin: 0 10px; font-weight: bold; }
+        main { min-height: 60vh; padding: 20px; }
+        footer { border-top: 1px solid #ddd; text-align: center; color: #666; font-size: 0.9em; }
+        .footer-logo img { height: 50px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <div class="logo-menu">
+                <img src="https://sbooks.com.co/wp-content/uploads/2022/10/Logo-Azul-2048x1078.png" alt="Logo SmartBooks">
+                
+                <div class="menu-links">
+                    <a href="/">Inicio</a>
+                    <a href="/productos">Productos</a>
+                    <a href="/editoriales">Editoriales</a>
+                    <a href="/contacto">Contacto</a>
+                </div>
+            </div>
+            </nav>
+    </header>
+
+    <main>
+        {% block content %}
+            {% endblock %}
+    </main>
+
+    <footer>
+        <div class="footer-logo">
+            <img src="https://sbooks.com.co/wp-content/uploads/2022/10/Logo-Azul-2048x1078.png" alt="Logo Footer">
+        </div>
+        <p>
+            Tel: +57 (601) 745 66 18 | Email: comercial@sbooks.com.co
+        </p>
+        <p>&copy; 2025 SmartBooks. Todos los derechos reservados.</p>
+        
+        <div class="editoriales-footer">
+            Patrocinadores:
+            <img src="{{ url_editorial1 }}" alt="E1" style="height: 25px;">
+            <img src="{{ url_editorial2 }}" alt="E2" style="height: 25px;">
+        </div>
+    </footer>
+
+</body>
+</html>
