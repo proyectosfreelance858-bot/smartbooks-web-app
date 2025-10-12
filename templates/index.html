@@ -11,8 +11,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@300;400;700&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMD/CDt3uWdYp5f3N0hT3zJ5r5s/h3sYg9aF1p4t1tQ0J0L8N0rWpG9C5z4K5pX2lQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
     <style>
         /* Definición de las fuentes para el diseño */
         .font-outfit { font-family: 'Outfit', sans-serif; }
@@ -42,35 +40,48 @@
             min-width: 14rem;
         }
 
-        /* Estilo del buscador replicado de la imagen */
-        .search-input-group {
-            display: flex;
-            border: 1px solid #d1d5db; /* gray-300 */
+        /* --- CORRECCIÓN CLAVE: ESTILO DEL BUSCADOR MINIMALISTA --- */
+
+        /* Estilo del campo de búsqueda: Minimalista, solo borde inferior y esquinas */
+        .search-input {
+            width: 100%;
+            /* Reducimos la altura quitando el padding agresivo */
+            padding: 0.5rem 1.5rem; /* py-2 pl-6 pr-4 */
+            border: 1px solid #d1d5db; 
             border-radius: 9999px; /* rounded-full */
-            overflow: hidden;
+            outline: none;
             transition: border-color 0.3s;
         }
-        .search-input-group:focus-within {
+        .search-input:focus {
             border-color: #4338ca; 
         }
 
-        /* Botón de la lupa azul con icono blanco (Réplica Exacta) */
-        .search-button {
-            flex-shrink: 0; 
-            height: 100%; 
-            width: 14%; 
-            min-width: 55px;
+        /* Botón de la lupa azul (SEPARADO Y DEFINIDO) */
+        .search-button-separate {
+            /* Aseguramos que sea un botón cuadrado para la lupa */
+            width: 44px; /* Tamaño del círculo */
+            height: 44px;
+            margin-left: 10px; /* Espacio entre el campo de búsqueda y el botón */
             background-color: #4338ca; 
-            color: #ffffff; 
-            font-size: 1.25rem; 
+            border-radius: 50%; /* Botón redondo */
             display: flex; 
             align-items: center; 
             justify-content: center; 
             transition: background-color 0.3s;
+            flex-shrink: 0; /* Evita que el botón se comprima */
         }
-        .search-button:hover {
+        .search-button-separate:hover {
             background-color: #3730a3; 
         }
+
+        /* ÍCONOS PNG: Define el filtro de color para convertir a blanco */
+        .icon-white {
+            /* FUERZA LA IMAGEN PNG NEGRA A VERSE BLANCA */
+            filter: brightness(0) invert(1); 
+        }
+
+        /* --- FIN CORRECCIÓN --- */
+
 
         /* Estilo para opción activa/hover del menú (con línea azul) */
         .menu-item {
@@ -134,9 +145,9 @@
             </div>
 
             <div class="flex space-x-3 items-center text-gray-500 flex-shrink-0">
-                <a href="https://www.facebook.com/smartbookscol" target="_blank" class="hover:text-brand-primary transition"><i class="fab fa-facebook-f"></i></a>
-                <a href="https://www.instagram.com/smartbookscol" target="_blank" class="hover:text-brand-primary transition"><i class="fab fa-instagram"></i></a>
-                <a href="www.linkedin.com/company/smartbookscol/" target="_blank" class="hover:text-brand-primary transition"><i class="fab fa-linkedin-in"></i></a>
+                <i class="fab fa-facebook-f text-lg"></i>
+                <i class="fab fa-instagram text-lg"></i>
+                <i class="fab fa-linkedin-in text-lg"></i>
             </div>
         </div>
     </div>
@@ -150,33 +161,34 @@
             </a>
 
             <form action="#" class="relative max-w-xl flex-grow mx-10 hidden lg:block">
-                <div class="search-input-group">
-                    <input type="text" placeholder="Buscar por palabra clave..." class="w-full pl-6 pr-4 py-3 bg-white focus:outline-none text-gray-700 text-base">
-                    <button type="submit" class="search-button">
-                        <i class="fas fa-search"></i>
+                <div class="flex items-center">
+                    <input type="text" placeholder="Buscar por palabra clave..." class="search-input text-gray-700 text-base">
+                    
+                    <button type="submit" class="search-button-separate" title="Buscar">
+                        <img src="https://cdn-icons-png.flaticon.com/128/3031/3031293.png" alt="Lupa" class="w-6 h-6 icon-white">
                     </button>
                 </div>
             </form>
 
             <div class="flex space-x-4 items-center">
-                <div class="hidden xl:flex flex-col items-end text-sm">
+                <div class="hidden xl:flex flex-col items-end text-xs">
                     <span class="text-gray-500 font-instrument">Llámanos ahora</span>
-                    <span class="font-outfit text-lg font-bold text-gray-800">PBX: 333 602 50 29</span>
+                    <span class="font-outfit text-base font-bold text-gray-800">333 602 50 29</span>
                 </div>
                 
                 <div class="flex space-x-3 items-center text-gray-800 text-xl">
-                    <a href="login.html" class="p-3 border border-gray-200 rounded-full hover:border-brand-primary hover:text-brand-primary transition duration-300" title="Mi Cuenta">
-                        <i class="fas fa-user"></i>
+                    <a href="login.html" class="p-2 hover:text-brand-primary transition duration-300 flex items-center justify-center" title="Mi Cuenta">
+                        <img src="https://cdn-icons-png.flaticon.com/128/18986/18986944.png" alt="Usuario" class="w-6 h-6">
                     </a>
-                    <a href="#" class="p-3 border border-gray-200 rounded-full hover:border-brand-primary hover:text-brand-primary transition duration-300 relative" title="Carrito de Compras">
-                        <i class="fas fa-shopping-bag"></i>
+                    <a href="#" class="p-2 hover:text-brand-primary transition duration-300 relative flex items-center justify-center" title="Carrito de Compras">
+                        <img src="https://cdn-icons-png.flaticon.com/128/3144/3144456.png" alt="Carrito" class="w-6 h-6">
                         <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-brand-accent rounded-full">
                             0
                         </span>
                     </a>
                 </div>
                 <button class="lg:hidden p-2 text-gray-800 hover:text-brand-primary transition duration-300">
-                    <i class="fas fa-bars"></i>
+                    <i class="fas fa-bars text-xl"></i>
                 </button>
             </div>
         </div>
