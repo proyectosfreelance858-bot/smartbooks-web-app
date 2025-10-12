@@ -9,7 +9,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@300;400;700&family=Outfit:wght@600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@300;400;700&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMD/CDt3uWdYp5f3N0hT3zJ5r5s/h3sYg9aF1p4t1tQ0J0L8N0rWpG9C5z4K5pX2lQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
@@ -25,21 +25,6 @@
         .text-brand-accent { color: #ef4444; }
         .text-active { color: #4338ca; /* Azul para la opción seleccionada/hover */ }
 
-        /* Animación de desplazamiento al cargar (Scroll Reveal) */
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-scroll-reveal {
-            opacity: 0;
-            animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; 
-        }
-
-        /* Estilos del Carrusel */
-        .carousel-item { display: none; }
-        .carousel-item.active { display: block; animation: carouselFade 1.5s ease-in-out; }
-        @keyframes carouselFade { from { opacity: 0; } to { opacity: 1; } }
-
         /* Estilos de Submenú (Dropdown) */
         .dropdown:hover .dropdown-menu {
             display: block;
@@ -54,20 +39,54 @@
             transition: all 0.3s ease-out;
             transform: translateY(10px);
             z-index: 50;
-            min-width: 14rem; /* Mínimo ancho para submenús */
+            min-width: 14rem;
         }
+
+        /* Estilo del buscador replicado de la imagen */
         .search-input-group {
-             /* Estilo replicado: input con border gris a la izquierda, botón a la derecha */
+            display: flex;
             border: 1px solid #d1d5db; /* gray-300 */
             border-radius: 9999px; /* rounded-full */
             overflow: hidden;
+            transition: border-color 0.3s;
         }
         .search-input-group:focus-within {
-             /* Focus para replicar el borde azul */
             border-color: #4338ca; 
         }
 
-        /* Estilos de WhatsApp Flotante */
+        /* Botón de la lupa azul con icono blanco (Réplica Exacta) */
+        .search-button {
+            flex-shrink: 0; 
+            height: 100%; 
+            width: 14%; 
+            min-width: 55px;
+            background-color: #4338ca; 
+            color: #ffffff; 
+            font-size: 1.25rem; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            transition: background-color 0.3s;
+        }
+        .search-button:hover {
+            background-color: #3730a3; 
+        }
+
+        /* Estilo para opción activa/hover del menú (con línea azul) */
+        .menu-item {
+            padding: 0 1rem;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            border-bottom: 4px solid transparent; /* Base transparente */
+            transition: all 0.2s ease-in-out;
+        }
+        .menu-item:hover, .menu-item.active {
+            color: #4338ca; /* Texto azul */
+            border-bottom-color: #4338ca; /* Línea azul */
+        }
+
+        /* Estilos de WhatsApp Flotante (sin cambios) */
         .whatsapp-float {
             position: fixed;
             width: 55px;
@@ -92,96 +111,108 @@
             70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); }
             100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
         }
+
+        /* Animación de desplazamiento al cargar (Scroll Reveal - sin cambios) */
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-scroll-reveal {
+            opacity: 0;
+            animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; 
+        }
     </style>
 </head>
 
 <body class="font-instrument text-gray-700 bg-white antialiased">
 
     <div class="bg-gray-100 border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 text-sm flex justify-end items-center">
-            <div class="flex space-x-6 items-center">
-                <div class="flex items-center text-gray-600 font-medium">
-                    <i class="fas fa-headset text-brand-accent mr-2 text-base"></i> 
-                    PBX: 333 602 50 29
-                </div>
-                <div class="flex space-x-3 items-center text-gray-500">
-                    <a href="https://www.facebook.com/smartbookscol" target="_blank" class="hover:text-brand-primary transition"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://www.instagram.com/smartbookscol" target="_blank" class="hover:text-brand-primary transition"><i class="fab fa-instagram"></i></a>
-                    <a href="www.linkedin.com/company/smartbookscol/" target="_blank" class="hover:text-brand-primary transition"><i class="fab fa-linkedin-in"></i></a>
-                </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 text-sm flex justify-between items-center">
+            
+            <div class="flex-grow text-center text-gray-700 font-outfit font-semibold text-sm sm:text-base tracking-wider">
+                Encuentra <span class="font-black text-gray-800">AQUÍ</span> los textos escolares de las mejores casas editoriales
+            </div>
+
+            <div class="flex space-x-3 items-center text-gray-500 flex-shrink-0">
+                <a href="https://www.facebook.com/smartbookscol" target="_blank" class="hover:text-brand-primary transition"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/smartbookscol" target="_blank" class="hover:text-brand-primary transition"><i class="fab fa-instagram"></i></a>
+                <a href="www.linkedin.com/company/smartbookscol/" target="_blank" class="hover:text-brand-primary transition"><i class="fab fa-linkedin-in"></i></a>
             </div>
         </div>
     </div>
 
     <header class="bg-white sticky top-0 z-50 shadow-md">
         
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
             
             <a href="#" class="flex-shrink-0">
                 <img src="https://sbooks.com.co/wp-content/uploads/2022/10/Logo-Azul-2048x1078.png" alt="Logo Smart Books Holding" class="h-14 w-auto">
             </a>
 
             <form action="#" class="relative max-w-xl flex-grow mx-10 hidden lg:block">
-                <div class="flex search-input-group">
+                <div class="search-input-group">
                     <input type="text" placeholder="Buscar por palabra clave..." class="w-full pl-6 pr-4 py-3 bg-white focus:outline-none text-gray-700 text-base">
-                    <button type="submit" class="flex-shrink-0 h-full w-14 bg-brand-primary text-white text-lg flex items-center justify-center transition duration-300 hover:bg-indigo-800">
+                    <button type="submit" class="search-button">
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
             </form>
 
-            <div class="flex space-x-6 items-center">
-                <div class="hidden lg:flex flex-col items-end text-sm">
+            <div class="flex space-x-4 items-center">
+                <div class="hidden xl:flex flex-col items-end text-sm">
                     <span class="text-gray-500 font-instrument">Llámanos ahora</span>
                     <span class="font-outfit text-lg font-bold text-gray-800">PBX: 333 602 50 29</span>
                 </div>
                 
-                <div class="flex space-x-3 items-center text-gray-800 text-2xl">
-                    <a href="login.html" class="p-2 hover:text-brand-primary transition duration-300" title="Mi Cuenta">
+                <div class="flex space-x-3 items-center text-gray-800 text-xl">
+                    <a href="login.html" class="p-3 border border-gray-200 rounded-full hover:border-brand-primary hover:text-brand-primary transition duration-300" title="Mi Cuenta">
                         <i class="fas fa-user"></i>
                     </a>
-                    <a href="#" class="p-2 hover:text-brand-primary transition duration-300 relative" title="Carrito de Compras">
+                    <a href="#" class="p-3 border border-gray-200 rounded-full hover:border-brand-primary hover:text-brand-primary transition duration-300 relative" title="Carrito de Compras">
                         <i class="fas fa-shopping-bag"></i>
                         <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-brand-accent rounded-full">
                             0
                         </span>
                     </a>
                 </div>
+                <button class="lg:hidden p-2 text-gray-800 hover:text-brand-primary transition duration-300">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
         </div>
 
-        <div class="bg-brand-primary hidden lg:block">
-            <div class="max-w-7xl mx-auto px-4">
-                <nav class="flex space-x-6 font-outfit text-white font-semibold text-sm uppercase tracking-wide">
+        <div class="bg-white border-t border-gray-100 hidden lg:block shadow-sm h-12">
+            <div class="max-w-7xl mx-auto px-4 h-full">
+                <nav class="flex justify-center space-x-8 font-outfit text-gray-800 font-semibold text-sm h-full">
                     
-                    <a href="#" class="hover:bg-indigo-800 px-4 py-4 transition duration-300 relative">Inicio</a>
+                    <a href="#" class="menu-item active">Inicio</a>
                     
-                    <div class="dropdown relative">
-                        <a href="#" class="hover:bg-indigo-800 px-4 py-4 transition duration-300 flex items-center">
+                    <div class="dropdown relative h-full">
+                        <a href="#" class="menu-item flex items-center">
                             Nosotros <i class="fas fa-chevron-down text-xs ml-1 transition-transform transform group-hover:rotate-180"></i>
                         </a>
-                        <div class="dropdown-menu absolute bg-white shadow-xl rounded-b-md w-56 border-t-2 border-brand-accent">
+                        <div class="dropdown-menu absolute bg-white shadow-xl rounded-b-md w-56 border-t-2 border-brand-accent top-full">
                             <a href="#" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Quienes Somos</a>
                             <a href="#" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Términos y Condiciones</a>
                             <a href="#" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Preguntas Frecuentes – FAQ</a>
                         </div>
                     </div>
                     
-                    <div class="dropdown relative">
-                        <a href="#" class="hover:bg-indigo-800 px-4 py-4 transition duration-300 flex items-center">
+                    <div class="dropdown relative h-full">
+                        <a href="#" class="menu-item flex items-center">
                             Aliados <i class="fas fa-chevron-down text-xs ml-1 transition-transform transform group-hover:rotate-180"></i>
                         </a>
-                        <div class="dropdown-menu absolute bg-white shadow-xl rounded-b-md w-40 border-t-2 border-brand-accent">
+                        <div class="dropdown-menu absolute bg-white shadow-xl rounded-b-md w-40 border-t-2 border-brand-accent top-full">
                             <a href="#" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Castillo</a>
                             <a href="#" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">MacMillan</a>
                         </div>
                     </div>
 
-                    <a href="#tienda" class="hover:bg-indigo-800 px-4 py-4 transition duration-300 relative">Tienda</a>
-                    <a href="#colegios" class="hover:bg-indigo-800 px-4 py-4 transition duration-300 relative">Colegios</a>
-                    <a href="#contactanos" class="hover:bg-indigo-800 px-4 py-4 transition duration-300 relative">Contáctanos</a>
-                    <a href="#blog" class="hover:bg-indigo-800 px-4 py-4 transition duration-300 relative">Blog</a>
-                    <a href="#intranet" class="hover:bg-indigo-800 px-4 py-4 transition duration-300 relative">Intranet</a>
+                    <a href="#tienda" class="menu-item">Tienda</a>
+                    <a href="#colegios" class="menu-item">Colegios</a>
+                    <a href="#contactanos" class="menu-item">Contáctanos</a>
+                    <a href="#blog" class="menu-item">Blog</a>
+                    <a href="#intranet" class="menu-item">Intranet</a>
 
                 </nav>
             </div>
