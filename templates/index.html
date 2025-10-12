@@ -6,11 +6,7 @@
     <title>Smart Books | Holding Educativo Global</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
-
-    
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@300;400;700&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
@@ -66,7 +62,6 @@
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            transition: background-color 0.3s;
             flex-shrink: 0; 
         }
         .search-button-separate:hover {
@@ -140,7 +135,7 @@
             100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
         }
 
-        /* Animación de desplazamiento al cargar (Scroll Reveal - sin cambios) */
+        /* Animación de desplazamiento al cargar (Scroll Reveal) */
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
@@ -253,10 +248,10 @@
         <section class="max-w-full mx-auto overflow-hidden relative shadow-lg animate-scroll-reveal" style="height: 75vh; min-height: 550px;">
             <div id="banner-carousel" class="w-full h-full">
                 <div class="carousel-item active w-full h-full">
-                    <img src="https://images.unsplash.com/photo-1543269664-56b93a02a768?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Banner Principal 1" class="w-full h-full object-cover">
+                    <img src="{{ url_banner1 }}" alt="Banner Principal 1" class="w-full h-full object-cover">
                 </div>
                 <div class="carousel-item w-full h-full">
-                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Banner Principal 2" class="w-full h-full object-cover">
+                    <img src="{{ url_banner2 }}" alt="Banner Principal 2" class="w-full h-full object-cover">
                 </div>
             </div>
             
@@ -324,7 +319,66 @@
             </div>
         </section>
 
-    </main>
+        <section id="blog" class="py-16 md:py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <h2 class="font-outfit text-4xl md:text-5xl text-center font-extrabold text-gray-900 mb-6 animate-scroll-reveal">
+                    Últimos Artículos <span class="text-brand-primary">del Blog</span>
+                </h2>
+                <p class="text-center text-lg text-gray-600 mb-12 animate-scroll-reveal delay-100 max-w-2xl mx-auto">
+                    Descubre guías, entrevistas y análisis sobre las tendencias educativas más relevantes en el panorama global.
+                </p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                    
+                    {% for blog in blogs %}
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 
+                                transform transition duration-300 hover:shadow-2xl hover:translate-y-[-4px] animate-scroll-reveal" 
+                                style="animation-delay: {{ loop.index * 100 }}ms;">
+                        
+                        <a href="{{ blog.url_articulo }}">
+                            <img src="{{ blog.url_imagen_principal }}" alt="{{ blog.titulo }}" 
+                                 class="w-full h-48 object-cover object-center">
+                        </a>
+
+                        <div class="p-5">
+                            
+                            <span class="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider 
+                                         bg-brand-primary text-white rounded-full mb-3">
+                                {{ blog.categoria }}
+                            </span>
+                            
+                            <a href="{{ blog.url_articulo }}" class="block text-gray-900 font-outfit text-xl font-bold mb-2 hover:text-brand-accent transition duration-300 line-clamp-2">
+                                {{ blog.titulo }}
+                            </a>
+                            
+                            <p class="text-gray-600 text-sm mb-4 font-instrument line-clamp-3">
+                                {{ blog.descripcion_corta }}
+                            </p>
+                            
+                            <div class="flex items-center text-gray-500 text-xs border-t pt-4">
+                                <i class="fas fa-user-circle text-base mr-2"></i>
+                                <span class="font-semibold text-gray-800 mr-4">{{ blog.autor }}</span>
+                                
+                                <i class="fas fa-calendar-alt text-base mr-2"></i>
+                                <span>{{ blog.fecha }}</span>
+                            </div>
+
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="text-center mt-12 animate-scroll-reveal delay-800">
+                    <a href="#blog" class="inline-flex items-center px-8 py-3 text-base font-medium text-white bg-brand-accent rounded-lg hover:bg-red-600 transition duration-300 shadow-lg">
+                        Ver Todos los Artículos
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                
+            </div>
+        </section>
+        </main>
 
     <footer class="bg-white py-12 border-t border-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -372,7 +426,7 @@
                     <li><a href="#" class="text-gray-600 hover:text-brand-primary transition duration-300">Quienes Somos</a></li>
                     <li><a href="#" class="text-gray-600 hover:text-brand-primary transition duration-300">Nuestros Productos</a></li>
                     <li><a href="#" class="text-gray-600 hover:text-brand-primary transition duration-300">Colegios</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-brand-primary transition duration-300">Blog</a></li>
+                    <li><a href="#blog" class="text-gray-600 hover:text-brand-primary transition duration-300">Blog</a></li>
                     <li><a href="login.html" class="text-gray-600 hover:text-brand-primary transition duration-300">Intranet (Iniciar Sesión)</a></li>
                 </ul>
             </div>
@@ -447,6 +501,7 @@
             const observer = new IntersectionObserver(entries => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
+                        // El retardo de animación se toma del atributo style
                         entry.target.style.opacity = 1;
                         entry.target.style.transform = 'translateY(0)';
                         observer.unobserve(entry.target);
@@ -457,6 +512,10 @@
             });
 
             revealElements.forEach(element => {
+                // Si ya tiene un delay, no lo sobrescribe
+                if (!element.style.animationDelay) {
+                    element.style.animationDelay = '0s'; // Valor por defecto
+                }
                 observer.observe(element);
             });
             
