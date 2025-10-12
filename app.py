@@ -1,21 +1,22 @@
 import os
-import psycopg2
 from flask import Flask, render_template
+import psycopg2
+from datetime import datetime
 
-# --- Inicialización de Flask ---
+# =================================================================
+# ATENCIÓN: CONFIGURACIÓN DE BASE DE DATOS
+# >>> DEBES REEMPLAZAR ESTOS VALORES CON TUS CREDENCIALES REALES DE POSTGRESQL <<<
+# =================================================================
+DB_HOST = "localhost" 
+DB_NAME = "nombre_de_tu_base_de_datos" 
+DB_USER = "tu_usuario_postgres" 
+DB_PASS = "tu_contraseña_postgres" 
+
 app = Flask(__name__)
 
-# --- Configuración de la Base de Datos PostgreSQL ---
-# ¡IMPORTANTE! Reemplaza estos valores con tus credenciales reales
-DB_HOST = os.environ.get("DB_HOST", "localhost")
-DB_NAME = os.environ.get("DB_NAME", "smartbooks_db") # Ejemplo: tu_nombre_db
-DB_USER = os.environ.get("DB_USER", "postgres")    # Ejemplo: tu_usuario_db
-DB_PASS = os.environ.get("DB_PASS", "tu_password")  # Ejemplo: tu_password_db
-
-
 def get_db_connection():
-    """Establece la conexión con PostgreSQL."""
-    # Nota: Se recomienda encarecidamente usar un pool de conexiones en producción.
+    """Establece la conexión a la base de datos PostgreSQL."""
+    # Nota: psycopg2 usará las credenciales definidas arriba
     conn = psycopg2.connect(
         host=DB_HOST,
         database=DB_NAME,
@@ -24,64 +25,91 @@ def get_db_connection():
     )
     return conn
 
-def get_latest_blogs():
-    """Obtiene los 3 artículos de blog más recientes."""
-    conn = None
+@app.route('/')
+def index():
+    """
+    Ruta principal: 
+    1. Conecta a la DB.
+    2. Obtiene los datos de los 7 blogs (blogs).
+    3. Define las variables de carrusel (url_banner1, url_banner2).
+    4. Renderiza el index.html con todos los datos.
+    """
     blogs = []
+    conn = None
+    
+    # --- 1. CONEXIÓN Y CONSULTA A LA BASE DE DATOS ---
     try:
         conn = get_db_connection()
         cur = conn.cursor()
+
+        # Consulta para obtener los 7 artículos del blog más recientes
+        # La tabla se llama articulos_blog según el script SQL anterior
+        sql_query = """
+            SELECT 
+                id, 
+                titulo, 
+                descripcion_corta, 
+                url_imagen_principal, 
+                fecha_creacion, 
+                slug 
+            FROM 
+                articulos_blog 
+            ORDER BY 
+                fecha_creacion DESC 
+            LIMIT 7;
+        """
+        cur.execute(sql_query)
+        db_blogs = cur.fetchall()
         
-        # Consulta SQL para obtener los 3 más recientes
-        cur.execute(
-            """
-            SELECT titulo, slug, descripcion_corta, url_imagen_principal, fecha_creacion
-            FROM articulos_blog
-            ORDER BY fecha_creacion DESC 
-            LIMIT 3;
-            """
-        )
-        
-        # Mapea los resultados del cursor a una lista de diccionarios (útil para Jinja)
-        columns = [desc[0] for desc in cur.description]
-        blogs = [dict(zip(columns, row)) for row in cur.fetchall()]
-        
+        # Formatear los datos obtenidos de la base de datos
+        for blog_data in db_blogs:
+            (id, titulo, descripcion_corta, url_imagen_principal, fecha_creacion, slug) = blog_data
+            
+            # Formateo de Fecha: '01 Oct, 2025'
+            # Se convierte la fecha del objeto datetime a un string y se traducen los meses
+            fecha_formateada = fecha_creacion.strftime("%d %b, %Y")
+            meses_espanol = {'Jan': 'Ene', 'Apr': 'Abr', 'Aug': 'Ago', 'Dec': 'Dic'}
+            for en, es in meses_espanol.items():
+                fecha_formateada = fecha_formateada.replace(en, es)
+            
+            # Construcción del diccionario 'blog' para Jinja2
+            blogs.append({
+                'id': id,
+                'titulo': titulo,
+                'descripcion_corta': descripcion_corta,
+                'url_imagen_principal': url_imagen_principal,
+                'fecha': fecha_formateada,
+                'autor': 'Smart Books Team',     # Valor fijo para el diseño (Se podría obtener de otra tabla)
+                'categoria': 'Educación',        # Valor fijo para el diseño (Se podría obtener de otra columna)
+                'url_articulo': f'/blog/{slug}'  # Enlace de ejemplo al detalle del artículo
+            })
+
         cur.close()
+
+    except psycopg2.Error as e:
+        print(f"Error de base de datos PostgreSQL: {e}")
+        # En caso de error, 'blogs' será una lista vacía, y la web cargará sin los artículos.
     except Exception as e:
-        print(f"Error al conectar o consultar la base de datos: {e}")
-        # En caso de error, retorna una lista vacía para que la página no falle
-        blogs = []
+        print(f"Error inesperado: {e}")
     finally:
-        if conn is not None:
+        if conn:
             conn.close()
-    return blogs
 
-# --- Filtro Jinja para formatear la fecha ---
-def format_date(value):
-    """Formatea un objeto datetime a 'DD Mes YYYY'"""
-    if value:
-        meses = {
-            1: 'Ene', 2: 'Feb', 3: 'Mar', 4: 'Abr', 5: 'May', 6: 'Jun', 
-            7: 'Jul', 8: 'Ago', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dic'
-        }
-        day = value.day
-        month = meses[value.month]
-        year = value.year
-        return f"{day} {month} {year}"
-    return ""
+    # --- 2. CONTEXTO DE VARIABLES PARA LA PLANTILLA (Incluye las variables anteriores) ---
+    context = {
+        # Variables anteriores para el Carrusel
+        'url_banner1': 'https://images.unsplash.com/photo-1543269664-56b93a02a768?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 
+        'url_banner2': 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 
+        
+        # Nueva variable que alimenta la sección del Blog
+        'blogs': blogs
+    }
 
-app.jinja_env.filters['date_format'] = format_date
+    # --- 3. RENDERIZACIÓN DE LA PLANTILLA ---
+    # Renderiza index.html (debe estar en la carpeta 'templates')
+    return render_template('index.html', **context)
 
-# --- Rutas de la Aplicación ---
-@app.route('/')
-def index():
-    # 1. Obtener los 3 blogs
-    latest_blogs = get_latest_blogs()
-    
-    # 2. Renderizar el HTML y pasar la lista de blogs
-    return render_template('index.html', latest_blogs=latest_blogs)
-
-# --- Ejecución ---
 if __name__ == '__main__':
-    # Usar host='0.0.0.0' para desarrollo y pruebas locales
-    app.run(debug=True, host='0.0.0.0')
+    # Ejecuta la aplicación Flask en modo de depuración
+    # (Para producción, se debe usar un servidor WSGI como Gunicorn)
+    app.run(debug=True)
