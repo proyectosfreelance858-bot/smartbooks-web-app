@@ -16,8 +16,7 @@
         
         <button class="carousel-btn prev-btn">&#10094;</button>
         <button class="carousel-btn next-btn">&#10095;</button>
-        
-        </div>
+    </div>
 
     <main class="page-content-wrapper">
         <h2 class="section-title">Nuestros Productos Destacados</h2>
@@ -70,12 +69,10 @@
         /* Estilos del Carrusel para full-width */
         .banner-carousel-container {
             width: 100vw;
-            /* La altura se ajusta para la relación de aspecto de un banner estándar. 
-               Se utiliza una altura fija para mantener la consistencia visual del banner original */
-            height: 450px; 
+            height: 450px; /* Altura fija para replicar un banner grande */
             overflow: hidden;
             position: relative;
-            /* Truco CSS para que el contenedor salga de cualquier limitación del layout.html */
+            /* Asegura que el contenedor salga de los límites de layout.html */
             left: 50%;
             right: 50%;
             margin-left: -50vw; 
@@ -83,18 +80,21 @@
         }
         .carousel-track {
             display: flex;
-            width: 200%; /* Espacio para 2 slides (100% * número de slides) */
+            /* CORRECCIÓN CLAVE: El ancho debe ser 100% * N° de slides (200% para 2 slides) */
+            width: calc(100% * 2); 
             height: 100%;
             transition: transform 0.5s ease-in-out; /* Deslizamiento suave */
         }
         .carousel-slide {
-            width: 50%; /* 100% / número de slides */
+            /* CORRECCIÓN CLAVE: Cada slide ocupa 100% / N° de slides (50% para 2 slides) */
+            width: 50%; 
             flex-shrink: 0;
         }
         .banner-image {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Recorta si es necesario, pero cubre el espacio */
+            /* Utilizamos 'cover' para que llene el espacio, recortando si es necesario. */
+            object-fit: cover; 
         }
         .carousel-btn {
             position: absolute;
@@ -115,7 +115,7 @@
         .prev-btn { left: 20px; }
         .next-btn { right: 20px; }
 
-        /* Estilos de Contenido Moderno */
+        /* Estilos de Contenido Moderno (Sin cambios) */
         .page-content-wrapper {
             max-width: 1200px;
             margin: 50px auto;
@@ -123,7 +123,7 @@
         }
         .section-title {
             text-align: center;
-            color: #0056b3; /* Azul corporativo */
+            color: #0056b3; 
             margin-bottom: 30px;
             font-size: 2.2em;
             font-weight: 700;
@@ -214,18 +214,17 @@
             const prevBtn = document.querySelector('.prev-btn');
             const nextBtn = document.querySelector('.next-btn');
             
-            // Asume un 50% de ancho por slide para 2 imágenes (100% / 2)
-            const slideWidth = 100; 
+            const slideWidth = 100; // Porcentaje de ancho visible (100% de la vista)
             let currentSlide = 0;
             const slideCount = slides.length;
-            const intervalTime = 2000; // 2 segundos
+            const intervalTime = 5000; // CORRECCIÓN: 5 segundos (5000ms)
 
             const updateCarousel = () => {
-                const offset = currentSlide * slideWidth;
+                const offset = currentSlide * slideWidth / slideCount; // 0%, 50%, 100%, etc.
                 track.style.transform = `translateX(-${offset}%)`;
             };
 
-            // Navegación automática: cambia cada 2 segundos
+            // Navegación automática
             let autoSlide = setInterval(() => {
                 currentSlide = (currentSlide + 1) % slideCount;
                 updateCarousel();
