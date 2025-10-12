@@ -11,6 +11,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@300;400;700&family=Outfit:wght@600;800&display=swap" rel="stylesheet">
     
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMD/CDt3uWdYp5f3N0hT3zJ5r5s/h3sYg9aF1p4t1tQ0J0L8N0rWpG9C5z4K5pX2lQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
     <style>
         /* Definición de las fuentes para el diseño */
         .font-outfit {
@@ -20,16 +22,6 @@
             font-family: 'Instrument Sans', sans-serif;
         }
 
-        /* Animación de carga general (Global Fade-In) */
-        @keyframes globalFadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        body {
-            animation: globalFadeIn 1s ease-out forwards;
-            opacity: 0;
-        }
-        
         /* Estilos del Carrusel */
         .carousel-item {
             display: none;
@@ -42,7 +34,7 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
-
+        
         /* Animación de desplazamiento al cargar (Scroll Reveal) */
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(50px); }
@@ -59,6 +51,35 @@
         .delay-500 { animation-delay: 0.5s; }
         .delay-700 { animation-delay: 0.7s; }
         .delay-900 { animation-delay: 0.9s; }
+        
+        /* Estilos para el Botón Flotante de WhatsApp */
+        .whatsapp-float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 30px;
+            right: 30px;
+            background-color: #25d366; /* Verde WhatsApp */
+            color: #FFF;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 2px 2px 3px #999;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Animación de Pulso */
+            animation: pulse 1.5s infinite;
+        }
+        .whatsapp-float:hover {
+            box-shadow: 0 0 0 10px rgba(37, 211, 102, 0.4);
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.9); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); }
+            100% { transform: scale(0.9); }
+        }
 
     </style>
 </head>
@@ -103,7 +124,6 @@
                     <img src="{{ url_banner2 }}" alt="Banner Principal 2" class="w-full h-full object-cover">
                 </div>
             </div>
-            
             <div class="absolute bottom-6 left-0 right-0 flex justify-center space-x-3">
                 <div class="dot w-4 h-4 bg-white rounded-full opacity-60 cursor-pointer transition duration-300 transform hover:scale-125" data-slide="0"></div>
                 <div class="dot w-4 h-4 bg-white rounded-full opacity-60 cursor-pointer transition duration-300 transform hover:scale-125" data-slide="1"></div>
@@ -119,9 +139,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
                     
-                    <div class="bg-white rounded-xl shadow-2xl overflow-hidden animate-scroll-reveal delay-300
-                                transform transition duration-500 ease-in-out hover:shadow-indigo-500/50 hover:shadow-3xl 
-                                perspective-1000 hover:rotate-y-3">
+                    <div class="bg-white rounded-xl shadow-2xl overflow-hidden animate-scroll-reveal delay-300 transform transition duration-500 ease-in-out hover:shadow-indigo-500/50 hover:shadow-3xl perspective-1000 hover:rotate-y-3">
                         <img src="{{ url_recuadro1 }}" alt="Imagen Recuadro 1" class="w-full h-64 object-cover transition duration-500 hover:opacity-80">
                         <div class="p-8">
                             <h3 class="font-outfit text-2xl font-bold text-indigo-700 mb-3">{{ txt_trecuadro1 }}</h3>
@@ -130,9 +148,7 @@
                         </div>
                     </div>
 
-                    <div class="bg-white rounded-xl shadow-2xl overflow-hidden animate-scroll-reveal delay-500
-                                transform transition duration-500 ease-in-out hover:shadow-indigo-500/50 hover:shadow-3xl
-                                perspective-1000 hover:rotate-y-3">
+                    <div class="bg-white rounded-xl shadow-2xl overflow-hidden animate-scroll-reveal delay-500 transform transition duration-500 ease-in-out hover:shadow-indigo-500/50 hover:shadow-3xl perspective-1000 hover:rotate-y-3">
                         <img src="{{ url_recuadro2 }}" alt="Imagen Recuadro 2" class="w-full h-64 object-cover transition duration-500 hover:opacity-80">
                         <div class="p-8">
                             <h3 class="font-outfit text-2xl font-bold text-indigo-700 mb-3">{{ txt_trecuadro2 }}</h3>
@@ -141,9 +157,7 @@
                         </div>
                     </div>
                     
-                    <div class="bg-white rounded-xl shadow-2xl overflow-hidden animate-scroll-reveal delay-700
-                                transform transition duration-500 ease-in-out hover:shadow-indigo-500/50 hover:shadow-3xl
-                                perspective-1000 hover:rotate-y-3">
+                    <div class="bg-white rounded-xl shadow-2xl overflow-hidden animate-scroll-reveal delay-700 transform transition duration-500 ease-in-out hover:shadow-indigo-500/50 hover:shadow-3xl perspective-1000 hover:rotate-y-3">
                         <img src="{{ url_recuadro3 }}" alt="Imagen Recuadro 3" class="w-full h-64 object-cover transition duration-500 hover:opacity-80">
                         <div class="p-8">
                             <h3 class="font-outfit text-2xl font-bold text-indigo-700 mb-3">{{ txt_trecuadro3 }}</h3>
@@ -156,13 +170,67 @@
             </div>
         </section>
 
-        </main>
+    </main>
 
-    <footer class="bg-gray-900 text-white py-10">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="font-instrument">&copy; 2024 Smart Books. Todos los derechos reservados.</p>
+    <footer class="bg-gray-900 text-gray-400 py-12 md:py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                
+                <div class="col-span-2 md:col-span-1">
+                    <img src="https://sbooks.com.co/wp-content/uploads/2022/10/Logo-Azul-2048x1078.png" alt="Logo Smart Books White" class="h-10 mb-4 filter brightness-150">
+                    <p class="text-sm">
+                        Smart Books es un holding educativo líder, dedicado a transformar la enseñanza con soluciones pedagógicas avanzadas y tecnología innovadora.
+                    </p>
+                    <div class="mt-6 flex space-x-4">
+                        <a href="https://www.facebook.com/smartbookscol" target="_blank" class="text-gray-400 hover:text-indigo-500 transition duration-300 transform hover:scale-110">
+                            <i class="fab fa-facebook-f fa-lg"></i>
+                        </a>
+                        <a href="https://www.instagram.com/smartbookscol" target="_blank" class="text-gray-400 hover:text-indigo-500 transition duration-300 transform hover:scale-110">
+                            <i class="fab fa-instagram fa-lg"></i>
+                        </a>
+                        <a href="www.linkedin.com/company/smartbookscol/" target="_blank" class="text-gray-400 hover:text-indigo-500 transition duration-300 transform hover:scale-110">
+                            <i class="fab fa-linkedin-in fa-lg"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-outfit text-white text-lg font-bold mb-4">Enlaces</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white transition duration-300">Inicio</a></li>
+                        <li><a href="#recuadros" class="hover:text-white transition duration-300">Soluciones</a></li>
+                        <li><a href="#" class="hover:text-white transition duration-300">Catálogo</a></li>
+                        <li><a href="#" class="hover:text-white transition duration-300">Programas</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-outfit text-white text-lg font-bold mb-4">Legal</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white transition duration-300">Términos y Condiciones</a></li>
+                        <li><a href="#" class="hover:text-white transition duration-300">Política de Privacidad</a></li>
+                        <li><a href="#" class="hover:text-white transition duration-300">Aviso Legal</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-outfit text-white text-lg font-bold mb-4">Contacto</h4>
+                    <p class="text-sm">
+                        Email: info@smartbooks.com.co <br>
+                        Teléfono: +57 311 557 2243
+                    </p>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-700 mt-10 pt-6 text-center text-sm">
+                <p>&copy; 2024 Smart Books. Todos los derechos reservados. | Diseñado con ❤️</p>
+            </div>
         </div>
     </footer>
+
+    <a href="https://api.whatsapp.com/send?phone=573115572243" target="_blank" class="whatsapp-float">
+        <i class="fab fa-whatsapp"></i>
+    </a>
 
 
     <script>
@@ -174,11 +242,9 @@
             const intervalTime = 5000; // 5 segundos
 
             function showSlide(index) {
-                // Ocultar todos
                 items.forEach(item => item.classList.remove('active'));
                 dots.forEach(dot => dot.classList.remove('opacity-100', 'bg-indigo-500'));
                 
-                // Mostrar el actual
                 if (items[index]) {
                     items[index].classList.add('active');
                     dots[index].classList.add('opacity-100', 'bg-indigo-500');
@@ -191,11 +257,9 @@
                 showSlide(currentIndex);
             }
 
-            // Iniciar el carrusel
             let slideInterval = setInterval(nextSlide, intervalTime);
             showSlide(currentIndex);
 
-            // Navegación por puntos
             dots.forEach((dot, index) => {
                 dot.addEventListener('click', () => {
                     clearInterval(slideInterval);
@@ -217,15 +281,12 @@
                     }
                 });
             }, {
-                threshold: 0.1 // Activar cuando el 10% del elemento sea visible
+                threshold: 0.1
             });
 
             revealElements.forEach(element => {
                 observer.observe(element);
             });
-            
-            // Script para la animación 3D de los recuadros (si es necesario un JS más complejo)
-            // Se usaron clases de Tailwind para un hover simple. Si quieres un 3D real, necesitarías JS avanzado.
             
         });
     </script>
