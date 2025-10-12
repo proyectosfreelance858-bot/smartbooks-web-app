@@ -43,7 +43,6 @@ def index():
         cur = conn.cursor()
 
         # Consulta para obtener los 7 artículos del blog más recientes
-        # La tabla se llama articulos_blog según el script SQL anterior
         sql_query = """
             SELECT 
                 id, 
@@ -66,7 +65,6 @@ def index():
             (id, titulo, descripcion_corta, url_imagen_principal, fecha_creacion, slug) = blog_data
             
             # Formateo de Fecha: '01 Oct, 2025'
-            # Se convierte la fecha del objeto datetime a un string y se traducen los meses
             fecha_formateada = fecha_creacion.strftime("%d %b, %Y")
             meses_espanol = {'Jan': 'Ene', 'Apr': 'Abr', 'Aug': 'Ago', 'Dec': 'Dic'}
             for en, es in meses_espanol.items():
@@ -79,23 +77,23 @@ def index():
                 'descripcion_corta': descripcion_corta,
                 'url_imagen_principal': url_imagen_principal,
                 'fecha': fecha_formateada,
-                'autor': 'Smart Books Team',     # Valor fijo para el diseño (Se podría obtener de otra tabla)
-                'categoria': 'Educación',        # Valor fijo para el diseño (Se podría obtener de otra columna)
-                'url_articulo': f'/blog/{slug}'  # Enlace de ejemplo al detalle del artículo
+                'autor': 'Smart Books Team',     
+                'categoria': 'Educación',        
+                'url_articulo': f'/blog/{slug}' 
             })
 
         cur.close()
 
     except psycopg2.Error as e:
         print(f"Error de base de datos PostgreSQL: {e}")
-        # En caso de error, 'blogs' será una lista vacía, y la web cargará sin los artículos.
+        # Si hay un error de conexión, 'blogs' será una lista vacía.
     except Exception as e:
         print(f"Error inesperado: {e}")
     finally:
         if conn:
             conn.close()
 
-    # --- 2. CONTEXTO DE VARIABLES PARA LA PLANTILLA (Incluye las variables anteriores) ---
+    # --- 2. CONTEXTO DE VARIABLES PARA LA PLANTILLA ---
     context = {
         # Variables anteriores para el Carrusel
         'url_banner1': 'https://images.unsplash.com/photo-1543269664-56b93a02a768?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 
@@ -106,10 +104,14 @@ def index():
     }
 
     # --- 3. RENDERIZACIÓN DE LA PLANTILLA ---
-    # Renderiza index.html (debe estar en la carpeta 'templates')
     return render_template('index.html', **context)
 
 if __name__ == '__main__':
-    # Ejecuta la aplicación Flask en modo de depuración
-    # (Para producción, se debe usar un servidor WSGI como Gunicorn)
-    app.run(debug=True)
+    # =================================================================
+    # CAMBIO CRÍTICO PARA HOSTING (Render, Heroku, etc.)
+    # Se obtienen el puerto y la IP del entorno de hosting, si existen.
+    # =================================================================
+    PORT = int(os.environ.get('PORT', 5000))
+    HOST = '0.0.0.0' # Necesario para escuchar en todas las interfaces de red
+    
+    app.run(host=HOST, port=PORT, debug=True)
