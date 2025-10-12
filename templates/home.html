@@ -5,51 +5,67 @@
 {% block content %}
     
     <div class="banner-carousel-container">
-        <div class="carousel-track">
-            <div class="carousel-slide">
-                <img src="{{ url_banner1 }}" alt="Banner Promocional 1" class="banner-image">
-            </div>
-            <div class="carousel-slide">
-                <img src="{{ url_banner2 }}" alt="Banner Promocional 2" class="banner-image">
-            </div>
+        <div class="carousel-track banner-track">
+            <div class="carousel-slide banner-slide"><img src="{{ url_banner1 }}" alt="Banner Promocional 1" class="banner-image"></div>
+            <div class="carousel-slide banner-slide"><img src="{{ url_banner2 }}" alt="Banner Promocional 2" class="banner-image"></div>
             </div>
         
-        <button class="carousel-btn prev-btn">&#10094;</button>
-        <button class="carousel-btn next-btn">&#10095;</button>
+        <button class="carousel-btn prev-btn banner-prev-btn">&#10094;</button>
+        <button class="carousel-btn next-btn banner-next-btn">&#10095;</button>
     </div>
 
-    <main class="page-content-wrapper">
-        <h2 class="section-title">Nuestros Productos Destacados</h2>
-        
-        <div class="products-grid">
-            
-            <div class="product-card">
-                <img src="{{ url_productosmasvendidos1 }}" alt="Producto 1" class="product-image">
-                <h3 class="product-title">{{ txt_productosmasvendidos1 }}</h3>
-                <p class="product-details">PAQUETE DE INGLÉS COSMO. <br>Ideal para grados superiores y educación bilingüe.</p>
-                <a href="#" class="btn-detail">Ver Detalle</a>
-            </div>
-            
-            <div class="product-card">
-                <img src="{{ url_productosmasvendidos2 }}" alt="Producto 2" class="product-image">
-                <h3 class="product-title">{{ txt_productosmasvendidos2 }}</h3>
-                <p class="product-details">PAQUETE DE INGLÉS COSMO. <br>Ideal para primeros grados, con enfoque lúdico.</p>
-                <a href="#" class="btn-detail">Ver Detalle</a>
-            </div>
-            
-            <div class="product-card">
-                <img src="{{ url_productosmasvendidos3 }}" alt="Producto 3" class="product-image">
-                <h3 class="product-title">{{ txt_productosmasvendidos3 }}</h3>
-                <p class="product-details">Novela histórica juvenil sobre la guerra, la supervivencia y el valor de la amistad.</p>
-                <a href="#" class="btn-detail">Ver Detalle</a>
-            </div>
-            
-            <div class="product-card">
-                <img src="{{ url_productosmasvendidos4 }}" alt="Producto 4" class="product-image">
-                <h3 class="product-title">{{ txt_productosmasvendidos4 }}</h3> 
-                <p class="product-details">Una crónica fascinante sobre un período crucial de la historia contemporánea y sus protagonistas.</p>
-                <a href="#" class="btn-detail">Ver Detalle</a>
-            </div>
+    <section class="recommended-products-section">
+        <h2 class="section-title">Productos Recomendados</h2>
+        <p class="section-subtitle">Conoce nuestros productos recomendados en esta temporada</p>
+
+        <div class="recommended-carousel-wrapper">
+            <button class="product-carousel-btn product-prev-btn">&#10094;</button>
+            <button class="product-carousel-btn product-next-btn">&#10095;</button>
+
+            <div class="recommended-carousel-track">
+                
+                <div class="product-group">
+                    {% set products = [
+                        {'img': url_productosmasvendidos1, 'txt': txt_productosmasvendidos1, 'desc': 'PAQUETE DE INGLÉS COSMO. Ideal para grados superiores y educación bilingüe.'},
+                        {'img': url_productosmasvendidos2, 'txt': txt_productosmasvendidos2, 'desc': 'PAQUETE DE INGLÉS COSMO. Ideal para primeros grados, con enfoque lúdico.'},
+                        {'img': url_productosmasvendidos3, 'txt': txt_productosmasvendidos3, 'desc': 'Novela histórica juvenil sobre la guerra, la supervivencia y el valor de la amistad.'}
+                    ] %}
+                    
+                    {% for p in products %}
+                        {% set is_center = loop.index == 2 %}
+                        <div class="product-slide {{ 'center-card' if is_center }}">
+                            <img src="{{ p.img }}" alt="{{ p.txt }}" class="product-image">
+                            <div class="product-info">
+                                <h3>{{ p.txt }}</h3>
+                                <p>{{ p.desc }}</p>
+                                <a href="#" class="btn-detail">Ver Detalle</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="product-group">
+                    <div class="product-slide">
+                         <img src="{{ url_productosmasvendidos1 }}" alt="Producto Extra 1" class="product-image">
+                         <div class="product-info"><h3>PAQUETE DE INGLÉS COSMO</h3><p>Descripción extra.</p><a href="#" class="btn-detail">Ver Detalle</a></div>
+                    </div>
+                    
+                    <div class="product-slide center-card">
+                        <img src="{{ url_productosmasvendidos4 }}" alt="{{ txt_productosmasvendidos4 }}" class="product-image">
+                        <div class="product-info">
+                            <h3>{{ txt_productosmasvendidos4 }}</h3>
+                            <p>Una crónica fascinante sobre un período crucial de la historia contemporánea y sus protagonistas.</p>
+                            <a href="#" class="btn-detail">Ver Detalle</a>
+                        </div>
+                    </div>
+
+                    <div class="product-slide">
+                         <img src="{{ url_productosmasvendidos2 }}" alt="Producto Extra 2" class="product-image">
+                         <div class="product-info"><h3>PAQUETE DE INGLÉS COSMO</h3><p>Descripción extra.</p><a href="#" class="btn-detail">Ver Detalle</a></div>
+                    </div>
+                </div>
+
+                </div>
         </div>
 
         <hr class="divider">
@@ -66,190 +82,227 @@
     </main>
     
     <style>
-        /* Estilos del Carrusel para full-width */
+        /* ------------------ ESTILOS GENERALES Y CARRUSEL BANNER ------------------ */
         .banner-carousel-container {
             width: 100vw;
-            height: 450px; /* Altura fija para replicar un banner grande */
+            height: 500px; /* Aumento de altura para acomodar las imágenes */
             overflow: hidden;
             position: relative;
-            /* Asegura que el contenedor salga de los límites de layout.html */
-            left: 50%;
-            right: 50%;
-            margin-left: -50vw; 
-            margin-right: -50vw;
+            left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;
         }
-        .carousel-track {
+        .banner-track {
             display: flex;
-            /* CORRECCIÓN CLAVE: El ancho debe ser 100% * N° de slides (200% para 2 slides) */
-            width: calc(100% * 2); 
             height: 100%;
-            transition: transform 0.5s ease-in-out; /* Deslizamiento suave */
+            transition: transform 0.5s ease-in-out; 
+            /* El ancho será calculado por JS (N° slides + 2 clones) */
         }
-        .carousel-slide {
-            /* CORRECCIÓN CLAVE: Cada slide ocupa 100% / N° de slides (50% para 2 slides) */
-            width: 50%; 
+        .banner-slide {
+            /* El ancho será calculado por JS */
             flex-shrink: 0;
         }
         .banner-image {
             width: 100%;
             height: 100%;
-            /* Utilizamos 'cover' para que llene el espacio, recortando si es necesario. */
             object-fit: cover; 
         }
         .carousel-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.4);
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-            z-index: 10;
-            font-size: 1.8em;
-            border-radius: 5px;
-            opacity: 0.8;
-            transition: opacity 0.3s;
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.4); color: white; border: none;
+            padding: 10px 15px; cursor: pointer; z-index: 10;
+            font-size: 1.8em; border-radius: 5px; opacity: 0.8; transition: opacity 0.3s;
         }
         .carousel-btn:hover { opacity: 1; }
-        .prev-btn { left: 20px; }
-        .next-btn { right: 20px; }
+        .banner-prev-btn { left: 20px; }
+        .banner-next-btn { right: 20px; }
 
-        /* Estilos de Contenido Moderno (Sin cambios) */
-        .page-content-wrapper {
+        /* ------------------ ESTILOS SECCIÓN PRODUCTOS RECOMENDADOS ------------------ */
+        .recommended-products-section {
             max-width: 1200px;
             margin: 50px auto;
             padding: 0 20px;
         }
         .section-title {
-            text-align: center;
-            color: #0056b3; 
-            margin-bottom: 30px;
-            font-size: 2.2em;
-            font-weight: 700;
-            border-bottom: 3px solid #f0f0f0;
-            padding-bottom: 10px;
+            text-align: center; color: #0056b3; margin-bottom: 5px;
+            font-size: 2.2em; font-weight: 700;
         }
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 30px;
-            margin-bottom: 50px;
+        .section-subtitle {
+            text-align: center; color: #666; margin-bottom: 40px; font-size: 1.1em;
         }
-        .product-card {
-            border: 1px solid #dcdcdc;
-            border-radius: 10px;
+        .recommended-carousel-wrapper {
+            position: relative;
             overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            padding-bottom: 20px;
-            transition: transform 0.3s, box-shadow 0.3s;
-            background-color: #ffffff;
+            padding: 20px 0; /* Espacio para sombras y flechas */
         }
-        .product-card:hover {
-            transform: translateY(-7px);
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
-        }
-        .product-image {
-            width: 100%;
-            height: 280px;
-            object-fit: cover;
-            margin-bottom: 15px;
-        }
-        .product-title {
-            font-size: 1.3em;
-            color: #1a1a1a;
-            margin: 0 10px 5px;
-        }
-        .product-details {
-            color: #666;
-            margin: 0 15px 15px;
-            font-size: 0.95em;
-            line-height: 1.4;
-        }
-        .btn-detail {
-            display: inline-block;
-            background-color: #007bff;
-            color: white;
-            padding: 10px 25px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: background-color 0.3s;
-        }
-        .btn-detail:hover {
-            background-color: #0056b3;
-        }
-        .divider {
-            border: none;
-            border-top: 1px solid #e0e0e0;
-            margin: 50px 0;
-        }
-        .editorials-logos {
+        .recommended-carousel-track {
             display: flex;
-            justify-content: space-around;
+            transition: transform 0.5s ease-in-out;
+            /* El ancho será (100% * N° de grupos) */
+        }
+        .product-group {
+            min-width: 100%; /* Cada grupo ocupa el 100% del wrapper */
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            padding: 20px 0;
-            gap: 30px;
+            padding: 0 50px; /* Espacio para las flechas */
+            box-sizing: border-box;
+            flex-shrink: 0;
         }
-        .editorial-logo {
-            max-height: 70px;
-            width: auto;
-            object-fit: contain;
-            filter: grayscale(80%);
-            opacity: 0.8;
-            transition: filter 0.3s, opacity 0.3s;
+        .product-slide {
+            width: 30%; /* Lados: 30% */
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+            padding-bottom: 15px;
         }
-        .editorial-logo:hover {
-            filter: grayscale(0%);
-            opacity: 1;
+        .center-card {
+            width: 35%; /* Centro: 35% (ligeramente más grande) */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transform: scale(1.05); /* Escala para énfasis */
         }
+        .product-slide:hover {
+             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+        .center-card:hover {
+            transform: scale(1.08);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+        }
+        .product-slide .product-image {
+            width: 100%;
+            height: 220px; /* Altura para el card */
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+        .product-info h3 { font-size: 1.2em; margin: 10px 0 5px; color: #1a1a1a; }
+        .product-info p { font-size: 0.9em; color: #666; padding: 0 10px; }
+        .product-info .btn-detail { margin-top: 15px; }
+
+        .product-carousel-btn {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: #007bff; color: white; border: none; border-radius: 50%;
+            width: 40px; height: 40px; font-size: 1.5em; line-height: 40px;
+            cursor: pointer; z-index: 5; opacity: 0.9; transition: opacity 0.3s, background-color 0.3s;
+        }
+        .product-carousel-btn:hover { background-color: #0056b3; opacity: 1; }
+        .product-prev-btn { left: 5px; }
+        .product-next-btn { right: 5px; }
+
+        /* Estilos de Editorial y Footer (Mantenidos) */
+        /* ... (Dejar los estilos de .divider, .editorials-logos, etc. de la versión anterior) ... */
     </style>
     
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const track = document.querySelector('.carousel-track');
-            const slides = document.querySelectorAll('.carousel-slide');
-            const prevBtn = document.querySelector('.prev-btn');
-            const nextBtn = document.querySelector('.next-btn');
             
-            const slideWidth = 100; // Porcentaje de ancho visible (100% de la vista)
-            let currentSlide = 0;
-            const slideCount = slides.length;
-            const intervalTime = 5000; // CORRECCIÓN: 5 segundos (5000ms)
+            // =============================================================
+            // LÓGICA DEL CARRUSEL DE BANNER (INFINITO Y 5 SEGUNDOS)
+            // =============================================================
+            const bannerTrack = document.querySelector('.banner-track');
+            const originalBannerSlides = document.querySelectorAll('.banner-slide');
+            const bannerPrevBtn = document.querySelector('.banner-prev-btn');
+            const bannerNextBtn = document.querySelector('.banner-next-btn');
+            const slideCount = originalBannerSlides.length;
+            const intervalTime = 5000; // 5 segundos
 
-            const updateCarousel = () => {
-                const offset = currentSlide * slideWidth / slideCount; // 0%, 50%, 100%, etc.
-                track.style.transform = `translateX(-${offset}%)`;
+            // 1. Clonar slides para el loop infinito
+            const firstClone = originalBannerSlides[0].cloneNode(true);
+            const lastClone = originalBannerSlides[slideCount - 1].cloneNode(true);
+            
+            bannerTrack.appendChild(firstClone);
+            bannerTrack.insertBefore(lastClone, originalBannerSlides[0]);
+            
+            const allBannerSlides = document.querySelectorAll('.banner-slide');
+            let currentBannerIndex = 1; // Empezamos en el primer slide real (después del clon)
+
+            // Ajustar el ancho del track y la posición inicial
+            const totalSlides = allBannerSlides.length;
+            const bannerSlideWidth = 100 / totalSlides;
+            bannerTrack.style.width = `${totalSlides * 100}%`;
+            allBannerSlides.forEach(slide => {
+                slide.style.width = `${bannerSlideWidth}%`;
+            });
+            
+            // Posicionarse en el primer slide real
+            bannerTrack.style.transform = `translateX(-${bannerSlideWidth * currentBannerIndex}%)`;
+
+
+            const updateBannerCarousel = (smooth = true) => {
+                bannerTrack.style.transition = smooth ? 'transform 0.5s ease-in-out' : 'none';
+                bannerTrack.style.transform = `translateX(-${bannerSlideWidth * currentBannerIndex}%)`;
             };
 
-            // Navegación automática
+            // Listener para el fin de la transición (manejo del loop)
+            bannerTrack.addEventListener('transitionend', () => {
+                if (currentBannerIndex === 0) {
+                    currentBannerIndex = slideCount;
+                    updateBannerCarousel(false); // Salto instantáneo
+                } else if (currentBannerIndex === totalSlides - 1) {
+                    currentBannerIndex = 1;
+                    updateBannerCarousel(false); // Salto instantáneo
+                }
+            });
+
+            // Navegación Manual
+            bannerNextBtn.addEventListener('click', () => {
+                if (currentBannerIndex >= totalSlides - 1) return; // Evitar ir más allá del clon final
+                currentBannerIndex++;
+                updateBannerCarousel();
+                resetBannerInterval();
+            });
+
+            bannerPrevBtn.addEventListener('click', () => {
+                if (currentBannerIndex <= 0) return; // Evitar ir más allá del clon inicial
+                currentBannerIndex--;
+                updateBannerCarousel();
+                resetBannerInterval();
+            });
+
+            // Navegación Automática
             let autoSlide = setInterval(() => {
-                currentSlide = (currentSlide + 1) % slideCount;
-                updateCarousel();
+                bannerNextBtn.click(); // Usamos el click para reciclar la lógica
             }, intervalTime);
 
-            // Reinicia el contador automático después de la interacción manual
-            const resetInterval = () => {
+            const resetBannerInterval = () => {
                 clearInterval(autoSlide);
                 autoSlide = setInterval(() => {
-                    currentSlide = (currentSlide + 1) % slideCount;
-                    updateCarousel();
+                    bannerNextBtn.click();
                 }, intervalTime);
             };
 
-            // Eventos de Navegación Manual
-            nextBtn.addEventListener('click', () => {
-                currentSlide = (currentSlide + 1) % slideCount;
-                updateCarousel();
-                resetInterval();
+
+            // =============================================================
+            // LÓGICA DEL CARRUSEL DE PRODUCTOS (GRUPOS DE TRES)
+            // =============================================================
+            const productTrack = document.querySelector('.recommended-carousel-track');
+            const productGroups = document.querySelectorAll('.product-group');
+            const productPrevBtn = document.querySelector('.product-prev-btn');
+            const productNextBtn = document.querySelector('.product-next-btn');
+            
+            let currentProductGroup = 0;
+            const groupCount = productGroups.length;
+
+            const updateProductCarousel = () => {
+                productTrack.style.transform = `translateX(-${currentProductGroup * 100}%)`;
+            };
+
+            productNextBtn.addEventListener('click', () => {
+                if (currentProductGroup < groupCount - 1) {
+                    currentProductGroup++;
+                } else {
+                    currentProductGroup = 0; // Loop simple al inicio
+                }
+                updateProductCarousel();
             });
 
-            prevBtn.addEventListener('click', () => {
-                currentSlide = (currentSlide - 1 + slideCount) % slideCount;
-                updateCarousel();
-                resetInterval();
+            productPrevBtn.addEventListener('click', () => {
+                if (currentProductGroup > 0) {
+                    currentProductGroup--;
+                } else {
+                    currentProductGroup = groupCount - 1; // Loop simple al final
+                }
+                updateProductCarousel();
             });
         });
     </script>
