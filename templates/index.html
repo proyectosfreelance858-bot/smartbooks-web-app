@@ -7,6 +7,10 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
 
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@300;400;700&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
@@ -40,12 +44,9 @@
             min-width: 14rem;
         }
 
-        /* --- CORRECCIÓN CLAVE: ESTILO DEL BUSCADOR MINIMALISTA --- */
-
-        /* Estilo del campo de búsqueda: Minimalista, solo borde inferior y esquinas */
+        /* --- ESTILO DEL BUSCADOR MINIMALISTA --- */
         .search-input {
             width: 100%;
-            /* Reducimos la altura quitando el padding agresivo */
             padding: 0.5rem 1.5rem; /* py-2 pl-6 pr-4 */
             border: 1px solid #d1d5db; 
             border-radius: 9999px; /* rounded-full */
@@ -56,9 +57,7 @@
             border-color: #4338ca; 
         }
 
-        /* Botón de la lupa azul (SEPARADO Y DEFINIDO) */
         .search-button-separate {
-            /* Aseguramos que sea un botón cuadrado para la lupa */
             width: 44px; /* Tamaño del círculo */
             height: 44px;
             margin-left: 10px; /* Espacio entre el campo de búsqueda y el botón */
@@ -68,7 +67,7 @@
             align-items: center; 
             justify-content: center; 
             transition: background-color 0.3s;
-            flex-shrink: 0; /* Evita que el botón se comprima */
+            flex-shrink: 0; 
         }
         .search-button-separate:hover {
             background-color: #3730a3; 
@@ -76,11 +75,27 @@
 
         /* ÍCONOS PNG: Define el filtro de color para convertir a blanco */
         .icon-white {
-            /* FUERZA LA IMAGEN PNG NEGRA A VERSE BLANCA */
             filter: brightness(0) invert(1); 
         }
-
-        /* --- FIN CORRECCIÓN --- */
+        /* --- FIN ESTILO BUSCADOR --- */
+        
+        /* --- ESTILO DEL CARRUSEL --- */
+        #banner-carousel {
+            position: relative;
+        }
+        .carousel-item {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            z-index: 10;
+        }
+        .carousel-item.active {
+            opacity: 1;
+            z-index: 20;
+        }
+        /* --- FIN ESTILO CARRUSEL --- */
 
 
         /* Estilo para opción activa/hover del menú (con línea azul) */
@@ -145,9 +160,9 @@
             </div>
 
             <div class="flex space-x-3 items-center text-gray-500 flex-shrink-0">
-                <i class="fab fa-facebook-f text-lg"></i>
-                <i class="fab fa-instagram text-lg"></i>
-                <i class="fab fa-linkedin-in text-lg"></i>
+                <a href="https://www.facebook.com/smartbookscol" target="_blank" class="hover:text-brand-primary"><i class="fab fa-facebook-f text-lg"></i></a>
+                <a href="https://www.instagram.com/smartbookscol" target="_blank" class="hover:text-brand-primary"><i class="fab fa-instagram text-lg"></i></a>
+                <a href="https://www.linkedin.com/company/smartbookscol/" target="_blank" class="hover:text-brand-primary"><i class="fab fa-linkedin-in text-lg"></i></a>
             </div>
         </div>
     </div>
@@ -233,17 +248,17 @@
 
     <main>
         
-        <section class="max-w-full mx-auto overflow-hidden relative shadow-lg animate-scroll-reveal" style="height: 65vh; min-height: 450px;">
+        <section class="max-w-full mx-auto overflow-hidden relative shadow-lg animate-scroll-reveal" style="height: 75vh; min-height: 550px;">
             <div id="banner-carousel" class="w-full h-full">
                 <div class="carousel-item active w-full h-full">
-                    <img src="{{ url_banner1 }}" alt="Banner Principal 1" class="w-full h-full object-cover">
+                    <img src="https://cdn.shopify.com/s/files/1/0533/2089/files/banner_principal_1.jpg?v=1700000000" alt="Banner Principal 1" class="w-full h-full object-cover">
                 </div>
                 <div class="carousel-item w-full h-full">
-                    <img src="{{ url_banner2 }}" alt="Banner Principal 2" class="w-full h-full object-cover">
+                    <img src="https://cdn.shopify.com/s/files/1/0533/2089/files/banner_principal_2.jpg?v=1700000000" alt="Banner Principal 2" class="w-full h-full object-cover">
                 </div>
             </div>
             
-            <div class="absolute bottom-6 left-0 right-0 flex justify-center space-x-3">
+            <div class="absolute bottom-6 left-0 right-0 flex justify-center space-x-3 z-30">
                 <div class="dot w-4 h-4 bg-white rounded-full opacity-70 cursor-pointer transition duration-300 transform hover:scale-125" data-slide="0"></div>
                 <div class="dot w-4 h-4 bg-white rounded-full opacity-70 cursor-pointer transition duration-300 transform hover:scale-125" data-slide="1"></div>
             </div>
@@ -275,30 +290,30 @@
                     
                     <div class="bg-white rounded-lg shadow-xl overflow-hidden animate-scroll-reveal delay-300
                                 transform transition duration-500 hover:shadow-2xl hover:translate-y-[-5px]">
-                        <img src="{{ url_recuadro1 }}" alt="Imagen Recuadro 1" class="w-full h-64 object-cover">
+                        <img src="https://sbooks.com.co/wp-content/uploads/2023/11/IMG_01.jpg" alt="Imagen Recuadro 1" class="w-full h-64 object-cover">
                         <div class="p-6">
-                            <h3 class="font-outfit text-xl font-bold text-gray-800 mb-2">{{ txt_trecuadro1 }}</h3>
-                            <p class="text-gray-500 text-sm font-instrument leading-relaxed line-clamp-3">{{ txt_recuadro1 }}</p>
+                            <h3 class="font-outfit text-xl font-bold text-gray-800 mb-2">Conoce y decide tu mejor elección</h3>
+                            <p class="text-gray-500 text-sm font-instrument leading-relaxed line-clamp-3">Accede a nuestros recursos pedagógicos y herramientas de diagnóstico para tomar decisiones informadas sobre los textos escolares que necesita tu institución.</p>
                             <a href="#" class="mt-4 inline-block text-brand-primary font-semibold hover:text-brand-accent transition duration-300">Ver más &rarr;</a>
                         </div>
                     </div>
 
                     <div class="bg-white rounded-lg shadow-xl overflow-hidden animate-scroll-reveal delay-500
                                 transform transition duration-500 hover:shadow-2xl hover:translate-y-[-5px]">
-                        <img src="{{ url_recuadro2 }}" alt="Imagen Recuadro 2" class="w-full h-64 object-cover">
+                        <img src="https://sbooks.com.co/wp-content/uploads/2023/11/IMG_02.jpg" alt="Imagen Recuadro 2" class="w-full h-64 object-cover">
                         <div class="p-6">
-                            <h3 class="font-outfit text-xl font-bold text-gray-800 mb-2">{{ txt_trecuadro2 }}</h3>
-                            <p class="text-gray-500 text-sm font-instrument leading-relaxed line-clamp-3">{{ txt_recuadro2 }}</p>
+                            <h3 class="font-outfit text-xl font-bold text-gray-800 mb-2">Más que libros, soluciones integrales</h3>
+                            <p class="text-gray-500 text-sm font-instrument leading-relaxed line-clamp-3">Ofrecemos paquetes completos que incluyen textos, plataformas digitales y capacitación docente para una inmersión total en la transformación educativa.</p>
                             <a href="#" class="mt-4 inline-block text-brand-primary font-semibold hover:text-brand-accent transition duration-300">Ver más &rarr;</a>
                         </div>
                     </div>
                     
                     <div class="bg-white rounded-lg shadow-xl overflow-hidden animate-scroll-reveal delay-700
                                 transform transition duration-500 hover:shadow-2xl hover:translate-y-[-5px]">
-                        <img src="{{ url_recuadro3 }}" alt="Imagen Recuadro 3" class="w-full h-64 object-cover">
+                        <img src="https://sbooks.com.co/wp-content/uploads/2023/11/IMG_03.jpg" alt="Imagen Recuadro 3" class="w-full h-64 object-cover">
                         <div class="p-6">
-                            <h3 class="font-outfit text-xl font-bold text-gray-800 mb-2">{{ txt_trecuadro3 }}</h3>
-                            <p class="text-gray-500 text-sm font-instrument leading-relaxed line-clamp-3">{{ txt_recuadro3 }}</p>
+                            <h3 class="font-outfit text-xl font-bold text-gray-800 mb-2">Nuevo Programa Académico Bilingüe</h3>
+                            <p class="text-gray-500 text-sm font-instrument leading-relaxed line-clamp-3">Descubre nuestra nueva propuesta bilingüe diseñada para colegios que buscan la certificación internacional con metodologías ágiles y modernas.</p>
                             <a href="#" class="mt-4 inline-block text-brand-primary font-semibold hover:text-brand-accent transition duration-300">Ver más &rarr;</a>
                         </div>
                     </div>
@@ -309,73 +324,75 @@
 
     </main>
 
-    <footer class="bg-gray-900 text-gray-400">
-        
-        <div class="border-b border-gray-700 py-16">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                    
-                    <div>
-                        <img src="https://sbooks.com.co/wp-content/uploads/2022/10/Logo-Azul-2048x1078.png" alt="Logo Smart Books White" class="h-10 mb-4 filter brightness-150">
-                        <p class="text-sm leading-relaxed mb-4">
-                            Líderes en soluciones pedagógicas para la transformación educativa en Latinoamérica.
-                        </p>
-                        <div class="flex space-x-3 text-lg">
-                            <a href="https://www.facebook.com/smartbookscol" target="_blank" class="text-gray-400 hover:text-brand-accent transition duration-300"><i class="fab fa-facebook-f"></i></a>
-                            <a href="https://www.instagram.com/smartbookscol" target="_blank" class="text-gray-400 hover:text-brand-accent transition duration-300"><i class="fab fa-instagram"></i></a>
-                            <a href="www.linkedin.com/company/smartbookscol/" target="_blank" class="text-gray-400 hover:text-brand-accent transition duration-300"><i class="fab fa-linkedin-in"></i></a>
-                        </div>
-                    </div>
-
-                    <div>
-                        <h4 class="font-outfit text-white text-xl font-bold mb-5 relative after:content-[''] after:block after:w-10 after:h-0.5 after:bg-brand-accent after:mt-2">
-                            Enlaces Rápidos
-                        </h4>
-                        <ul class="space-y-3 text-sm">
-                            <li><a href="#" class="hover:text-white transition duration-300">Nuestro Holding</a></li>
-                            <li><a href="#recuadros" class="hover:text-white transition duration-300">Programas Académicos</a></li>
-                            <li><a href="#productos" class="hover:text-white transition duration-300">Catálogo General</a></li>
-                            <li><a href="#" class="hover:text-white transition duration-300">Asesoría Docente</a></li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        <h4 class="font-outfit text-white text-xl font-bold mb-5 relative after:content-[''] after:block after:w-10 after:h-0.5 after:bg-brand-accent after:mt-2">
-                            Legal
-                        </h4>
-                        <ul class="space-y-3 text-sm">
-                            <li><a href="#" class="hover:text-white transition duration-300">Términos y Condiciones</a></li>
-                            <li><a href="#" class="hover:text-white transition duration-300">Política de Privacidad</a></li>
-                            <li><a href="#" class="hover:text-white transition duration-300">Aviso Legal</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div>
-                        <h4 class="font-outfit text-white text-xl font-bold mb-5 relative after:content-[''] after:block after:w-10 after:h-0.5 after:bg-brand-accent after:mt-2">
-                            Mantente Informado
-                        </h4>
-                        <p class="text-sm mb-4">Suscríbete para recibir nuestro plan de contenidos gratuito.</p>
-                        <form action="#" class="flex">
-                            <input type="email" placeholder="Tu Email" class="p-3 text-gray-900 rounded-l-lg flex-grow focus:outline-none">
-                            <button type="submit" class="bg-brand-accent text-white p-3 rounded-r-lg hover:bg-red-600 transition duration-300">
-                                <i class="fas fa-arrow-right"></i>
-                            </button>
-                        </form>
-                    </div>
+    <footer class="bg-white py-12 border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            
+            <div class="flex flex-col items-start">
+                <img src="https://sbooks.com.co/wp-content/uploads/2022/10/Logo-Azul-2048x1078.png" alt="Logo Smart Books" class="h-10 mb-4">
+                <p class="text-sm text-gray-600 mb-2">¿Tienes preguntas? ¡Llámanos!</p>
+                <a href="tel:+573336025029" class="text-brand-accent font-outfit text-2xl font-bold mb-4 hover:text-red-700 transition duration-300">
+                    +57 (333) 602 50 29
+                </a>
+                <div class="flex space-x-4 text-gray-500">
+                    <a href="https://www.facebook.com/smartbookscol" target="_blank" class="hover:text-brand-primary transition duration-300"><i class="fab fa-facebook-f text-lg"></i></a>
+                    <a href="https://www.instagram.com/smartbookscol" target="_blank" class="hover:text-brand-primary transition duration-300"><i class="fab fa-instagram text-lg"></i></a>
+                    <a href="https://www.linkedin.com/company/smartbookscol/" target="_blank" class="hover:text-brand-primary transition duration-300"><i class="fab fa-linkedin-in text-lg"></i></a>
+                    <a href="#" class="hover:text-brand-primary transition duration-300"><i class="fab fa-pinterest-p text-lg"></i></a>
                 </div>
             </div>
+
+            <div>
+                <h4 class="font-outfit text-lg font-semibold text-gray-900 mb-4">Información de Contacto</h4>
+                <ul class="space-y-2 text-sm text-gray-600">
+                    <li>
+                        <p class="font-semibold text-gray-800">Bogotá:</p>
+                        <p>Carrera 58 No 164A-55, C.C Punto 170 Local 113</p>
+                        <p>(Cerrado Temporalmente)</p>
+                        <p>Calle 159A # 21A – 39 – Barrio Magdalena – Casa Blanca</p>
+                        <p>PBX: 333 602 50 29</p>
+                    </li>
+                    <li>
+                        <p class="font-semibold text-gray-800">Medellín, Antioquia:</p>
+                        <p>Edificio San Sebastian de La 70</p>
+                        <p>DQ 2 # 70 – 24 – INT 202</p>
+                        <p>LAURELES</p>
+                        <p>PBX: 333 602 50 29 EXT: 1100</p>
+                    </li>
+                    <li>
+                        <a href="mailto:contacto@smartbooks.com.co" class="text-brand-primary hover:underline">contacto@smartbooks.com.co</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-outfit text-lg font-semibold text-gray-900 mb-4">Explorar</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#" class="text-gray-600 hover:text-brand-primary transition duration-300">Quienes Somos</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-brand-primary transition duration-300">Nuestros Productos</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-brand-primary transition duration-300">Colegios</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-brand-primary transition duration-300">Blog</a></li>
+                    <li><a href="login.html" class="text-gray-600 hover:text-brand-primary transition duration-300">Intranet (Iniciar Sesión)</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-outfit text-lg font-semibold text-gray-900 mb-4">Nuestro Servicio</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#" class="text-gray-600 hover:text-brand-primary transition duration-300">Ayuda y Soporte</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-brand-primary transition duration-300">Preguntas Frecuentes – FAQ</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-brand-primary transition duration-300">Términos y Condiciones</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-brand-primary transition duration-300">Política de Privacidad</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-brand-primary transition duration-300">Servicio al Cliente</a></li>
+                </ul>
+            </div>
+
         </div>
-        
-        <div class="bg-gray-800 py-4">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center text-sm">
-                <p>&copy; 2024 Smart Books. Todos los derechos reservados. | Diseñado con ❤️</p>
-                <div class="flex space-x-2 text-xl">
-                    <i class="fab fa-cc-visa"></i>
-                    <i class="fab fa-cc-mastercard"></i>
-                </div>
-            </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t border-gray-100 text-sm text-gray-500 text-center">
+            <p>&copy; 2024 Smart Books. Todos los derechos reservados. | Diseñado con ❤️</p>
         </div>
     </footer>
+    
 
     <a href="https://api.whatsapp.com/send?phone=573115572243" target="_blank" class="whatsapp-float" aria-label="Contactar por WhatsApp">
         <i class="fab fa-whatsapp"></i>
@@ -388,12 +405,14 @@
             const items = document.querySelectorAll('.carousel-item');
             const dots = document.querySelectorAll('.dot');
             let currentIndex = 0;
-            const intervalTime = 5000; 
+            const intervalTime = 5000; // Cambia cada 5 segundos
 
             function showSlide(index) {
+                // Desactiva todos los elementos
                 items.forEach(item => item.classList.remove('active'));
                 dots.forEach(dot => dot.classList.remove('opacity-100', 'bg-brand-primary'));
                 
+                // Activa el elemento y dot correcto
                 if (items[index]) {
                     items[index].classList.add('active');
                     dots[index].classList.add('opacity-100', 'bg-brand-primary'); 
@@ -406,15 +425,17 @@
                 showSlide(currentIndex);
             }
 
+            // Inicia el carrusel
             let slideInterval = setInterval(nextSlide, intervalTime);
             showSlide(currentIndex);
 
+            // Maneja el clic en los dots
             dots.forEach((dot, index) => {
                 dot.addEventListener('click', () => {
-                    clearInterval(slideInterval);
+                    clearInterval(slideInterval); // Resetea el intervalo
                     currentIndex = index;
                     showSlide(currentIndex);
-                    slideInterval = setInterval(nextSlide, intervalTime);
+                    slideInterval = setInterval(nextSlide, intervalTime); // Reinicia el intervalo
                 });
             });
             
