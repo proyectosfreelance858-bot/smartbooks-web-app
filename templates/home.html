@@ -9,7 +9,7 @@
             <div id="primary" class="content-area column small-12">
                 <main id="main" class="site-main" role="main">
 
-                    <div class="wp-container-1 elementor-section elementor-top-section elementor-element elementor-element-c26685f elementor-section-height-min-height elementor-section-boxed elementor-section-height-default elementor-section-items-middle"
+                    <div class="wp-container-1 elementor-section elementor-top-section elementor-element elementor-element-c26685f elementor-section-height-min-height elementor-section-boxed elementor-section-height-default elementor-section-items-middle hero-section"
                         data-element_type="section">
                         <div class="elementor-container elementor-column-gap-default">
                             <div class="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-287c14a"
@@ -23,8 +23,8 @@
                                                 <div class="carousel-slide banner-slide"><img src="{{ url_banner1 }}" alt="Banner Promocional 1" class="banner-image"></div>
                                                 <div class="carousel-slide banner-slide"><img src="{{ url_banner2 }}" alt="Banner Promocional 2" class="banner-image"></div>
                                             </div>
-                                            <button class="carousel-btn prev-btn banner-prev-btn">&#10094;</button>
-                                            <button class="carousel-btn next-btn banner-next-btn">&#10095;</button>
+                                            <button class="carousel-btn prev-btn banner-prev-btn" aria-label="Anterior">&#10094;</button>
+                                            <button class="carousel-btn next-btn banner-next-btn" aria-label="Siguiente">&#10095;</button>
                                         </div>
 
                                     </div>
@@ -33,14 +33,13 @@
                         </div>
                     </div>
 
-
                     <section class="recommended-products-section wp-block-group elementor-section elementor-element-b7f3295 elementor-section-full_width elementor-section-height-default elementor-section-height-default" data-element_type="section">
-                        <h2 class="section-title">Nuestras categorías destacadas</h2>
+                        <h2 class="section-title">Nuestras **categorías destacadas**</h2>
                         <p class="section-subtitle">Lo más buscado por nuestros clientes en este momento</p>
 
                         <div class="recommended-carousel-wrapper">
-                            <button class="product-carousel-btn product-prev-btn">&#10094;</button>
-                            <button class="product-carousel-btn product-next-btn">&#10095;</button>
+                            <button class="product-carousel-btn product-prev-btn" aria-label="Grupo anterior">&#10094;</button>
+                            <button class="product-carousel-btn product-next-btn" aria-label="Grupo siguiente">&#10095;</button>
 
                             <div class="recommended-carousel-track product-track">
                                 
@@ -53,8 +52,10 @@
                                     
                                     {% for p in products_group1 %}
                                         {% set is_center = loop.index == 2 %}
-                                        <div class="product-slide {{ 'center-card' if is_center }}">
-                                            <img src="{{ p.img }}" alt="{{ p.txt }}" class="product-image">
+                                        <div class="product-slide product-card {{ 'center-card' if is_center }}" data-aos="fade-up" data-aos-delay="{{ loop.index * 100 }}">
+                                            <div class="product-image-container">
+                                                <img src="{{ p.img }}" alt="{{ p.txt }}" class="product-image">
+                                            </div>
                                             <div class="product-info">
                                                 <h3>{{ p.txt }}</h3>
                                                 <p>{{ p.desc }}</p>
@@ -65,13 +66,17 @@
                                 </div>
                                 
                                 <div class="product-group">
-                                    <div class="product-slide">
-                                        <img src="{{ url_productosmasvendidos3 }}" alt="Relleno 1" class="product-image">
+                                    <div class="product-slide product-card" data-aos="fade-up" data-aos-delay="0">
+                                        <div class="product-image-container">
+                                            <img src="{{ url_productosmasvendidos3 }}" alt="Relleno 1" class="product-image">
+                                        </div>
                                         <div class="product-info"><h3>Libro de Relleno</h3><p>Descripción extra de un libro de apoyo.</p><a href="#" class="btn-detail">Ver Detalle</a></div>
                                     </div>
                                     
-                                    <div class="product-slide center-card">
-                                        <img src="{{ url_productosmasvendidos4 }}" alt="{{ txt_productosmasvendidos4 }}" class="product-image">
+                                    <div class="product-slide center-card product-card" data-aos="fade-up" data-aos-delay="100">
+                                        <div class="product-image-container">
+                                            <img src="{{ url_productosmasvendidos4 }}" alt="{{ txt_productosmasvendidos4 }}" class="product-image">
+                                        </div>
                                         <div class="product-info">
                                             <h3>{{ txt_productosmasvendidos4 }}</h3>
                                             <p>Una crónica fascinante sobre un período crucial.</p>
@@ -79,8 +84,10 @@
                                         </div>
                                     </div>
 
-                                    <div class="product-slide">
-                                        <img src="{{ url_productosmasvendidos1 }}" alt="Relleno 2" class="product-image">
+                                    <div class="product-slide product-card" data-aos="fade-up" data-aos-delay="200">
+                                        <div class="product-image-container">
+                                            <img src="{{ url_productosmasvendidos1 }}" alt="Relleno 2" class="product-image">
+                                        </div>
                                         <div class="product-info"><h3>Libro de Relleno</h3><p>Descripción extra de otro libro de apoyo.</p><a href="#" class="btn-detail">Ver Detalle</a></div>
                                     </div>
                                 </div>
@@ -88,25 +95,24 @@
                         </div>
                     </section>
 
-
-                    <div class="wp-block-group elementor-section elementor-top-section elementor-element elementor-element-f97e68c elementor-section-full_width elementor-section-height-default elementor-section-height-default" data-element_type="section">
+                    <div class="wp-block-group elementor-section elementor-top-section elementor-element elementor-element-f97e68c elementor-section-full_width elementor-section-height-default elementor-section-height-default info-banner-section" data-element_type="section">
                         <div class="elementor-container elementor-column-gap-default">
-                            <div class="elementor-column elementor-col-50 elementor-top-column elementor-element elementor-element-3144d2d" data-element_type="column">
+                            <div class="elementor-column elementor-col-50 elementor-top-column elementor-element elementor-element-3144d2d text-column" data-element_type="column" data-aos="fade-right">
                                 <div class="elementor-widget-wrap elementor-element-populated">
                                     <div class="elementor-element elementor-element-d1445b2 elementor-widget elementor-widget-text-editor" data-element_type="widget">
                                         <div class="elementor-widget-container">
-                                            <h2>Descubre una nueva forma de aprender</h2>
-                                            <p>Tu librería online te ofrece más que solo libros. Conoce nuestros recursos digitales, audiolibros, ebooks y guías especializadas para la educación del futuro.</p>
+                                            <h2>Descubre una **nueva forma de aprender**</h2>
+                                            <p>Tu librería online te ofrece más que solo libros. Conoce nuestros **recursos digitales, audiolibros, ebooks y guías especializadas** para la educación del futuro.</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="elementor-column elementor-col-50 elementor-top-column elementor-element elementor-element-f8a65c2" data-element_type="column">
+                            <div class="elementor-column elementor-col-50 elementor-top-column elementor-element elementor-element-f8a65c2 image-column" data-element_type="column" data-aos="fade-left">
                                 <div class="elementor-widget-wrap elementor-element-populated">
                                     <div class="elementor-element elementor-element-d84f4f3 elementor-widget elementor-widget-image" data-element_type="widget">
-                                        <div class="elementor-widget-container">
-                                            <img decoding="async" src="{{ url_banner3 }}" title="Banner Lateral" alt="Banner de Ofertas Especiales" class="elementor-image">
+                                        <div class="elementor-widget-container banner-3-container">
+                                            <img decoding="async" src="{{ url_banner3 }}" title="Banner Lateral" alt="Banner de Ofertas Especiales" class="elementor-image modern-image-shadow">
                                         </div>
                                     </div>
                                 </div>
@@ -114,13 +120,13 @@
                         </div>
                     </div>
 
-                    <div class="wp-block-group elementor-section elementor-top-section elementor-element elementor-element-a5f979c elementor-section-boxed elementor-section-height-default elementor-section-height-default" data-element_type="section">
+                    <div class="wp-block-group elementor-section elementor-top-section elementor-element elementor-element-a5f979c elementor-section-boxed elementor-section-height-default elementor-section-height-default full-width-promo-banner" data-element_type="section" data-aos="zoom-in">
                         <div class="elementor-container elementor-column-gap-default">
                             <div class="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-19e97f4" data-element_type="column">
                                 <div class="elementor-widget-wrap elementor-element-populated">
                                     <div class="elementor-element elementor-element-59d4c20 elementor-widget elementor-widget-image" data-element_type="widget">
                                         <div class="elementor-widget-container">
-                                            <img decoding="async" src="{{ url_banner4 }}" title="Banner de Promoción de Cursos" alt="Gran Oferta" class="elementor-image">
+                                            <img decoding="async" src="{{ url_banner4 }}" title="Banner de Promoción de Cursos" alt="Gran Oferta" class="elementor-image promo-banner-image modern-image-shadow">
                                         </div>
                                     </div>
                                 </div>
@@ -128,15 +134,14 @@
                         </div>
                     </div>
 
-
                     <div class="wp-block-group elementor-section elementor-top-section elementor-element elementor-element-b7f3295 elementor-section-full_width elementor-section-height-default elementor-section-height-default editorials-section" data-element_type="section">
-                        <h2 class="section-title">Nuestras Editoriales Aliadas</h2>
+                        <h2 class="section-title">Nuestras **Editoriales Aliadas**</h2>
                         <div class="editorials-logos">
-                            <img src="{{ url_editorial1 }}" alt="Editorial 1" class="editorial-logo">
-                            <img src="{{ url_editorial2 }}" alt="Editorial 2" class="editorial-logo">
-                            <img src="{{ url_editorial3 }}" alt="Editorial 3" class="editorial-logo">
-                            <img src="{{ url_editorial4 }}" alt="Editorial 4" class="editorial-logo">
-                            <img src="{{ url_editorial5 }}" alt="Editorial 5" class="editorial-logo">
+                            <img src="{{ url_editorial1 }}" alt="Editorial 1" class="editorial-logo" data-aos="flip-up" data-aos-delay="0">
+                            <img src="{{ url_editorial2 }}" alt="Editorial 2" class="editorial-logo" data-aos="flip-up" data-aos-delay="100">
+                            <img src="{{ url_editorial3 }}" alt="Editorial 3" class="editorial-logo" data-aos="flip-up" data-aos-delay="200">
+                            <img src="{{ url_editorial4 }}" alt="Editorial 4" class="editorial-logo" data-aos="flip-up" data-aos-delay="300">
+                            <img src="{{ url_editorial5 }}" alt="Editorial 5" class="editorial-logo" data-aos="flip-up" data-aos-delay="400">
                         </div>
                     </div>
 
@@ -145,236 +150,330 @@
         </div>
     </div>
     
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
     <style>
-        /* ------------------ ESTILOS BASE Y ESTRUCTURA (Replicados del ejemplo) ------------------ */
-        .site-content { max-width: 100vw; margin: 0 auto; }
+        /* ------------------ VARIABLES Y ESTILOS GLOBALES MODERNOS ------------------ */
+        :root {
+            --color-primary: #007bff; /* Azul vibrante */
+            --color-secondary: #0056b3; /* Azul oscuro para títulos */
+            --color-text-dark: #333;
+            --color-text-light: #666;
+            --color-background: #f8f9fa; /* Fondo muy claro */
+            --color-card-bg: #ffffff; /* Fondo blanco para tarjetas */
+            --shadow-subtle: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --shadow-deep: 0 10px 30px rgba(0, 0, 0, 0.15);
+            --border-radius: 12px;
+        }
+
+        body {
+            background-color: var(--color-background);
+            font-family: 'Poppins', sans-serif; /* Fuente moderna, si se incluye en layout.html */
+        }
+        
+        /* Reset y Base */
+        .site-content { max-width: 100vw; margin: 0 auto; background-color: white; }
         .row { display: flex; flex-wrap: wrap; margin: 0; }
         .column { padding: 0; }
-
-        /* Estilos Elementor/WP para replicar layout */
-        .wp-container-1, .elementor-section { margin-bottom: 0; padding: 0 !important; }
-        .elementor-section { width: 100%; position: relative; }
-        .elementor-section-boxed > .elementor-container { max-width: 1200px; margin: 0 auto; }
+        .elementor-section { padding: 0 !important; width: 100%; position: relative; }
+        .elementor-section-boxed > .elementor-container { max-width: 1300px; margin: 0 auto; }
         .elementor-container { display: flex; flex-wrap: wrap; width: 100%; }
-        .elementor-col-100 { width: 100%; }
-        .elementor-col-50 { width: 50%; }
-        .elementor-column { padding: 10px; box-sizing: border-box; }
+        .elementor-column { padding: 15px; box-sizing: border-box; }
+
+        /* Tipografía y Secciones */
+        .section-title { text-align: center; color: var(--color-secondary); margin-bottom: 5px; font-size: 2.8em; font-weight: 800; text-transform: uppercase; letter-spacing: -0.5px; }
+        .section-title strong { color: var(--color-primary); } /* Resaltar palabras */
+        .section-subtitle { text-align: center; color: var(--color-text-light); margin-bottom: 50px; font-size: 1.2em; font-weight: 300; }
         
-        .elementor-widget-text-editor { padding: 20px; }
-        .elementor-widget-container h2 { color: #1a1a1a; font-size: 2em; margin-bottom: 15px; }
-        .elementor-widget-container p { color: #666; font-size: 1.1em; line-height: 1.6; }
+        .elementor-widget-container h2 { color: var(--color-secondary); font-size: 2.2em; margin-bottom: 15px; font-weight: 700; }
+        .elementor-widget-container h2 strong { color: var(--color-primary); }
+        .elementor-widget-container p { color: var(--color-text-dark); font-size: 1.1em; line-height: 1.7; }
         .elementor-image { width: 100%; height: auto; display: block; }
+        .modern-image-shadow { border-radius: var(--border-radius); box-shadow: var(--shadow-subtle); transition: transform 0.3s ease; }
+        .modern-image-shadow:hover { transform: translateY(-5px); box-shadow: var(--shadow-deep); }
 
-        /* ------------------ ESTILOS CARRUSEL BANNER (Funcional) ------------------ */
+        /* ------------------ ESTILOS CARRUSEL BANNER (Modernizado) ------------------ */
         .banner-carousel-container {
-            width: 100vw;
-            height: 500px; /* Altura ajustada */
-            overflow: hidden;
-            position: relative;
-            /* Truco para full width */
-            left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;
+            height: 550px; /* Un poco más alto */
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 var(--border-radius) var(--border-radius); /* Bordes redondeados abajo */
         }
-        .banner-track {
-            display: flex;
-            height: 100%;
-            transition: transform 0.5s ease-in-out; 
-        }
-        .banner-slide {
-            width: 50%; 
-            flex-shrink: 0;
-        }
-        .banner-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; 
-        }
+        .banner-image { object-fit: cover; }
         .carousel-btn {
-            position: absolute; top: 50%; transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.4); color: white; border: none;
-            padding: 10px 15px; cursor: pointer; z-index: 10;
-            font-size: 1.8em; border-radius: 5px; opacity: 0.8; transition: opacity 0.3s;
+            background: rgba(0, 0, 0, 0.3); 
+            color: white; 
+            border: none;
+            padding: 15px 20px; 
+            cursor: pointer; 
+            z-index: 10;
+            font-size: 2em; 
+            border-radius: 50%; /* Más moderno */
+            opacity: 0.8; 
+            transition: all 0.3s;
         }
-        .banner-prev-btn { left: 20px; }
-        .banner-next-btn { right: 20px; }
+        .carousel-btn:hover {
+            background: var(--color-primary);
+            opacity: 1;
+            transform: scale(1.1) translateY(-50%);
+        }
 
-        /* ------------------ ESTILOS SECCIÓN PRODUCTOS RECOMENDADOS (Funcional) ------------------ */
-        .recommended-products-section { max-width: 1200px; margin: 50px auto; padding: 0 20px; }
-        .section-title { text-align: center; color: #0056b3; margin-bottom: 5px; font-size: 2.2em; font-weight: 700; }
-        .section-subtitle { text-align: center; color: #666; margin-bottom: 40px; font-size: 1.1em; }
+        /* ------------------ ESTILOS SECCIÓN PRODUCTOS RECOMENDADOS (Tarjetas modernas) ------------------ */
+        .recommended-products-section { max-width: 1300px; margin: 80px auto; padding: 0 20px; }
+        .recommended-carousel-wrapper { padding: 20px 0; margin: 0 2%; } /* Reducir margen lateral */
+        
+        .product-group { justify-content: space-evenly; } /* Mejor distribución */
 
-        .recommended-carousel-wrapper {
-            position: relative;
-            overflow: hidden;
-            padding: 20px 0;
-            margin: 0 5%; 
+        .product-card {
+            background-color: var(--color-card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-subtle);
+            padding: 0;
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+            border: 1px solid #eee; /* Borde sutil */
         }
-        .product-track {
-            display: flex;
-            transition: transform 0.5s ease-in-out;
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-deep);
         }
-        .product-group {
-            min-width: 100%; 
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px; 
-            box-sizing: border-box;
-            flex-shrink: 0;
-        }
-        .product-slide {
-            width: 25%; 
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            background-color: #ffffff;
-            transition: transform 0.3s, box-shadow 0.3s;
-            text-align: center;
-            padding-bottom: 15px;
-            margin: 0 10px; 
-        }
+
         .center-card {
-            width: 40%; /* Tarjeta central notablemente más grande */
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            transform: scale(1.05); 
+            width: 40%; 
+            transform: scale(1.0); /* Inicialmente no escalado */
+            border: 2px solid var(--color-primary); /* Resaltar con borde */
+            box-shadow: var(--shadow-deep);
         }
-        .product-slide .product-image { width: 100%; height: 220px; object-fit: cover; margin-bottom: 10px; }
-        .product-info h3 { font-size: 1.2em; margin: 10px 0 5px; color: #1a1a1a; }
-        .product-info p { font-size: 0.9em; color: #666; padding: 0 10px; }
-        .product-info .btn-detail { margin-top: 15px; display: inline-block; padding: 8px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; font-size: 0.9em; }
+        .center-card:hover {
+            transform: translateY(-8px) scale(1.05); /* Escala solo al pasar el mouse */
+        }
+
+        .product-slide .product-image-container { 
+            height: 250px; 
+            overflow: hidden;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+        }
+        .product-slide .product-image { 
+            height: 100%;
+            width: 100%;
+            object-fit: cover; 
+            transition: transform 0.5s ease;
+        }
+        .product-card:hover .product-image {
+            transform: scale(1.05); /* Zoom sutil al pasar el mouse */
+        }
+
+        .product-info { padding: 15px; }
+        .product-info h3 { font-size: 1.3em; margin: 5px 0 5px; color: var(--color-secondary); font-weight: 600; }
+        .product-info p { font-size: 0.95em; color: var(--color-text-light); padding: 0; margin-bottom: 20px; line-height: 1.4; height: 3em; overflow: hidden; }
+        
+        .product-info .btn-detail { 
+            margin-top: 15px; 
+            display: inline-block; 
+            padding: 10px 20px; 
+            background-color: var(--color-primary); 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 50px; /* Estilo píldora */
+            font-size: 0.9em; 
+            font-weight: 600;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .product-info .btn-detail:hover {
+            background-color: var(--color-secondary);
+            transform: scale(1.05);
+        }
 
         .product-carousel-btn {
-            position: absolute; top: 50%; transform: translateY(-50%);
-            background: #007bff; color: white; border: none; border-radius: 50%;
-            width: 40px; height: 40px; font-size: 1.5em; line-height: 40px;
-            cursor: pointer; z-index: 5; opacity: 0.9; 
-            display: flex; justify-content: center; align-items: center; /* Centrado perfecto */
+            background: var(--color-primary); 
+            width: 50px; height: 50px; 
+            font-size: 1.8em; 
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.4);
+            transition: all 0.3s;
         }
-        .product-prev-btn { left: 0; }
-        .product-next-btn { right: 0; }
+        .product-carousel-btn:hover {
+            background: var(--color-secondary);
+            transform: scale(1.1) translateY(-50%);
+        }
 
-        /* Estilos de Editorial (Mantenidos) */
-        .editorials-section { margin-top: 50px; }
-        .editorials-logos { display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; padding: 20px 0; gap: 30px; max-width: 1000px; margin: 0 auto; }
-        .editorial-logo { max-height: 70px; width: auto; object-fit: contain; filter: grayscale(80%); opacity: 0.8; transition: filter 0.3s, opacity 0.3s; }
-        .editorial-logo:hover { filter: grayscale(0%); opacity: 1; }
+        /* ------------------ SECCIONES DE CONTENIDO ------------------ */
+        .info-banner-section { background-color: var(--color-card-bg); margin: 50px 0; padding: 40px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
+        .info-banner-section .text-column { display: flex; align-items: center; }
+
+        .full-width-promo-banner { margin: 50px 0; }
+        .promo-banner-image { border-radius: 18px; }
+
+        /* Estilos de Editorial (Mejorados) */
+        .editorials-section { margin-top: 80px; margin-bottom: 50px; }
+        .editorials-logos { gap: 40px; padding: 30px 0; max-width: 1200px; }
+        .editorial-logo { 
+            max-height: 80px; 
+            filter: grayscale(100%); 
+            opacity: 0.7; 
+            transition: filter 0.5s, opacity 0.5s, transform 0.3s; 
+        }
+        .editorial-logo:hover { 
+            filter: grayscale(0%); 
+            opacity: 1; 
+            transform: scale(1.1); 
+        }
+
+        /* Media Queries para Responsive Design (limpieza) */
+        @media (max-width: 900px) {
+            .banner-carousel-container { height: 400px; }
+            .section-title { font-size: 2em; }
+            .elementor-col-50 { width: 100%; }
+            .recommended-carousel-wrapper { margin: 0; }
+            .product-group { padding: 0 10px; }
+            .product-slide { width: 30%; margin: 0 5px; }
+            .center-card { width: 50%; }
+            .product-slide .product-image-container { height: 180px; }
+            .product-carousel-btn { width: 35px; height: 35px; font-size: 1.2em; }
+        }
+        @media (max-width: 600px) {
+            .banner-carousel-container { height: 300px; }
+            .product-group { flex-wrap: wrap; justify-content: center; }
+            .product-slide { width: 80%; margin: 15px 0; }
+            .center-card { width: 90%; transform: scale(1.0); }
+            .center-card:hover { transform: translateY(-5px) scale(1.02); }
+            .product-carousel-btn { display: none; } /* Ocultar botones en móviles para carrusel de productos */
+            .editorials-logos { justify-content: center; }
+        }
+
     </style>
     
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
+            // Inicializar AOS para las animaciones al hacer scroll
+            AOS.init({
+                duration: 800,
+                once: true,
+                offset: 50,
+            });
+
             // =============================================================
             // LÓGICA DEL CARRUSEL DE BANNER (INFINITO Y 5 SEGUNDOS)
+            // Lógica intacta, solo envuelta en una función para mantener limpio
             // =============================================================
-            const bannerTrack = document.querySelector('.banner-track');
-            const originalBannerSlides = document.querySelectorAll('.banner-slide');
-            const bannerPrevBtn = document.querySelector('.banner-prev-btn');
-            const bannerNextBtn = document.querySelector('.banner-next-btn');
-            const slideCount = originalBannerSlides.length;
-            const intervalTime = 5000; 
+            const initBannerCarousel = () => {
+                const bannerTrack = document.querySelector('.banner-track');
+                const originalBannerSlides = document.querySelectorAll('.banner-slide');
+                const bannerPrevBtn = document.querySelector('.banner-prev-btn');
+                const bannerNextBtn = document.querySelector('.banner-next-btn');
+                const slideCount = originalBannerSlides.length;
+                const intervalTime = 5000; 
 
-            // Clonar slides para el loop
-            if (slideCount > 0) {
-                const firstClone = originalBannerSlides[0].cloneNode(true);
-                const lastClone = originalBannerSlides[slideCount - 1].cloneNode(true);
+                if (slideCount > 0) {
+                    const firstClone = originalBannerSlides[0].cloneNode(true);
+                    const lastClone = originalBannerSlides[slideCount - 1].cloneNode(true);
+                    
+                    bannerTrack.appendChild(firstClone);
+                    bannerTrack.insertBefore(lastClone, originalBannerSlides[0]);
+                }
                 
-                bannerTrack.appendChild(firstClone);
-                bannerTrack.insertBefore(lastClone, originalBannerSlides[0]);
-            }
-            
-            const allBannerSlides = document.querySelectorAll('.banner-slide');
-            const totalSlides = allBannerSlides.length;
-            if (totalSlides > 0) {
-                let currentBannerIndex = 1; 
-                
-                const bannerSlideWidth = 100 / totalSlides;
-                bannerTrack.style.width = `${totalSlides * 100}%`;
-                allBannerSlides.forEach(slide => {
-                    slide.style.width = `${bannerSlideWidth}%`;
-                });
-                
-                bannerTrack.style.transform = `translateX(-${bannerSlideWidth * currentBannerIndex}%)`;
-
-
-                const updateBannerCarousel = (smooth = true) => {
-                    bannerTrack.style.transition = smooth ? 'transform 0.5s ease-in-out' : 'none';
+                const allBannerSlides = document.querySelectorAll('.banner-slide');
+                const totalSlides = allBannerSlides.length;
+                if (totalSlides > 0) {
+                    let currentBannerIndex = 1; 
+                    
+                    const bannerSlideWidth = 100 / totalSlides;
+                    bannerTrack.style.width = `${totalSlides * 100}%`;
+                    allBannerSlides.forEach(slide => {
+                        slide.style.width = `${bannerSlideWidth}%`;
+                    });
+                    
+                    // Asegura que se inicie en el primer slide real
+                    bannerTrack.style.transition = 'none';
                     bannerTrack.style.transform = `translateX(-${bannerSlideWidth * currentBannerIndex}%)`;
-                };
+                    setTimeout(() => { bannerTrack.style.transition = 'transform 0.5s ease-in-out'; }, 50);
 
-                bannerTrack.addEventListener('transitionend', () => {
-                    if (currentBannerIndex === 0) {
-                        currentBannerIndex = slideCount;
-                        updateBannerCarousel(false); 
-                    } else if (currentBannerIndex === totalSlides - 1) {
-                        currentBannerIndex = 1;
-                        updateBannerCarousel(false); 
-                    }
-                });
 
-                const navigateBanner = (direction) => {
-                    if (direction === 'next') {
-                        if (currentBannerIndex >= totalSlides - 1) return;
-                        currentBannerIndex++;
-                    } else { 
-                        if (currentBannerIndex <= 0) return;
-                        currentBannerIndex--;
-                    }
-                    updateBannerCarousel();
-                    resetBannerInterval();
-                };
+                    const updateBannerCarousel = (smooth = true) => {
+                        bannerTrack.style.transition = smooth ? 'transform 0.5s ease-in-out' : 'none';
+                        bannerTrack.style.transform = `translateX(-${bannerSlideWidth * currentBannerIndex}%)`;
+                    };
 
-                bannerNextBtn.addEventListener('click', () => navigateBanner('next'));
-                bannerPrevBtn.addEventListener('click', () => navigateBanner('prev'));
+                    bannerTrack.addEventListener('transitionend', () => {
+                        if (currentBannerIndex === 0) {
+                            currentBannerIndex = slideCount;
+                            updateBannerCarousel(false); 
+                        } else if (currentBannerIndex === totalSlides - 1) {
+                            currentBannerIndex = 1;
+                            updateBannerCarousel(false); 
+                        }
+                    });
 
-                let autoSlide = setInterval(() => {
-                    navigateBanner('next');
-                }, intervalTime);
+                    const navigateBanner = (direction) => {
+                        if (direction === 'next') {
+                            if (currentBannerIndex >= totalSlides - 1) return;
+                            currentBannerIndex++;
+                        } else { 
+                            if (currentBannerIndex <= 0) return;
+                            currentBannerIndex--;
+                        }
+                        updateBannerCarousel();
+                        resetBannerInterval();
+                    };
 
-                const resetBannerInterval = () => {
-                    clearInterval(autoSlide);
-                    autoSlide = setInterval(() => {
+                    bannerNextBtn.addEventListener('click', () => navigateBanner('next'));
+                    bannerPrevBtn.addEventListener('click', () => navigateBanner('prev'));
+
+                    let autoSlide = setInterval(() => {
                         navigateBanner('next');
                     }, intervalTime);
-                };
-            }
 
+                    const resetBannerInterval = () => {
+                        clearInterval(autoSlide);
+                        autoSlide = setInterval(() => {
+                            navigateBanner('next');
+                        }, intervalTime);
+                    };
+                }
+            };
 
             // =============================================================
             // LÓGICA DEL CARRUSEL DE PRODUCTOS (GRUPOS DE TRES) - ESTABLE
             // =============================================================
-            const productTrack = document.querySelector('.product-track');
-            const productGroups = document.querySelectorAll('.product-group');
-            const productPrevBtn = document.querySelector('.product-prev-btn');
-            const productNextBtn = document.querySelector('.product-next-btn');
-            
-            let currentProductGroup = 0;
-            const groupCount = productGroups.length;
-
-            if (productTrack && groupCount > 0) {
-                const updateProductCarousel = () => {
-                    productTrack.style.width = `${groupCount * 100}%`; 
-                    productTrack.style.transform = `translateX(-${currentProductGroup * 100}%)`;
-                };
-
-                productNextBtn.addEventListener('click', () => {
-                    if (currentProductGroup < groupCount - 1) {
-                        currentProductGroup++;
-                    } else {
-                        currentProductGroup = 0; // Loop simple al inicio
-                    }
-                    updateProductCarousel();
-                });
-
-                productPrevBtn.addEventListener('click', () => {
-                    if (currentProductGroup > 0) {
-                        currentProductGroup--;
-                    } else {
-                        currentProductGroup = groupCount - 1; // Loop simple al final
-                    }
-                    updateProductCarousel();
-                });
+            const initProductCarousel = () => {
+                const productTrack = document.querySelector('.product-track');
+                const productGroups = document.querySelectorAll('.product-group');
+                const productPrevBtn = document.querySelector('.product-prev-btn');
+                const productNextBtn = document.querySelector('.product-next-btn');
                 
-                updateProductCarousel(); 
-            }
+                let currentProductGroup = 0;
+                const groupCount = productGroups.length;
+
+                if (productTrack && groupCount > 0) {
+                    const updateProductCarousel = () => {
+                        productTrack.style.width = `${groupCount * 100}%`; 
+                        productTrack.style.transform = `translateX(-${currentProductGroup * 100}%)`;
+                    };
+
+                    productNextBtn.addEventListener('click', () => {
+                        if (currentProductGroup < groupCount - 1) {
+                            currentProductGroup++;
+                        } else {
+                            currentProductGroup = 0; // Loop simple al inicio
+                        }
+                        updateProductCarousel();
+                    });
+
+                    productPrevBtn.addEventListener('click', () => {
+                        if (currentProductGroup > 0) {
+                            currentProductGroup--;
+                        } else {
+                            currentProductGroup = groupCount - 1; // Loop simple al final
+                        }
+                        updateProductCarousel();
+                    });
+                    
+                    updateProductCarousel(); 
+                }
+            };
+
+            initBannerCarousel();
+            initProductCarousel();
         });
     </script>
 
