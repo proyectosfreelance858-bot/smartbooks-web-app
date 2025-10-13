@@ -2,16 +2,22 @@ import os
 from flask import Flask, render_template
 import psycopg2
 from datetime import datetime
+from dotenv import load_dotenv # <-- Importar dotenv
+
+# Cargar las variables de entorno desde el archivo .env
+# Esto hace que DB_HOST, DB_NAME, DB_USER, DB_PASS estén disponibles
+load_dotenv()
 
 # =================================================================
 # 1. CONFIGURACIÓN DE BASE DE DATOS Y HOSTING
-# Obtiene las credenciales de las variables de entorno (Render/Hosting) 
-# o usa valores por defecto (localhost) si no las encuentra.
+# Obtiene las credenciales de las variables de entorno (Render/Hosting/.env)
 # =================================================================
-DB_HOST = os.environ.get("DB_HOST", "localhost") 
-DB_NAME = os.environ.get("DB_NAME", "nombre_de_tu_base_de_datos") 
-DB_USER = os.environ.get("DB_USER", "tu_usuario_postgres") 
-DB_PASS = os.environ.get("DB_PASS", "tu_contraseña_postgres") 
+# Ahora lee directamente de las variables de entorno (cargadas por load_dotenv() o por el hosting)
+DB_HOST = os.environ.get("DB_HOST") 
+DB_NAME = os.environ.get("DB_NAME") 
+DB_USER = os.environ.get("DB_USER") 
+DB_PASS = os.environ.get("DB_PASS") 
+# DB_PORT no es necesario por defecto, psycopg2 lo maneja
 
 # Configuración de puerto y host para Render
 PORT = int(os.environ.get('PORT', 5000))
@@ -21,6 +27,10 @@ app = Flask(__name__)
 
 def get_db_connection():
     """Intenta establecer la conexión a la base de datos PostgreSQL."""
+    # Se añade un chequeo simple para no fallar en psycopg2 con None
+    if not all([DB_HOST, DB_NAME, DB_USER, DB_PASS]):
+         raise psycopg2.OperationalError("Faltan variables de conexión a la base de datos (DB_HOST, DB_NAME, DB_USER, DB_PASS).")
+         
     conn = psycopg2.connect(
         host=DB_HOST,
         database=DB_NAME,
