@@ -2,17 +2,26 @@ import os
 from flask import Flask, render_template
 import psycopg2
 from datetime import datetime
+from dotenv import load_dotenv
+
+# Carga las variables de entorno desde el archivo .env (útil para desarrollo local)
+load_dotenv()
 
 # =================================================================
 # ATENCIÓN: CONFIGURACIÓN DE BASE DE DATOS
-# >>> DEBES REEMPLAZAR ESTOS VALORES CON TUS CREDENCIALES REALES DE POSTGRESQL <<<
+# ESTO DEBE SER REEMPLAZADO CON TUS CREDENCIALES REALES O VARIABLES DE ENTORNO
 # =================================================================
-# Si usas Render, considera usar Variables de Entorno y `os.environ.get()` aquí 
-# para mayor seguridad y flexibilidad en producción.
-DB_HOST = "localhost" 
-DB_NAME = "nombre_de_tu_base_de_datos" 
-DB_USER = "tu_usuario_postgres" 
-DB_PASS = "tu_contraseña_postgres" 
+# La mejor práctica es usar variables de entorno (Render/Heroku/etc. las usan).
+# Si no las encuentra en el entorno, usa los valores por defecto (ej. "localhost").
+
+DB_HOST = os.environ.get("DB_HOST", "localhost") 
+DB_NAME = os.environ.get("DB_NAME", "nombre_de_tu_base_de_datos") 
+DB_USER = os.environ.get("DB_USER", "tu_usuario_postgres") 
+DB_PASS = os.environ.get("DB_PASS", "tu_contraseña_postgres") 
+
+# El puerto de Render/hosting se obtiene de la variable 'PORT'
+PORT = int(os.environ.get('PORT', 5000))
+HOST = '0.0.0.0' 
 
 app = Flask(__name__)
 
@@ -28,16 +37,10 @@ def get_db_connection():
 
 @app.route('/')
 def index():
-    """
-    Ruta principal: 
-    1. Conecta a la DB y obtiene los 7 blogs.
-    2. Define todas las variables requeridas por index.html (banners y blogs).
-    3. Renderiza la plantilla.
-    """
     blogs = []
     conn = None
     
-    # --- 1. CONEXIÓN Y CONSULTA A LA BASE DE DATOS ---
+    # --- 1. CONEXIÓN Y CONSULTA A LA BASE DE DATOS (CON MANEJO DE ERRORES) ---
     try:
         conn = get_db_connection()
         cur = conn.cursor()
@@ -74,21 +77,26 @@ def index():
             blogs.append({
                 'id': id,
                 'titulo': titulo,
+                # IMPORTANTE: Los blogs que no tienen URL de imagen fallarán. 
+                # Aquí verificamos si la URL es nula y usamos una por defecto.
+                'url_imagen_principal': url_imagen_principal if url_imagen_principal else 'https://via.placeholder.com/600x400.png?text=Smart+Books+Blog',
                 'descripcion_corta': descripcion_corta,
-                'url_imagen_principal': url_imagen_principal,
                 'fecha': fecha_formateada,
-                'autor': 'Smart Books Team',     # Variable fija para el diseño
-                'categoria': 'Educación',        # Variable fija para el diseño
-                'url_articulo': f'/blog/{slug}'  # Enlace dinámico
+                'autor': 'Smart Books Team',     
+                'categoria': 'Educación',        
+                'url_articulo': f'/blog/{slug}'  
             })
 
         cur.close()
 
     except psycopg2.Error as e:
-        print(f"Error de base de datos PostgreSQL: {e}")
-        # En caso de error, 'blogs' será una lista vacía, pero la web cargará.
+        # Si la conexión falla, imprimimos un mensaje claro y dejamos 'blogs' vacío
+        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        print(f"ERROR CRÍTICO DE CONEXIÓN A LA BASE DE DATOS: {e}")
+        print(f"Revisa las credenciales (DB_HOST, DB_NAME, DB_USER, DB_PASS).")
+        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     except Exception as e:
-        print(f"Error inesperado: {e}")
+        print(f"Error inesperado durante la consulta: {e}")
     finally:
         if conn:
             conn.close()
@@ -103,16 +111,8 @@ def index():
         'blogs': blogs
     }
 
-    # --- 3. RENDERIZACIÓN DE LA PLANTILLA ---
-    # Renderiza index.html (debe estar en la carpeta 'templates')
     return render_template('index.html', **context)
 
 if __name__ == '__main__':
-    # =================================================================
-    # SOLUCIÓN CRÍTICA AL ERROR DE PUERTOS (PARA RENDER/HOSTING)
-    # Se asegura que Flask escuche en 0.0.0.0 y use el puerto asignado
-    # =================================================================
-    PORT = int(os.environ.get('PORT', 5000))
-    HOST = '0.0.0.0' 
-    
+    # Ejecuta el servidor escuchando en 0.0.0.0 y usando la variable PORT
     app.run(host=HOST, port=PORT, debug=True)
