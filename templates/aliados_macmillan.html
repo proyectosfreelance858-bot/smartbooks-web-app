@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Books | Holding Educativo Global</title>
-    
+    <title>MacMillan | Aliado Educativo Smart Books</title>
+    <meta name="description" content="Descubre los programas y libros de MacMillan Education: Give Me Five, Insta English, Doodle Town y Ferris Wheel. Soluciones bilingües y de inglés con Smart Books.">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,27 +42,23 @@
         }
 
         /* --- ESTILO DE ANIMACIÓN DE LOGOS (MARQUEE) --- */
-        /* 1. Definición de la animación de desplazamiento */
         @keyframes scroll {
             0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); } /* Desplaza la mitad del contenido (el original y la copia) */
+            100% { transform: translateX(-50%); } 
         }
 
-        /* 2. Contenedor de logos que aplicará la animación */
         .scrolling-logos {
             display: flex;
-            width: 200%; /* Duplicado de ancho para permitir el bucle infinito */
-            animation: scroll 30s linear infinite; /* 30s de duración, lineal, infinito */
-            will-change: transform; /* Optimización de rendimiento */
+            width: 200%; 
+            animation: scroll 30s linear infinite; 
+            will-change: transform; 
         }
         
-        /* 3. Pausar animación al hacer hover (opcional) */
         .logos-track:hover .scrolling-logos {
             animation-play-state: paused;
         }
 
         .logo-item {
-             /* Asegura que todos los logos tengan el mismo espacio y tamaño en el carrusel */
             padding: 0 2rem; 
             flex-shrink: 0;
             display: flex;
@@ -76,12 +73,12 @@
             display: flex;
             align-items: center;
             height: 100%;
-            border-bottom: 4px solid transparent; /* Base transparente */
+            border-bottom: 4px solid transparent; 
             transition: all 0.2s ease-in-out;
         }
         .menu-item:hover, .menu-item.active {
-            color: #4338ca; /* Texto azul */
-            border-bottom-color: #4338ca; /* Línea azul */
+            color: #4338ca; 
+            border-bottom-color: #4338ca; 
         }
 
         /* Estilos de WhatsApp Flotante (sin cambios) */
@@ -192,7 +189,7 @@
             <div class="max-w-7xl mx-auto px-4 h-full">
                 <nav class="flex justify-center space-x-8 font-outfit text-gray-800 font-semibold text-sm h-full">
                     
-                    <a href="/" class="menu-item active">Inicio</a>
+                    <a href="/" class="menu-item">Inicio</a>
                     
                     <div class="dropdown relative h-full">
                         <a href="#" class="menu-item flex items-center">
@@ -206,12 +203,12 @@
                     </div>
                     
                     <div class="dropdown relative h-full">
-                        <a href="#" class="menu-item flex items-center">
+                        <a href="#" class="menu-item flex items-center active">
                             Aliados <i class="fas fa-chevron-down text-xs ml-1 transition-transform transform group-hover:rotate-180"></i>
                         </a>
                         <div class="dropdown-menu absolute bg-white shadow-xl rounded-b-md w-40 border-t-2 border-brand-accent top-full">
                             <a href="/aliados/castillo" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Castillo</a>
-                            <a href="#" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">MacMillan</a>
+                            <a href="/aliados/macmillan" class="block px-5 py-3 text-gray-800 bg-gray-50 text-active font-semibold transition duration-300 text-sm">MacMillan</a>
                         </div>
                     </div>
 
@@ -227,78 +224,66 @@
 
     <main>
         
-        <section class="max-w-full mx-auto overflow-hidden relative shadow-lg animate-scroll-reveal" style="height: 75vh; min-height: 550px;">
-            <div id="banner-carousel" class="w-full h-full">
-                <div class="carousel-item active w-full h-full">
-                    <img src="{{ url_banner1 }}" alt="Banner Principal 1" class="w-full h-full object-cover">
-                </div>
-                <div class="carousel-item w-full h-full">
-                    <img src="{{ url_banner2 }}" alt="Banner Principal 2" class="w-full h-full object-cover">
-                </div>
-            </div>
-            
-            <div class="absolute bottom-6 left-0 right-0 flex justify-center space-x-3 z-30">
-                <div class="dot w-4 h-4 bg-white rounded-full opacity-70 cursor-pointer transition duration-300 transform hover:scale-125" data-slide="0"></div>
-                <div class="dot w-4 h-4 bg-white rounded-full opacity-70 cursor-pointer transition duration-300 transform hover:scale-125" data-slide="1"></div>
-            </div>
-        </section>
-        
-        <section class="py-16 md:py-24 text-center">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 animate-scroll-reveal delay-300">
-                <h2 class="text-xs font-outfit uppercase tracking-widest text-brand-accent mb-3">Nuestra Misión</h2>
-                <p class="font-outfit text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 leading-snug mb-6">
-                    Somos un <span class="text-brand-primary">Holding Educativo</span> Global
+        <section class="bg-white py-16 md:py-24 text-center border-b border-gray-100">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 animate-scroll-reveal">
+                
+                <img src="https://sbooks.com.co/wp-content/uploads/2022/11/logo_MacMillanresized.webp" 
+                     alt="Logo MacMillan Education" class="h-16 sm:h-20 w-auto mx-auto mb-6">
+                
+                <h1 class="font-outfit text-4xl sm:text-5xl md:text-6xl font-extrabold text-gray-900 leading-snug mb-4">
+                    Explora el Universo <span class="text-brand-primary">MacMillan Education</span>
+                </h1>
+                <p class="text-xl text-gray-600 mb-8 font-instrument">
+                    Líderes en soluciones bilingües y programas de inglés, MacMillan te ofrece una metodología de enseñanza innovadora y global.
                 </p>
-                <p class="text-lg text-gray-600 mb-8 font-instrument">
-                    Transformando la educación en América Latina con soluciones pedagógicas integrales, tecnología avanzada y un compromiso inquebrantable con la excelencia.
-                </p>
-                <a href="#recuadros" class="inline-block px-8 py-3 text-base font-medium text-white bg-brand-primary rounded-lg hover:bg-indigo-700 transition duration-300 shadow-md">
-                    Descubre nuestras Soluciones
+                <a href="#programas-macmillan" class="inline-block px-8 py-3 text-base font-medium text-white bg-brand-primary rounded-lg hover:bg-indigo-700 transition duration-300 shadow-md">
+                    Ver Todos los Programas
                 </a>
             </div>
         </section>
-        
-        <section id="editoriales" class="py-16 bg-gray-100"> 
+
+        <section id="programas-macmillan" class="py-16 md:py-20 bg-gray-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="font-outfit text-xl md:text-2xl text-center font-bold text-gray-900 mb-10 animate-scroll-reveal">
-                    Trabajamos con las mejores <span class="text-brand-primary">Editoriales Globales</span>
+                <h2 class="font-outfit text-3xl font-extrabold text-gray-900 mb-10 text-center animate-scroll-reveal">
+                    Programas y Series Destacadas
                 </h2>
-                
-                <div class="logos-track overflow-hidden relative w-full mx-auto" style="height: 100px;">
-                    <div class="scrolling-logos" id="scrolling-logos-container">
-                        
-                        <div id="original-logos" class="flex">
-                            <div class="logo-item"><img src="{{ url_editorial1 }}" alt="Logo Editorial 1" class="h-10 opacity-70 hover:opacity-100 transition duration-300"></div>
-                            <div class="logo-item"><img src="{{ url_editorial2 }}" alt="Logo Editorial 2" class="h-10 opacity-70 hover:opacity-100 transition duration-300"></div>
-                            <div class="logo-item"><img src="{{ url_editorial3 }}" alt="Logo Editorial 3" class="h-10 opacity-70 hover:opacity-100 transition duration-300"></div>
-                            <div class="logo-item"><img src="{{ url_editorial4 }}" alt="Logo Editorial 4" class="h-10 opacity-70 hover:opacity-100 transition duration-300"></div>
-                            <div class="logo-item"><img src="{{ url_editorial5 }}" alt="Logo Editorial 5" class="h-10 opacity-70 hover:opacity-100 transition duration-300"></div>
-                            <div class="logo-item"><img src="{{ url_editorial1 }}" alt="Logo Editorial 1" class="h-10 opacity-70 hover:opacity-100 transition duration-300"></div>
-                            <div class="logo-item"><img src="{{ url_editorial2 }}" alt="Logo Editorial 2" class="h-10 opacity-70 hover:opacity-100 transition duration-300"></div>
-                        </div>
 
-                        <div id="duplicate-logos" class="flex">
-                            </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                    
+                    {% set programs = [
+                        ('Give Me Five, MacMillan', 'bg-blue-100', 'fas fa-chalkboard-teacher'),
+                        ('Insta English, MacMillan', 'bg-red-100', 'fas fa-comments'),
+                        ('Doodle Town, MacMillan', 'bg-yellow-100', 'fas fa-pencil-ruler'),
+                        ('Ferris Wheel, MacMillan', 'bg-green-100', 'fas fa-graduation-cap')
+                    ] %}
+                    
+                    {% for program, bg_class, icon_class in programs %}
+                    <a href="#productos" class="block p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 {{ bg_class }} animate-scroll-reveal" style="animation-delay: {{ loop.index * 150 }}ms;">
+                        <i class="{{ icon_class }} text-4xl text-gray-800 mb-3"></i>
+                        <h3 class="font-outfit text-xl font-bold text-gray-900">{{ program.split(', ')[0] }}</h3>
+                        <p class="text-sm text-gray-600 mt-1">Nivel: {{ program.split(', ')[1] }}</p>
+                    </a>
+                    {% endfor %}
 
-                    </div>
                 </div>
             </div>
         </section>
 
-        <section id="productos-vendidos" class="py-16 md:py-24 bg-white"> <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section id="productos" class="py-16 md:py-24 bg-white"> 
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 
                 <div class="flex justify-between items-center mb-10 animate-scroll-reveal">
                     <h2 class="font-outfit text-4xl font-extrabold text-gray-900">
-                        Productos más <span class="text-brand-accent">Vendidos</span>
+                        Materiales de <span class="text-brand-accent">MacMillan</span>
                     </h2>
                     <a href="#tienda" class="inline-block px-6 py-2 text-base font-medium text-white bg-brand-accent rounded-lg hover:bg-red-600 transition duration-300 shadow-md">
-                        Ver Todos
+                        Ver Tienda General
                     </a>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     
-                    {% for producto in productos_destacados %}
+                    {% for producto in productos_macmillan %}
                     <div class="bg-gray-100 rounded-xl shadow-lg overflow-hidden product-card animate-scroll-reveal" 
                         style="animation-delay: {{ loop.index * 150 }}ms;">
                         
@@ -338,49 +323,15 @@
 
                     </div>
                     {% endfor %}
-                </div>
-            </div>
-        </section>
-        
-        <section id="recuadros" class="bg-gray-100 py-16 md:py-24">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                
-                <h2 class="font-outfit text-3xl md:text-4xl text-center font-extrabold text-gray-900 mb-12 animate-scroll-reveal">
-                    Nuestros Proyectos <span class="text-brand-accent">Destacados</span>
-                </h2>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {% if not productos_macmillan %}
+                        <div class="col-span-4 text-center py-12 bg-white rounded-xl border border-dashed border-gray-300 shadow-md">
+                            <i class="fas fa-box-open text-6xl text-gray-300 mb-4"></i>
+                            <p class="text-xl font-outfit text-gray-700">No hay productos de MacMillan disponibles en este momento.</p>
+                            <p class="text-sm text-gray-500 mt-2">Asegúrate de que la función Flask `aliados_macmillan` esté consultando las categorías correctas en la base de datos (e.g., 'MacMillan', 'Give Me Five, MacMillan').</p>
+                        </div>
+                    {% endif %}
                     
-                    <div class="bg-white rounded-lg shadow-xl overflow-hidden animate-scroll-reveal delay-300
-                                transform transition duration-500 hover:shadow-2xl hover:translate-y-[-5px]">
-                        <img src="{{ url_recuadro1 }}" alt="Imagen Recuadro 1" class="w-full h-64 object-cover">
-                        <div class="p-6">
-                            <h3 class="font-outfit text-xl font-bold text-gray-800 mb-2">Conoce y decide tu mejor elección</h3>
-                            <p class="text-gray-500 text-sm font-instrument leading-relaxed line-clamp-3">Accede a nuestros recursos pedagógicos y herramientas de diagnóstico para tomar decisiones informadas sobre los textos escolares que necesita tu institución.</p>
-                            <a href="#" class="mt-4 inline-block text-brand-primary font-semibold hover:text-brand-accent transition duration-300">Ver más &rarr;</a>
-                        </div>
-                    </div>
-
-                    <div class="bg-white rounded-lg shadow-xl overflow-hidden animate-scroll-reveal delay-500
-                                transform transition duration-500 hover:shadow-2xl hover:translate-y-[-5px]">
-                        <img src="{{ url_recuadro2 }}" alt="Imagen Recuadro 2" class="w-full h-64 object-cover">
-                        <div class="p-6">
-                            <h3 class="font-outfit text-xl font-bold text-gray-800 mb-2">Más que libros, soluciones integrales</h3>
-                            <p class="text-gray-500 text-sm font-instrument leading-relaxed line-clamp-3">Ofrecemos paquetes completos que incluyen textos, plataformas digitales y capacitación docente para una inmersión total en la transformación educativa.</p>
-                            <a href="#" class="mt-4 inline-block text-brand-primary font-semibold hover:text-brand-accent transition duration-300">Ver más &rarr;</a>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-lg shadow-xl overflow-hidden animate-scroll-reveal delay-700
-                                transform transition duration-500 hover:shadow-2xl hover:translate-y-[-5px]">
-                        <img src="{{ url_recuadro3 }}" alt="Imagen Recuadro 3" class="w-full h-64 object-cover">
-                        <div class="p-6">
-                            <h3 class="font-outfit text-xl font-bold text-gray-800 mb-2">Nuevo Programa Académico Bilingüe</h3>
-                            <p class="text-gray-500 text-sm font-instrument leading-relaxed line-clamp-3">Descubre nuestra nueva propuesta bilingüe diseñada para colegios que buscan la certificación internacional con metodologías ágiles y modernas.</p>
-                            <a href="#" class="mt-4 inline-block text-brand-primary font-semibold hover:text-brand-accent transition duration-300">Ver más &rarr;</a>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </section>
@@ -456,7 +407,6 @@
         </div>
     </footer>
     
-
     <a href="https://api.whatsapp.com/send?phone=573115572243" target="_blank" class="whatsapp-float" aria-label="Contactar por WhatsApp">
         <i class="fab fa-whatsapp"></i>
     </a>
@@ -464,56 +414,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Script para el Carrusel
-            const items = document.querySelectorAll('.carousel-item');
-            const dots = document.querySelectorAll('.dot');
-            let currentIndex = 0;
-            const intervalTime = 5000; // Cambia cada 5 segundos
-
-            function showSlide(index) {
-                // Desactiva todos los elementos
-                items.forEach(item => item.classList.remove('active'));
-                dots.forEach(dot => dot.classList.remove('opacity-100', 'bg-brand-primary'));
-                
-                // Activa el elemento y dot correcto
-                if (items[index]) {
-                    items[index].classList.add('active');
-                    dots[index].classList.add('opacity-100', 'bg-brand-primary'); 
-                    dots[index].classList.remove('opacity-70', 'bg-white'); 
-                }
-            }
-
-            function nextSlide() {
-                currentIndex = (currentIndex + 1) % items.length;
-                showSlide(currentIndex);
-            }
-
-            // Inicia el carrusel
-            let slideInterval = setInterval(nextSlide, intervalTime);
-            showSlide(currentIndex);
-
-            // Maneja el clic en los dots
-            dots.forEach((dot, index) => {
-                dot.addEventListener('click', () => {
-                    clearInterval(slideInterval); // Resetea el intervalo
-                    currentIndex = index;
-                    showSlide(currentIndex);
-                    slideInterval = setInterval(nextSlide, intervalTime); // Reinicia el intervalo
-                });
-            });
-            
-            // --- NUEVO SCRIPT PARA CARRUSEL INFINITO DE LOGOS ---
-            function setupInfiniteScroll() {
-                const originalLogosContainer = document.getElementById('original-logos');
-                const duplicateLogosContainer = document.getElementById('duplicate-logos');
-                
-                if (originalLogosContainer && duplicateLogosContainer) {
-                    // Copia el HTML interno del original al duplicado para el efecto de bucle
-                    duplicateLogosContainer.innerHTML = originalLogosContainer.innerHTML;
-                }
-            }
-            setupInfiniteScroll();
-            // --- FIN NUEVO SCRIPT ---
+            // El carrusel de banners de la homepage no se usa aquí.
 
             // Script para Scroll Reveal (Animaciones al hacer scroll)
             const revealElements = document.querySelectorAll('.animate-scroll-reveal');
@@ -521,7 +422,6 @@
             const observer = new IntersectionObserver(entries => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        // El retardo de animación se toma del atributo style
                         entry.target.style.opacity = 1;
                         entry.target.style.transform = 'translateY(0)';
                         observer.unobserve(entry.target);
@@ -532,9 +432,8 @@
             });
 
             revealElements.forEach(element => {
-                // Si ya tiene un delay, no lo sobrescribe
                 if (!element.style.animationDelay) {
-                    element.style.animationDelay = '0s'; // Valor por defecto
+                    element.style.animationDelay = '0s'; 
                 }
                 observer.observe(element);
             });

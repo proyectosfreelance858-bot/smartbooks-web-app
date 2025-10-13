@@ -23,8 +23,8 @@ app = Flask(__name__)
 def get_db_connection():
     """Intenta establecer la conexión a la base de datos PostgreSQL."""
     if not all([DB_HOST, DB_NAME, DB_USER, DB_PASS]):
-         raise psycopg2.OperationalError("Faltan variables de conexión a la base de datos.")
-         
+          raise psycopg2.OperationalError("Faltan variables de conexión a la base de datos.")
+          
     conn = psycopg2.connect(
         host=DB_HOST,
         database=DB_NAME,
@@ -183,11 +183,11 @@ def index():
 
 
 # =================================================================
-# NUEVA RUTA PARA LA PÁGINA DE EDICIONES CASTILLO
+# RUTA PARA LA PÁGINA DE EDICIONES CASTILLO
 # =================================================================
 
 @app.route('/aliados/castillo')
-def castillo_productos():
+def aliados_castillo():
     productos = []
     conn = None
     
@@ -215,11 +215,9 @@ def castillo_productos():
 
     except psycopg2.OperationalError as e:
         print(f"ERROR CRÍTICO: FALLA DE CONEXIÓN A LA BASE DE DATOS. Mensaje: {e}")
-        # Si la base de datos falla, la lista de productos queda vacía
         pass 
     except Exception as e:
         print(f"Error inesperado al cargar productos de Castillo: {e}")
-        # Si hay otro error, la lista de productos queda vacía
         pass
     finally:
         if conn:
@@ -228,13 +226,79 @@ def castillo_productos():
     context = {
         'titulo_pagina': 'Ediciones Castillo',
         'productos': productos,
-        # URL del logo proporcionada por ti
+        # URL del logo de Ediciones Castillo
         'url_logo_editorial': 'https://sbooks.com.co/wp-content/uploads/2023/09/Ediciones-Color-2.png', 
         'texto_presentacion': 'Explora la colección completa de textos escolares, guías y plan lector de Ediciones Castillo, líder en innovación educativa.',
         'total_productos': len(productos)
     }
     
+    # Se espera que el nombre de la plantilla sea 'Castillo.html'
     return render_template('Castillo.html', **context)
+
+
+# =================================================================
+# NUEVA RUTA PARA LA PÁGINA DE MACMILLAN EDUCATION
+# =================================================================
+
+@app.route('/aliados/macmillan')
+def aliados_macmillan():
+    productos = []
+    conn = None
+    
+    # Lista de categorías exactas proporcionadas por el usuario para MacMillan
+    macmillan_categories = [
+        'MacMillan',
+        'Give Me Five, MacMillan',
+        'Insta English, MacMillan',
+        'Doodle Town, MacMillan',
+        'Ferris Wheel, MacMillan'
+    ]
+    
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+
+        # Usamos IN para obtener los productos de las categorías exactas de MacMillan
+        # Nota: La sintaxis de psycopg2 para IN requiere pasar una tupla de valores
+        sql_macmillan_query = """
+            SELECT 
+                sku, titulo, categoria, precio, url_imagen, descripcion
+            FROM 
+                productos_escolares 
+            WHERE 
+                categoria IN %s
+            ORDER BY 
+                titulo ASC; 
+        """
+        # Ejecutamos la consulta. La tupla se pasa como una sola variable de consulta
+        cur.execute(sql_macmillan_query, (tuple(macmillan_categories),))
+        db_productos = cur.fetchall()
+        
+        productos = format_products(db_productos)
+            
+        cur.close()
+
+    except psycopg2.OperationalError as e:
+        print(f"ERROR CRÍTICO: FALLA DE CONEXIÓN A LA BASE DE DATOS. Mensaje: {e}")
+        pass 
+    except Exception as e:
+        print(f"Error inesperado al cargar productos de MacMillan: {e}")
+        pass
+    finally:
+        if conn:
+            conn.close()
+
+    context = {
+        'titulo_pagina': 'MacMillan Education',
+        'productos_macmillan': productos, # Variable usada en la plantilla aliados_macmillan.html
+        # URL del logo de MacMillan proporcionada por el usuario
+        'url_logo_editorial': 'https://sbooks.com.co/wp-content/uploads/2022/11/logo_MacMillanresized.webp', 
+        'texto_presentacion': 'Explora la colección completa de textos, plataformas y soluciones bilingües de MacMillan Education.',
+        'total_productos': len(productos)
+    }
+    
+    # Renderizamos la nueva plantilla 'aliados_macmillan.html'
+    return render_template('aliados_macmillan.html', **context)
 
 
 if __name__ == '__main__':
