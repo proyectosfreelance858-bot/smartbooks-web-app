@@ -152,6 +152,25 @@
         .product-info {
             transition: all 0.3s ease;
         }
+
+        /* --- ESTILO PARA CARRUSEL DE EDITORIALES (MARQUEE) --- */
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } /* Se desplaza el 50% de su ancho total (un set de logos) */
+        }
+        .marquee {
+            animation: marquee 30s linear infinite; /* 30 segundos, velocidad constante, bucle infinito */
+            width: 200%; /* El doble de ancho para contener dos sets de logos */
+            display: flex;
+            white-space: nowrap; /* Evita que los logos salten de línea */
+        }
+        .marquee > div {
+            display: flex;
+            justify-content: space-around; /* Distribuye el espacio entre los logos */
+            align-items: center;
+            width: 50%; /* Cada set toma el 50% del contenedor total (200%) */
+        }
+        /* --- FIN ESTILO MARQUEE --- */
     </style>
 </head>
 
@@ -283,16 +302,29 @@
             </div>
         </section>
         
-        <section id="editoriales" class="py-16 bg-gray-100"> <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section id="editoriales" class="py-16 bg-gray-100"> 
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 class="font-outfit text-xl md:text-2xl text-center font-bold text-gray-900 mb-10 animate-scroll-reveal">
                     Trabajamos con las mejores <span class="text-brand-primary">Editoriales Globales</span>
                 </h2>
-                <div class="flex flex-wrap justify-center items-center gap-x-12 gap-y-6">
-                    <img src="{{ url_editorial1 }}" alt="Logo Editorial 1" class="h-10 opacity-70 hover:opacity-100 transition duration-300 animate-scroll-reveal" style="animation-delay: 100ms;">
-                    <img src="{{ url_editorial2 }}" alt="Logo Editorial 2" class="h-10 opacity-70 hover:opacity-100 transition duration-300 animate-scroll-reveal" style="animation-delay: 200ms;">
-                    <img src="{{ url_editorial3 }}" alt="Logo Editorial 3" class="h-10 opacity-70 hover:opacity-100 transition duration-300 animate-scroll-reveal" style="animation-delay: 300ms;">
-                    <img src="{{ url_editorial4 }}" alt="Logo Editorial 4" class="h-10 opacity-70 hover:opacity-100 transition duration-300 animate-scroll-reveal" style="animation-delay: 400ms;">
-                    <img src="{{ url_editorial5 }}" alt="Logo Editorial 5" class="h-10 opacity-70 hover:opacity-100 transition duration-300 animate-scroll-reveal" style="animation-delay: 500ms;">
+                
+                <div class="overflow-hidden whitespace-nowrap py-4">
+                    <div class="marquee">
+                        <div>
+                            <img src="{{ url_editorial1 }}" alt="Logo Editorial 1" class="h-10 opacity-70 hover:opacity-100 transition duration-300 mx-10 inline-block">
+                            <img src="{{ url_editorial2 }}" alt="Logo Editorial 2" class="h-10 opacity-70 hover:opacity-100 transition duration-300 mx-10 inline-block">
+                            <img src="{{ url_editorial3 }}" alt="Logo Editorial 3" class="h-10 opacity-70 hover:opacity-100 transition duration-300 mx-10 inline-block">
+                            <img src="{{ url_editorial4 }}" alt="Logo Editorial 4" class="h-10 opacity-70 hover:opacity-100 transition duration-300 mx-10 inline-block">
+                            <img src="{{ url_editorial5 }}" alt="Logo Editorial 5" class="h-10 opacity-70 hover:opacity-100 transition duration-300 mx-10 inline-block">
+                        </div>
+                        <div>
+                            <img src="{{ url_editorial1 }}" alt="Logo Editorial 1" class="h-10 opacity-70 hover:opacity-100 transition duration-300 mx-10 inline-block">
+                            <img src="{{ url_editorial2 }}" alt="Logo Editorial 2" class="h-10 opacity-70 hover:opacity-100 transition duration-300 mx-10 inline-block">
+                            <img src="{{ url_editorial3 }}" alt="Logo Editorial 3" class="h-10 opacity-70 hover:opacity-100 transition duration-300 mx-10 inline-block">
+                            <img src="{{ url_editorial4 }}" alt="Logo Editorial 4" class="h-10 opacity-70 hover:opacity-100 transition duration-300 mx-10 inline-block">
+                            <img src="{{ url_editorial5 }}" alt="Logo Editorial 5" class="h-10 opacity-70 hover:opacity-100 transition duration-300 mx-10 inline-block">
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
