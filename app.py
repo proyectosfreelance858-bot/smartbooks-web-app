@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template, abort
 import psycopg2
 from datetime import datetime
 from dotenv import load_dotenv
@@ -33,10 +33,36 @@ def get_db_connection():
     )
     return conn
 
+# Función auxiliar para formatear productos (evita repetir código)
+def format_products(db_productos):
+    """Convierte los resultados de la consulta de productos en un formato de lista de diccionarios."""
+    productos = []
+    for producto_data in db_productos:
+        (sku, titulo, categoria, precio, url_imagen, descripcion) = producto_data
+        
+        precio_formateado = f"${precio:,.0f}".replace(",", ".")
+        
+        imagen_url = url_imagen
+        if not imagen_url or not imagen_url.strip():
+            imagen_url = 'https://via.placeholder.com/400x500.png?text=Producto'
+        
+        productos.append({
+            'sku': sku,
+            'titulo': titulo,
+            'categoria': categoria,
+            'precio': precio,
+            'precio_formateado': precio_formateado,
+            'url_imagen': imagen_url,
+            'rating': 5,
+            'descripcion_corta': descripcion.split('.')[0] if descripcion else "Descripción no disponible."
+        })
+    return productos
+
+
 @app.route('/')
 def index():
     blogs = []
-    productos_destacados = [] # NUEVO: Lista para productos más vendidos
+    productos_destacados = [] 
     config_data = {}
     conn = None
     
@@ -78,15 +104,10 @@ def index():
         url_editorial5 = config_data.get('url_editorial5', 'https://via.placeholder.com/150x80.png?text=Editorial+5')
 
 
-        # --- CONSULTA 2: OBTENER LOS ARTÍCULOS DEL BLOG (MODIFICADO a LIMIT 8) ---
+        # --- CONSULTA 2: OBTENER LOS ARTÍCULOS DEL BLOG ---
         sql_blog_query = """
             SELECT 
-                id, 
-                titulo, 
-                descripcion_corta, 
-                url_imagen_principal, 
-                fecha_creacion, 
-                slug 
+                id, titulo, descripcion_corta, url_imagen_principal, fecha_creacion, slug 
             FROM 
                 articulos_blog 
             ORDER BY 
@@ -114,75 +135,35 @@ def index():
                 'url_articulo': f'/blog/{slug}'  
             })
             
-        # --- CONSULTA 3: OBTENER PRODUCTOS MÁS VENDIDOS (NUEVA CONSULTA) ---
+        # --- CONSULTA 3: OBTENER PRODUCTOS MÁS VENDIDOS (Para index.html) ---
         sql_productos_query = """
             SELECT 
-                sku, 
-                titulo, 
-                categoria, 
-                precio, 
-                url_imagen 
+                sku, titulo, categoria, precio, url_imagen, descripcion 
             FROM 
                 productos_escolares 
-            -- Aquí se simularía un ORDER BY ventas DESC o rating DESC, 
-            -- pero por simplicidad de la DB, solo limitaremos los primeros 4.
+            -- Los ordenamos por SKU para consistencia, limitando a 4
+            ORDER BY sku 
             LIMIT 4; 
         """
         cur.execute(sql_productos_query)
         db_productos = cur.fetchall()
-
-        # Formatear los datos de los productos
-        for producto_data in db_productos:
-            (sku, titulo, categoria, precio, url_imagen) = producto_data
-            
-            # Formateo de precio a formato de moneda sin decimales
-            precio_formateado = f"${precio:,.0f}".replace(",", ".")
-            
-            # URL de imagen de fallback
-            imagen_url = url_imagen
-            if not imagen_url or not imagen_url.strip():
-                imagen_url = 'https://via.placeholder.com/400x500.png?text=Producto'
-            
-            productos_destacados.append({
-                'sku': sku,
-                'titulo': titulo,
-                'categoria': categoria,
-                'precio': precio,
-                'precio_formateado': precio_formateado, # Para mostrar en la plantilla
-                'url_imagen': imagen_url,
-                'rating': 5, # Valor fijo para simular el diseño
-                'descripcion_corta': "Descripción corta del producto. Ideal para una rápida vista previa." # Placeholder
-            })
+        productos_destacados = format_products(db_productos) # Usamos la función auxiliar
             
         cur.close()
 
     except psycopg2.OperationalError as e:
         print(f"ERROR CRÍTICO: FALLA DE CONEXIÓN A LA BASE DE DATOS. Mensaje: {e}")
-        # En caso de fallo crítico, usamos fallbacks para evitar errores de Jinja
-        url_banner1 = 'https://via.placeholder.com/1920x600.png?text=Error+DB+Banner+1'
-        url_banner2 = 'https://via.placeholder.com/1920x600.png?text=Error+DB+Banner+2'
-        url_recuadro1 = 'https://via.placeholder.com/600x400.png?text=Error+DB+Recuadro+1'
-        url_recuadro2 = 'https://via.placeholder.com/600x400.png?text=Error+DB+Recuadro+2'
-        url_recuadro3 = 'https://via.placeholder.com/600x400.png?text=Error+DB+Recuadro+3'
-        url_editorial1 = 'https://via.placeholder.com/150x80.png?text=Error+E1'
-        url_editorial2 = 'https://via.placeholder.com/150x80.png?text=Error+E2'
-        url_editorial3 = 'https://via.placeholder.com/150x80.png?text=Error+E3'
-        url_editorial4 = 'https://via.placeholder.com/150x80.png?text=Error+E4'
-        url_editorial5 = 'https://via.placeholder.com/150x80.png?text=Error+E5'
+        # Manejo de fallbacks simplificado
+        url_banner1, url_banner2 = 'https://via.placeholder.com/1920x600.png?text=Error+DB', 'https://via.placeholder.com/1920x600.png?text=Error+DB'
+        url_recuadro1, url_recuadro2, url_recuadro3 = 'https://via.placeholder.com/600x400.png?text=Error+DB', 'https://via.placeholder.com/600x400.png?text=Error+DB', 'https://via.placeholder.com/600x400.png?text=Error+DB'
+        url_editorial1, url_editorial2, url_editorial3, url_editorial4, url_editorial5 = ['https://via.placeholder.com/150x80.png?text=Error+DB'] * 5
         
     except Exception as e:
         print(f"Error inesperado durante la consulta de datos: {e}")
-        # En caso de fallo inesperado, usamos fallbacks
-        url_banner1 = 'https://via.placeholder.com/1920x600.png?text=Error+Inesperado+Banner+1'
-        url_banner2 = 'https://via.placeholder.com/1920x600.png?text=Error+Inesperado+Banner+2'
-        url_recuadro1 = 'https://via.placeholder.com/600x400.png?text=Error+Inesperado+Recuadro+1'
-        url_recuadro2 = 'https://via.placeholder.com/600x400.png?text=Error+Inesperado+Recuadro+2'
-        url_recuadro3 = 'https://via.placeholder.com/600x400.png?text=Error+Inesperado+Recuadro+3'
-        url_editorial1 = 'https://via.placeholder.com/150x80.png?text=Error+E1'
-        url_editorial2 = 'https://via.placeholder.com/150x80.png?text=Error+E2'
-        url_editorial3 = 'https://via.placeholder.com/150x80.png?text=Error+E3'
-        url_editorial4 = 'https://via.placeholder.com/150x80.png?text=Error+E4'
-        url_editorial5 = 'https://via.placeholder.com/150x80.png?text=Error+E5'
+        # Manejo de fallbacks simplificado
+        url_banner1, url_banner2 = 'https://via.placeholder.com/1920x600.png?text=Error+Inesperado', 'https://via.placeholder.com/1920x600.png?text=Error+Inesperado'
+        url_recuadro1, url_recuadro2, url_recuadro3 = 'https://via.placeholder.com/600x400.png?text=Error+Inesperado', 'https://via.placeholder.com/600x400.png?text=Error+Inesperado', 'https://via.placeholder.com/600x400.png?text=Error+Inesperado'
+        url_editorial1, url_editorial2, url_editorial3, url_editorial4, url_editorial5 = ['https://via.placeholder.com/150x80.png?text=Error+E'] * 5
         
     finally:
         if conn:
@@ -190,21 +171,72 @@ def index():
 
     # --- 3. CONTEXTO DE VARIABLES PARA LA PLANTILLA ---
     context = {
-        'url_banner1': url_banner1, 
-        'url_banner2': url_banner2, 
-        'url_recuadro1': url_recuadro1,
-        'url_recuadro2': url_recuadro2,
-        'url_recuadro3': url_recuadro3,
-        'url_editorial1': url_editorial1,
-        'url_editorial2': url_editorial2,
-        'url_editorial3': url_editorial3,
-        'url_editorial4': url_editorial4,
-        'url_editorial5': url_editorial5,
+        'url_banner1': url_banner1, 'url_banner2': url_banner2, 
+        'url_recuadro1': url_recuadro1, 'url_recuadro2': url_recuadro2, 'url_recuadro3': url_recuadro3,
+        'url_editorial1': url_editorial1, 'url_editorial2': url_editorial2, 'url_editorial3': url_editorial3, 
+        'url_editorial4': url_editorial4, 'url_editorial5': url_editorial5,
         'blogs': blogs,
-        'productos_destacados': productos_destacados # NUEVO: Productos para la sección de ventas
+        'productos_destacados': productos_destacados
     }
 
     return render_template('index.html', **context)
 
+
+# =================================================================
+# NUEVA RUTA PARA LA PÁGINA DE EDICIONES CASTILLO
+# =================================================================
+
+@app.route('/aliados/castillo')
+def castillo_productos():
+    productos = []
+    conn = None
+    
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+
+        # Usamos LIKE para obtener todas las subcategorías que empiezan por 'Ediciones Castillo'
+        sql_castillo_query = """
+            SELECT 
+                sku, titulo, categoria, precio, url_imagen, descripcion
+            FROM 
+                productos_escolares 
+            WHERE 
+                categoria LIKE 'Ediciones Castillo%%' 
+            ORDER BY 
+                titulo ASC; 
+        """
+        cur.execute(sql_castillo_query)
+        db_productos = cur.fetchall()
+        
+        productos = format_products(db_productos)
+            
+        cur.close()
+
+    except psycopg2.OperationalError as e:
+        print(f"ERROR CRÍTICO: FALLA DE CONEXIÓN A LA BASE DE DATOS. Mensaje: {e}")
+        # Si la base de datos falla, la lista de productos queda vacía
+        pass 
+    except Exception as e:
+        print(f"Error inesperado al cargar productos de Castillo: {e}")
+        # Si hay otro error, la lista de productos queda vacía
+        pass
+    finally:
+        if conn:
+            conn.close()
+
+    context = {
+        'titulo_pagina': 'Ediciones Castillo',
+        'productos': productos,
+        # URL del logo proporcionada por ti
+        'url_logo_editorial': 'https://sbooks.com.co/wp-content/uploads/2023/09/Ediciones-Color-2.png', 
+        'texto_presentacion': 'Explora la colección completa de textos escolares, guías y plan lector de Ediciones Castillo, líder en innovación educativa.',
+        'total_productos': len(productos)
+    }
+    
+    return render_template('Castillo.html', **context)
+
+
 if __name__ == '__main__':
+    # Usar debug=True solo en entorno de desarrollo
     app.run(host=HOST, port=PORT, debug=True)
