@@ -95,29 +95,19 @@
         /* --- FIN ESTILO CARRUSEL --- */
 
 
-        /* MODIFICACIÓN: Estilo para opción activa/hover del menú (con recuadro azul) */
+        /* Estilo para opción activa/hover del menú (con línea azul) */
         .menu-item {
-            padding: 0.5rem 1rem; /* Padding más generoso para el recuadro */
+            padding: 0 1rem;
             display: flex;
             align-items: center;
+            height: 100%;
+            border-bottom: 4px solid transparent; /* Base transparente */
             transition: all 0.2s ease-in-out;
-            border-radius: 0.5rem; /* Borde redondeado */
-            margin: 0 0.25rem; /* Pequeño margen para separar los ítems */
         }
-        .menu-item:hover {
-            color: #4338ca; /* Texto azul al pasar el ratón */
-            background-color: #eef2ff; /* Fondo muy claro para hover */
+        .menu-item:hover, .menu-item.active {
+            color: #4338ca; /* Texto azul */
+            border-bottom-color: #4338ca; /* Línea azul */
         }
-        /* Estilo para el recuadro azul del elemento activo */
-        .menu-item.active {
-            background-color: #4338ca; /* bg-brand-primary */
-            color: white; /* Texto blanco */
-        }
-        .menu-item.active:hover {
-            background-color: #3730a3; /* Un azul más oscuro al pasar el ratón sobre el activo */
-            color: white;
-        }
-
 
         /* Estilos de WhatsApp Flotante (sin cambios) */
         .whatsapp-float {
@@ -162,25 +152,6 @@
         .product-info {
             transition: all 0.3s ease;
         }
-
-        /* --- ESTILO PARA CARRUSEL DE EDITORIALES (MARQUEE) --- */
-        @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); } 
-        }
-        .marquee {
-            animation: marquee 30s linear infinite; 
-            width: 200%; 
-            display: flex;
-            white-space: nowrap; 
-        }
-        .marquee > div {
-            display: flex;
-            justify-content: space-around; 
-            align-items: center;
-            width: 50%; 
-        }
-        /* --- FIN ESTILO MARQUEE --- */
     </style>
 </head>
 
@@ -205,7 +176,7 @@
         
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
             
-            <a href="#" class="flex-shrink-0">
+            <a href="/" class="flex-shrink-0">
                 <img src="https://sbooks.com.co/wp-content/uploads/2022/10/Logo-Azul-2048x1078.png" alt="Logo Smart Books Holding" class="h-14 w-auto">
             </a>
 
@@ -226,7 +197,7 @@
                 </div>
                 
                 <div class="flex space-x-3 items-center text-gray-800 text-xl">
-                    <a href="login.html" class="p-2 hover:text-brand-primary transition duration-300 flex items-center justify-center" title="Mi Cuenta">
+                    <a href="/login" class="p-2 hover:text-brand-primary transition duration-300 flex items-center justify-center" title="Mi Cuenta">
                         <img src="https://cdn-icons-png.flaticon.com/128/18986/18986944.png" alt="Usuario" class="w-6 h-6">
                     </a>
                     <a href="#" class="p-2 hover:text-brand-primary transition duration-300 relative flex items-center justify-center" title="Carrito de Compras">
@@ -243,40 +214,40 @@
         </div>
 
         <div class="bg-white border-t border-gray-100 hidden lg:block shadow-sm h-12">
-    <div class="max-w-7xl mx-auto px-4 h-full">
-        <nav class="flex justify-center space-x-8 font-outfit text-gray-800 font-semibold text-sm h-full items-center">
-            
-            <a href="index.html" class="menu-item active">Inicio</a>
-            
-            <div class="dropdown relative h-full flex items-center">
-                <a href="QuienesSomos.html" class="menu-item flex items-center">
-                    Nosotros <i class="fas fa-chevron-down text-xs ml-1 transition-transform transform group-hover:rotate-180"></i>
-                </a>
-                <div class="dropdown-menu absolute bg-white shadow-xl rounded-b-md w-56 border-t-2 border-brand-accent top-full">
-                    <a href="QuienesSomos.html" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Quienes Somos</a>
-                    <a href="TerminosYCondiciones.html" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Términos y Condiciones</a>
-                    <a href="#" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Preguntas Frecuentes – FAQ</a>
-                </div>
-            </div>
-            
-            <div class="dropdown relative h-full flex items-center">
-                <a href="#" class="menu-item flex items-center">
-                    Aliados <i class="fas fa-chevron-down text-xs ml-1 transition-transform transform group-hover:rotate-180"></i>
-                </a>
-                <div class="dropdown-menu absolute bg-white shadow-xl rounded-b-md w-40 border-t-2 border-brand-accent top-full">
-                    <a href="#" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Castillo</a>
-                    <a href="#" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">MacMillan</a>
-                </div>
-            </div>
+            <div class="max-w-7xl mx-auto px-4 h-full">
+                <nav class="flex justify-center space-x-8 font-outfit text-gray-800 font-semibold text-sm h-full">
+                    
+                    <a href="/" class="menu-item active">Inicio</a>
+                    
+                    <div class="dropdown relative h-full">
+                        <a href="#" class="menu-item flex items-center">
+                            Nosotros <i class="fas fa-chevron-down text-xs ml-1 transition-transform transform group-hover:rotate-180"></i>
+                        </a>
+                        <div class="dropdown-menu absolute bg-white shadow-xl rounded-b-md w-56 border-t-2 border-brand-accent top-full">
+                            <a href="/quienessomos" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Quienes Somos</a>
+                            <a href="/terminosycondiciones" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Términos y Condiciones</a>
+                            <a href="/preguntasfrecuentes" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Preguntas Frecuentes – FAQ</a>
+                        </div>
+                    </div>
+                    
+                    <div class="dropdown relative h-full">
+                        <a href="#" class="menu-item flex items-center">
+                            Aliados <i class="fas fa-chevron-down text-xs ml-1 transition-transform transform group-hover:rotate-180"></i>
+                        </a>
+                        <div class="dropdown-menu absolute bg-white shadow-xl rounded-b-md w-40 border-t-2 border-brand-accent top-full">
+                            <a href="/aliados/castillo" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Castillo</a>
+                            <a href="#" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">MacMillan</a>
+                        </div>
+                    </div>
 
-            <a href="#tienda" class="menu-item">Tienda</a>
-            <a href="#colegios" class="menu-item">Colegios</a>
-            <a href="#contactanos" class="menu-item">Contáctanos</a>
-            <a href="#intranet" class="menu-item">Intranet</a>
+                    <a href="#tienda" class="menu-item">Tienda</a>
+                    <a href="#colegios" class="menu-item">Colegios</a>
+                    <a href="#contactanos" class="menu-item">Contáctanos</a>
+                    <a href="#intranet" class="menu-item">Intranet</a>
 
-        </nav>
-    </div>
-</div>
+                </nav>
+            </div>
+        </div>
     </header>
 
     <main>
@@ -312,29 +283,16 @@
             </div>
         </section>
         
-        <section id="editoriales" class="py-16 bg-gray-100"> 
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section id="editoriales" class="py-16 bg-gray-100"> <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 class="font-outfit text-xl md:text-2xl text-center font-bold text-gray-900 mb-10 animate-scroll-reveal">
                     Trabajamos con las mejores <span class="text-brand-primary">Editoriales Globales</span>
                 </h2>
-                
-                <div class="overflow-hidden whitespace-nowrap py-4">
-                    <div class="marquee">
-                        <div>
-                            <img src="{{ url_editorial1 }}" alt="Logo Editorial 1" class="h-10 opacity-70 hover:opacity-100 transition duration-300 mx-10 inline-block">
-                            <img src="{{ url_editorial2 }}" alt="Logo Editorial 2" class="h-10 opacity-70 hover:opacity-100 transition duration-300 mx-10 inline-block">
-                            <img src="{{ url_editorial3 }}" alt="Logo Editorial 3" class="h-10 opacity-70 hover:opacity-100 transition duration-300 mx-10 inline-block">
-                            <img src="{{ url_editorial4 }}" alt="Logo Editorial 4" class="h-10 opacity-70 hover:opacity-100 transition duration-300 mx-10 inline-block">
-                            <img src="{{ url_editorial5 }}" alt="Logo Editorial 5" class="h-10 opacity-70 hover:opacity-100 transition duration-300 mx-10 inline-block">
-                        </div>
-                        <div>
-                            <img src="{{ url_editorial1 }}" alt="Logo Editorial 1" class="h-10 opacity-70 hover:opacity-100 transition duration-300 mx-10 inline-block">
-                            <img src="{{ url_editorial2 }}" alt="Logo Editorial 2" class="h-10 opacity-70 hover:opacity-100 transition duration-300 mx-10 inline-block">
-                            <img src="{{ url_editorial3 }}" alt="Logo Editorial 3" class="h-10 opacity-70 hover:opacity-100 transition duration-300 mx-10 inline-block">
-                            <img src="{{ url_editorial4 }}" alt="Logo Editorial 4" class="h-10 opacity-70 hover:opacity-100 transition duration-300 mx-10 inline-block">
-                            <img src="{{ url_editorial5 }}" alt="Logo Editorial 5" class="h-10 opacity-70 hover:opacity-100 transition duration-300 mx-10 inline-block">
-                        </div>
-                    </div>
+                <div class="flex flex-wrap justify-center items-center gap-x-12 gap-y-6">
+                    <img src="{{ url_editorial1 }}" alt="Logo Editorial 1" class="h-10 opacity-70 hover:opacity-100 transition duration-300 animate-scroll-reveal" style="animation-delay: 100ms;">
+                    <img src="{{ url_editorial2 }}" alt="Logo Editorial 2" class="h-10 opacity-70 hover:opacity-100 transition duration-300 animate-scroll-reveal" style="animation-delay: 200ms;">
+                    <img src="{{ url_editorial3 }}" alt="Logo Editorial 3" class="h-10 opacity-70 hover:opacity-100 transition duration-300 animate-scroll-reveal" style="animation-delay: 300ms;">
+                    <img src="{{ url_editorial4 }}" alt="Logo Editorial 4" class="h-10 opacity-70 hover:opacity-100 transition duration-300 animate-scroll-reveal" style="animation-delay: 400ms;">
+                    <img src="{{ url_editorial5 }}" alt="Logo Editorial 5" class="h-10 opacity-70 hover:opacity-100 transition duration-300 animate-scroll-reveal" style="animation-delay: 500ms;">
                 </div>
             </div>
         </section>
@@ -484,11 +442,11 @@
             <div>
                 <h4 class="font-outfit text-lg font-semibold text-gray-900 mb-4">Explorar</h4>
                 <ul class="space-y-2 text-sm">
-                    <li><a href="#" class="text-gray-600 hover:text-brand-primary transition duration-300">Quienes Somos</a></li>
+                    <li><a href="/quienessomos" class="text-gray-600 hover:text-brand-primary transition duration-300">Quienes Somos</a></li>
                     <li><a href="#" class="text-gray-600 hover:text-brand-primary transition duration-300">Nuestros Productos</a></li>
                     <li><a href="#" class="text-gray-600 hover:text-brand-primary transition duration-300">Colegios</a></li>
                     <li><a href="#blog" class="text-gray-600 hover:text-brand-primary transition duration-300">Blog</a></li>
-                    <li><a href="login.html" class="text-gray-600 hover:text-brand-primary transition duration-300">Intranet (Iniciar Sesión)</a></li>
+                    <li><a href="/login" class="text-gray-600 hover:text-brand-primary transition duration-300">Intranet (Iniciar Sesión)</a></li>
                 </ul>
             </div>
 
@@ -496,8 +454,8 @@
                 <h4 class="font-outfit text-lg font-semibold text-gray-900 mb-4">Nuestro Servicio</h4>
                 <ul class="space-y-2 text-sm">
                     <li><a href="#" class="text-gray-600 hover:text-brand-primary transition duration-300">Ayuda y Soporte</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-brand-primary transition duration-300">Preguntas Frecuentes – FAQ</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-brand-primary transition duration-300">Términos y Condiciones</a></li>
+                    <li><a href="/preguntasfrecuentes" class="text-gray-600 hover:text-brand-primary transition duration-300">Preguntas Frecuentes – FAQ</a></li>
+                    <li><a href="/terminosycondiciones" class="text-gray-600 hover:text-brand-primary transition duration-300">Términos y Condiciones</a></li>
                     <li><a href="#" class="text-gray-600 hover:text-brand-primary transition duration-300">Política de Privacidad</a></li>
                     <li><a href="#" class="text-gray-600 hover:text-brand-primary transition duration-300">Servicio al Cliente</a></li>
                 </ul>
