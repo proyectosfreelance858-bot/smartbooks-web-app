@@ -95,19 +95,29 @@
         /* --- FIN ESTILO CARRUSEL --- */
 
 
-        /* Estilo para opción activa/hover del menú (con línea azul) */
+        /* MODIFICACIÓN: Estilo para opción activa/hover del menú (con recuadro azul) */
         .menu-item {
-            padding: 0 1rem;
+            padding: 0.5rem 1rem; /* Padding más generoso para el recuadro */
             display: flex;
             align-items: center;
-            height: 100%;
-            border-bottom: 4px solid transparent; /* Base transparente */
             transition: all 0.2s ease-in-out;
+            border-radius: 0.5rem; /* Borde redondeado */
+            margin: 0 0.25rem; /* Pequeño margen para separar los ítems */
         }
-        .menu-item:hover, .menu-item.active {
-            color: #4338ca; /* Texto azul */
-            border-bottom-color: #4338ca; /* Línea azul */
+        .menu-item:hover {
+            color: #4338ca; /* Texto azul al pasar el ratón */
+            background-color: #eef2ff; /* Fondo muy claro para hover */
         }
+        /* Estilo para el recuadro azul del elemento activo */
+        .menu-item.active {
+            background-color: #4338ca; /* bg-brand-primary */
+            color: white; /* Texto blanco */
+        }
+        .menu-item.active:hover {
+            background-color: #3730a3; /* Un azul más oscuro al pasar el ratón sobre el activo */
+            color: white;
+        }
+
 
         /* Estilos de WhatsApp Flotante (sin cambios) */
         .whatsapp-float {
@@ -156,19 +166,19 @@
         /* --- ESTILO PARA CARRUSEL DE EDITORIALES (MARQUEE) --- */
         @keyframes marquee {
             0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); } /* Se desplaza el 50% de su ancho total (un set de logos) */
+            100% { transform: translateX(-50%); } 
         }
         .marquee {
-            animation: marquee 30s linear infinite; /* 30 segundos, velocidad constante, bucle infinito */
-            width: 200%; /* El doble de ancho para contener dos sets de logos */
+            animation: marquee 30s linear infinite; 
+            width: 200%; 
             display: flex;
-            white-space: nowrap; /* Evita que los logos salten de línea */
+            white-space: nowrap; 
         }
         .marquee > div {
             display: flex;
-            justify-content: space-around; /* Distribuye el espacio entre los logos */
+            justify-content: space-around; 
             align-items: center;
-            width: 50%; /* Cada set toma el 50% del contenedor total (200%) */
+            width: 50%; 
         }
         /* --- FIN ESTILO MARQUEE --- */
     </style>
@@ -234,7 +244,7 @@
 
         <div class="bg-white border-t border-gray-100 hidden lg:block shadow-sm h-12">
             <div class="max-w-7xl mx-auto px-4 h-full">
-                <nav class="flex justify-center space-x-8 font-outfit text-gray-800 font-semibold text-sm h-full">
+                <nav class="flex justify-center space-x-2 font-outfit text-gray-800 font-semibold text-sm h-full items-center">
                     
                     <a href="#" class="menu-item active">Inicio</a>
                     
