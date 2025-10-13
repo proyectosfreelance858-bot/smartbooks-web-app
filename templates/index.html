@@ -21,7 +21,7 @@
         .text-brand-primary { color: #4338ca; }
         .bg-brand-accent { background-color: #ef4444; /* Red-500, para detalles */ }
         .text-brand-accent { color: #ef4444; }
-        .text-active { color: #4338ca; /* Azul para la opción seleccionada/hover */ }
+        .bg-brand-soft { background-color: #eef2ff; /* Indigo-50, para el hover/active del menú */ }
 
         /* Estilos de Submenú (Dropdown) */
         .dropdown:hover .dropdown-menu {
@@ -43,22 +43,21 @@
         /* --- ESTILO DEL BUSCADOR MINIMALISTA --- */
         .search-input {
             width: 100%;
-            padding: 0.5rem 1.5rem; /* py-2 pl-6 pr-4 */
+            padding: 0.5rem 1.5rem; 
             border: 1px solid #d1d5db; 
-            border-radius: 9999px; /* rounded-full */
+            border-radius: 9999px; 
             outline: none;
             transition: border-color 0.3s;
         }
         .search-input:focus {
             border-color: #4338ca; 
         }
-
         .search-button-separate {
-            width: 44px; /* Tamaño del círculo */
+            width: 44px; 
             height: 44px;
-            margin-left: 10px; /* Espacio entre el campo de búsqueda y el botón */
+            margin-left: 10px; 
             background-color: #4338ca; 
-            border-radius: 50%; /* Botón redondo */
+            border-radius: 50%; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
@@ -67,7 +66,6 @@
         .search-button-separate:hover {
             background-color: #3730a3; 
         }
-
         /* ÍCONOS PNG: Define el filtro de color para convertir a blanco */
         .icon-white {
             filter: brightness(0) invert(1); 
@@ -82,8 +80,8 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%; /* Asegura que cubra todo el contenedor */
-            height: 100%; /* Asegura que cubra todo el contenedor */
+            width: 100%; 
+            height: 100%; 
             opacity: 0;
             transition: opacity 1s ease-in-out;
             z-index: 10;
@@ -95,20 +93,44 @@
         /* --- FIN ESTILO CARRUSEL --- */
 
 
-        /* Estilo para opción activa/hover del menú (con línea azul) */
+        /* --- ESTILOS DEL MENÚ (Recuadro Azul) --- */
         .menu-item {
-            padding: 0 1rem;
+            padding: 0.5rem 1rem;
             display: flex;
             align-items: center;
             height: 100%;
-            border-bottom: 4px solid transparent; /* Base transparente */
+            border-radius: 6px; /* Borde redondeado para el box */
             transition: all 0.2s ease-in-out;
+            color: #1f2937; /* Default color */
+            margin: 0 0.5rem; /* Espacio entre opciones */
         }
+        /* Aplica el recuadro azul para la opción activa y hover */
         .menu-item:hover, .menu-item.active {
             color: #4338ca; /* Texto azul */
-            border-bottom-color: #4338ca; /* Línea azul */
+            background-color: #eef2ff; /* Indigo-50 - fondo azul claro */
         }
+        /* --- FIN ESTILOS DEL MENÚ --- */
 
+
+        /* --- ANIMACIÓN DEL TELÉFONO (Animación de Pulso Roja) --- */
+        @keyframes pulse-phone {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        .phone-float {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px; /* rounded-full */
+            padding: 0.3rem 0.6rem;
+            background-color: transparent;
+            animation: pulse-phone 1.5s infinite;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); /* Sombra inicial */
+        }
+        /* --- FIN ANIMACIÓN TELÉFONO --- */
+        
         /* Estilos de WhatsApp Flotante (sin cambios) */
         .whatsapp-float {
             position: fixed;
@@ -169,7 +191,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
             
             <a href="#" class="flex-shrink-0">
-                <img src="https://sbooks.com.co/wp-content/uploads/2022/10/Logo-Azul-2048x1078.png" alt="Logo Smart Books Holding" class="h-14 w-auto">
+                <img src="https://sbooks.com.co/wp-content/uploads/2022/10/Logo-Azul-2048x1078.png" alt="Logo Smart Books Holding" class="h-16 w-auto">
             </a>
 
             <form action="#" class="relative max-w-xl flex-grow mx-10 hidden lg:block">
@@ -185,7 +207,9 @@
             <div class="flex space-x-4 items-center">
                 <div class="hidden xl:flex flex-col items-end text-xs">
                     <span class="text-gray-500 font-instrument">Llámanos ahora</span>
-                    <span class="font-outfit text-base font-bold text-gray-800">333 602 50 29</span>
+                    <a href="tel:3336025029" class="phone-float">
+                        <span class="font-outfit text-base font-bold text-brand-accent">333 602 50 29</span>
+                    </a>
                 </div>
                 
                 <div class="flex space-x-3 items-center text-gray-800 text-xl">
@@ -205,30 +229,30 @@
             </div>
         </div>
 
-        <div class="bg-white border-t border-gray-100 hidden lg:block shadow-sm h-12">
+        <div class="bg-white border-t border-gray-100 hidden lg:block shadow-sm h-14">
             <div class="max-w-7xl mx-auto px-4 h-full">
-                <nav class="flex justify-center space-x-8 font-outfit text-gray-800 font-semibold text-sm h-full">
+                <nav class="flex justify-center space-x-1 font-outfit text-gray-800 font-semibold text-sm h-full items-center">
                     
                     <a href="#" class="menu-item active">Inicio</a>
                     
-                    <div class="dropdown relative h-full">
+                    <div class="dropdown relative h-full flex items-center">
                         <a href="#" class="menu-item flex items-center">
                             Nosotros <i class="fas fa-chevron-down text-xs ml-1 transition-transform transform group-hover:rotate-180"></i>
                         </a>
                         <div class="dropdown-menu absolute bg-white shadow-xl rounded-b-md w-56 border-t-2 border-brand-accent top-full">
-                            <a href="#" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Quienes Somos</a>
-                            <a href="#" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Términos y Condiciones</a>
-                            <a href="#" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Preguntas Frecuentes – FAQ</a>
+                            <a href="#" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-brand-primary transition duration-300 text-sm">Quienes Somos</a>
+                            <a href="#" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-brand-primary transition duration-300 text-sm">Términos y Condiciones</a>
+                            <a href="#" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-brand-primary transition duration-300 text-sm">Preguntas Frecuentes – FAQ</a>
                         </div>
                     </div>
                     
-                    <div class="dropdown relative h-full">
+                    <div class="dropdown relative h-full flex items-center">
                         <a href="#" class="menu-item flex items-center">
                             Aliados <i class="fas fa-chevron-down text-xs ml-1 transition-transform transform group-hover:rotate-180"></i>
                         </a>
                         <div class="dropdown-menu absolute bg-white shadow-xl rounded-b-md w-40 border-t-2 border-brand-accent top-full">
-                            <a href="#" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Castillo</a>
-                            <a href="#" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">MacMillan</a>
+                            <a href="#" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-brand-primary transition duration-300 text-sm">Castillo</a>
+                            <a href="#" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-brand-primary transition duration-300 text-sm">MacMillan</a>
                         </div>
                     </div>
 
@@ -287,7 +311,7 @@
                     
                     <div class="bg-white rounded-lg shadow-xl overflow-hidden animate-scroll-reveal delay-300
                                 transform transition duration-500 hover:shadow-2xl hover:translate-y-[-5px]">
-                        <img src="https://sbooks.com.co/wp-content/uploads/2023/11/IMG_01.jpg" alt="Imagen Recuadro 1" class="w-full h-64 object-cover">
+                        <img src="{{ url_recuadro1 }}" alt="Imagen Recuadro 1" class="w-full h-64 object-cover">
                         <div class="p-6">
                             <h3 class="font-outfit text-xl font-bold text-gray-800 mb-2">Conoce y decide tu mejor elección</h3>
                             <p class="text-gray-500 text-sm font-instrument leading-relaxed line-clamp-3">Accede a nuestros recursos pedagógicos y herramientas de diagnóstico para tomar decisiones informadas sobre los textos escolares que necesita tu institución.</p>
@@ -297,7 +321,7 @@
 
                     <div class="bg-white rounded-lg shadow-xl overflow-hidden animate-scroll-reveal delay-500
                                 transform transition duration-500 hover:shadow-2xl hover:translate-y-[-5px]">
-                        <img src="https://sbooks.com.co/wp-content/uploads/2023/11/IMG_02.jpg" alt="Imagen Recuadro 2" class="w-full h-64 object-cover">
+                        <img src="{{ url_recuadro2 }}" alt="Imagen Recuadro 2" class="w-full h-64 object-cover">
                         <div class="p-6">
                             <h3 class="font-outfit text-xl font-bold text-gray-800 mb-2">Más que libros, soluciones integrales</h3>
                             <p class="text-gray-500 text-sm font-instrument leading-relaxed line-clamp-3">Ofrecemos paquetes completos que incluyen textos, plataformas digitales y capacitación docente para una inmersión total en la transformación educativa.</p>
@@ -307,7 +331,7 @@
                     
                     <div class="bg-white rounded-lg shadow-xl overflow-hidden animate-scroll-reveal delay-700
                                 transform transition duration-500 hover:shadow-2xl hover:translate-y-[-5px]">
-                        <img src="https://sbooks.com.co/wp-content/uploads/2023/11/IMG_03.jpg" alt="Imagen Recuadro 3" class="w-full h-64 object-cover">
+                        <img src="{{ url_recuadro3 }}" alt="Imagen Recuadro 3" class="w-full h-64 object-cover">
                         <div class="p-6">
                             <h3 class="font-outfit text-xl font-bold text-gray-800 mb-2">Nuevo Programa Académico Bilingüe</h3>
                             <p class="text-gray-500 text-sm font-instrument leading-relaxed line-clamp-3">Descubre nuestra nueva propuesta bilingüe diseñada para colegios que buscan la certificación internacional con metodologías ágiles y modernas.</p>

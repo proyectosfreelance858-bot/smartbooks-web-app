@@ -2,19 +2,23 @@ import os
 from flask import Flask, render_template
 import psycopg2
 from datetime import datetime
-from dotenv import load_dotenv
+from dotenv import load_dotenv # <-- Importar dotenv
 
 # Cargar las variables de entorno desde el archivo .env
+# Esto hace que DB_HOST, DB_NAME, DB_USER, DB_PASS estén disponibles
 load_dotenv()
 
 # =================================================================
 # 1. CONFIGURACIÓN DE BASE DE DATOS Y HOSTING
+# Obtiene las credenciales de las variables de entorno (Render/Hosting/.env)
 # =================================================================
+# Ahora lee directamente de las variables de entorno
 DB_HOST = os.environ.get("DB_HOST") 
 DB_NAME = os.environ.get("DB_NAME") 
 DB_USER = os.environ.get("DB_USER") 
 DB_PASS = os.environ.get("DB_PASS") 
 
+# Configuración de puerto y host para Render
 PORT = int(os.environ.get('PORT', 5000))
 HOST = '0.0.0.0' 
 
@@ -22,8 +26,10 @@ app = Flask(__name__)
 
 def get_db_connection():
     """Intenta establecer la conexión a la base de datos PostgreSQL."""
+    # Se añade un chequeo simple para no fallar en psycopg2 con None
     if not all([DB_HOST, DB_NAME, DB_USER, DB_PASS]):
-         raise psycopg2.OperationalError("Faltan variables de conexión a la base de datos.")
+         # Es una buena práctica lanzar un error si faltan las credenciales críticas
+         raise psycopg2.OperationalError("Faltan variables de conexión a la base de datos (DB_HOST, DB_NAME, DB_USER, DB_PASS).")
          
     conn = psycopg2.connect(
         host=DB_HOST,
@@ -36,38 +42,39 @@ def get_db_connection():
 @app.route('/')
 def index():
     blogs = []
-    banners = {} # Diccionario para almacenar las URLs de los banners
+    config_data = {}
     conn = None
     
+    # --- 2. INTENTO DE CONEXIÓN Y CONSULTA DE LA DB ---
     try:
         conn = get_db_connection()
         cur = conn.cursor()
 
-        # --- CONSULTA 1: OBTENER LAS URLs DE LOS BANNERS (url_banner1 y url_banner2) ---
-        print("Consultando configuración de banners...")
-        sql_banners = """
+        # --- CONSULTA 1: OBTENER URLs DE BANNERS Y RECUADROS ---
+        sql_config = """
             SELECT 
                 clave, 
                 valor 
             FROM 
                 configuracion_web 
             WHERE 
-                clave IN ('url_banner1', 'url_banner2');
+                clave IN ('url_banner1', 'url_banner2', 'url_recuadro1', 'url_recuadro2', 'url_recuadro3');
         """
-        cur.execute(sql_banners)
-        db_banners = cur.fetchall()
+        cur.execute(sql_config)
+        db_config = cur.fetchall()
 
-        # Almacenar las URLs en el diccionario 'banners'
-        for clave, valor in db_banners:
-            banners[clave] = valor
+        # Almacenar las URLs en el diccionario 'config_data'
+        for clave, valor in db_config:
+            config_data[clave] = valor
             
-        # Asignar valores a variables de contexto (con un fallback de seguridad)
-        url_banner1 = banners.get('url_banner1', 'https://via.placeholder.com/1920x600.png?text=Falta+Banner+1')
-        url_banner2 = banners.get('url_banner2', 'https://via.placeholder.com/1920x600.png?text=Falta+Banner+2')
-
+        # Asignar valores a variables de contexto (con un fallback de seguridad si no están en la DB)
+        url_banner1 = config_data.get('url_banner1', 'https://via.placeholder.com/1920x600.png?text=Falta+Banner+1')
+        url_banner2 = config_data.get('url_banner2', 'https://via.placeholder.com/1920x600.png?text=Falta+Banner+2')
+        url_recuadro1 = config_data.get('url_recuadro1', 'https://via.placeholder.com/600x400.png?text=Falta+Recuadro+1')
+        url_recuadro2 = config_data.get('url_recuadro2', 'https://via.placeholder.com/600x400.png?text=Falta+Recuadro+2')
+        url_recuadro3 = config_data.get('url_recuadro3', 'https://via.placeholder.com/600x400.png?text=Falta+Recuadro+3')
 
         # --- CONSULTA 2: OBTENER LOS ARTÍCULOS DEL BLOG ---
-        print("Consultando artículos del blog...")
         sql_blog_query = """
             SELECT 
                 id, 
@@ -118,15 +125,21 @@ def index():
         print(f"ERROR CRÍTICO: FALLA DE CONEXIÓN A LA BASE DE DATOS.")
         print(f"Mensaje: {e}")
         print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        # En caso de fallo crítico, usamos fallbacks de placeholders
+        # En caso de fallo crítico, usamos fallbacks
         url_banner1 = 'https://via.placeholder.com/1920x600.png?text=Falla+DB+-+Banner+1'
         url_banner2 = 'https://via.placeholder.com/1920x600.png?text=Falla+DB+-+Banner+2'
+        url_recuadro1 = 'https://via.placeholder.com/600x400.png?text=Falla+DB+-+Recuadro+1'
+        url_recuadro2 = 'https://via.placeholder.com/600x400.png?text=Falla+DB+-+Recuadro+2'
+        url_recuadro3 = 'https://via.placeholder.com/600x400.png?text=Falla+DB+-+Recuadro+3'
         
     except Exception as e:
         print(f"Error inesperado durante la consulta de datos: {e}")
-        # En caso de fallo inesperado, usamos fallbacks de placeholders
+        # En caso de fallo inesperado, usamos fallbacks
         url_banner1 = 'https://via.placeholder.com/1920x600.png?text=Error+Inesperado+-+Banner+1'
         url_banner2 = 'https://via.placeholder.com/1920x600.png?text=Error+Inesperado+-+Banner+2'
+        url_recuadro1 = 'https://via.placeholder.com/600x400.png?text=Error+Inesperado+-+Recuadro+1'
+        url_recuadro2 = 'https://via.placeholder.com/600x400.png?text=Error+Inesperado+-+Recuadro+2'
+        url_recuadro3 = 'https://via.placeholder.com/600x400.png?text=Error+Inesperado+-+Recuadro+3'
         
     finally:
         if conn:
@@ -134,11 +147,16 @@ def index():
 
     # --- 3. CONTEXTO DE VARIABLES PARA LA PLANTILLA ---
     context = {
-        # BANNERS: ¡Ahora usan las variables cargadas de la DB!
+        # BANNERS
         'url_banner1': url_banner1, 
         'url_banner2': url_banner2, 
         
-        # BLOGS: Lista llena o vacía
+        # RECUADROS (NUEVO)
+        'url_recuadro1': url_recuadro1,
+        'url_recuadro2': url_recuadro2,
+        'url_recuadro3': url_recuadro3,
+        
+        # BLOGS
         'blogs': blogs
     }
 
