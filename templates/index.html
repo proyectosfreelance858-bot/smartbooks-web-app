@@ -40,36 +40,61 @@
             min-width: 14rem;
         }
 
-        /* --- ESTILO DE ANIMACIÓN DE LOGOS (MARQUEE) --- */
-        /* 1. Definición de la animación de desplazamiento */
-        @keyframes scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); } /* Desplaza la mitad del contenido (el original y la copia) */
+        /* --- ESTILO DEL BUSCADOR MINIMALISTA --- */
+        .search-input {
+            width: 100%;
+            padding: 0.5rem 1.5rem; /* py-2 pl-6 pr-4 */
+            border: 1px solid #d1d5db; 
+            border-radius: 9999px; /* rounded-full */
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .search-input:focus {
+            border-color: #4338ca; 
         }
 
-        /* 2. Contenedor de logos que aplicará la animación */
-        .scrolling-logos {
-            display: flex;
-            width: 200%; /* Duplicado de ancho para permitir el bucle infinito */
-            animation: scroll 30s linear infinite; /* 30s de duración, lineal, infinito */
-            will-change: transform; /* Optimización de rendimiento */
+        .search-button-separate {
+            width: 44px; /* Tamaño del círculo */
+            height: 44px;
+            margin-left: 10px; /* Espacio entre el campo de búsqueda y el botón */
+            background-color: #4338ca; 
+            border-radius: 50%; /* Botón redondo */
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            flex-shrink: 0; 
         }
-        
-        /* 3. Pausar animación al hacer hover (opcional) */
-        .logos-track:hover .scrolling-logos {
-            animation-play-state: paused;
+        .search-button-separate:hover {
+            background-color: #3730a3; 
         }
 
-        .logo-item {
-             /* Asegura que todos los logos tengan el mismo espacio y tamaño en el carrusel */
-            padding: 0 2rem; 
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        /* ÍCONOS PNG: Define el filtro de color para convertir a blanco */
+        .icon-white {
+            filter: brightness(0) invert(1); 
         }
-        /* --- FIN ESTILO LOGOS --- */
+        /* --- FIN ESTILO BUSCADOR --- */
         
+        /* --- ESTILO DEL CARRUSEL --- */
+        #banner-carousel {
+            position: relative;
+        }
+        .carousel-item {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%; /* Asegura que cubra todo el contenedor */
+            height: 100%; /* Asegura que cubra todo el contenedor */
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            z-index: 10;
+        }
+        .carousel-item.active {
+            opacity: 1;
+            z-index: 20;
+        }
+        /* --- FIN ESTILO CARRUSEL --- */
+
+
         /* Estilo para opción activa/hover del menú (con línea azul) */
         .menu-item {
             padding: 0 1rem;
@@ -119,7 +144,7 @@
             opacity: 0;
             animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; 
         }
-        /* Estilo para el hover del producto */
+        /* Estilo para el hover del producto (simula el diseño de la imagen) */
         .product-card:hover .product-info {
             transform: translateY(0);
             opacity: 1;
@@ -258,29 +283,16 @@
             </div>
         </section>
         
-        <section id="editoriales" class="py-16 bg-gray-100"> 
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section id="editoriales" class="py-16 bg-gray-100"> <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 class="font-outfit text-xl md:text-2xl text-center font-bold text-gray-900 mb-10 animate-scroll-reveal">
                     Trabajamos con las mejores <span class="text-brand-primary">Editoriales Globales</span>
                 </h2>
-                
-                <div class="logos-track overflow-hidden relative w-full mx-auto" style="height: 100px;">
-                    <div class="scrolling-logos" id="scrolling-logos-container">
-                        
-                        <div id="original-logos" class="flex">
-                            <div class="logo-item"><img src="{{ url_editorial1 }}" alt="Logo Editorial 1" class="h-10 opacity-70 hover:opacity-100 transition duration-300"></div>
-                            <div class="logo-item"><img src="{{ url_editorial2 }}" alt="Logo Editorial 2" class="h-10 opacity-70 hover:opacity-100 transition duration-300"></div>
-                            <div class="logo-item"><img src="{{ url_editorial3 }}" alt="Logo Editorial 3" class="h-10 opacity-70 hover:opacity-100 transition duration-300"></div>
-                            <div class="logo-item"><img src="{{ url_editorial4 }}" alt="Logo Editorial 4" class="h-10 opacity-70 hover:opacity-100 transition duration-300"></div>
-                            <div class="logo-item"><img src="{{ url_editorial5 }}" alt="Logo Editorial 5" class="h-10 opacity-70 hover:opacity-100 transition duration-300"></div>
-                            <div class="logo-item"><img src="{{ url_editorial1 }}" alt="Logo Editorial 1" class="h-10 opacity-70 hover:opacity-100 transition duration-300"></div>
-                            <div class="logo-item"><img src="{{ url_editorial2 }}" alt="Logo Editorial 2" class="h-10 opacity-70 hover:opacity-100 transition duration-300"></div>
-                        </div>
-
-                        <div id="duplicate-logos" class="flex">
-                            </div>
-
-                    </div>
+                <div class="flex flex-wrap justify-center items-center gap-x-12 gap-y-6">
+                    <img src="{{ url_editorial1 }}" alt="Logo Editorial 1" class="h-10 opacity-70 hover:opacity-100 transition duration-300 animate-scroll-reveal" style="animation-delay: 100ms;">
+                    <img src="{{ url_editorial2 }}" alt="Logo Editorial 2" class="h-10 opacity-70 hover:opacity-100 transition duration-300 animate-scroll-reveal" style="animation-delay: 200ms;">
+                    <img src="{{ url_editorial3 }}" alt="Logo Editorial 3" class="h-10 opacity-70 hover:opacity-100 transition duration-300 animate-scroll-reveal" style="animation-delay: 300ms;">
+                    <img src="{{ url_editorial4 }}" alt="Logo Editorial 4" class="h-10 opacity-70 hover:opacity-100 transition duration-300 animate-scroll-reveal" style="animation-delay: 400ms;">
+                    <img src="{{ url_editorial5 }}" alt="Logo Editorial 5" class="h-10 opacity-70 hover:opacity-100 transition duration-300 animate-scroll-reveal" style="animation-delay: 500ms;">
                 </div>
             </div>
         </section>
@@ -502,19 +514,6 @@
                 });
             });
             
-            // --- NUEVO SCRIPT PARA CARRUSEL INFINITO DE LOGOS ---
-            function setupInfiniteScroll() {
-                const originalLogosContainer = document.getElementById('original-logos');
-                const duplicateLogosContainer = document.getElementById('duplicate-logos');
-                
-                if (originalLogosContainer && duplicateLogosContainer) {
-                    // Copia el HTML interno del original al duplicado para el efecto de bucle
-                    duplicateLogosContainer.innerHTML = originalLogosContainer.innerHTML;
-                }
-            }
-            setupInfiniteScroll();
-            // --- FIN NUEVO SCRIPT ---
-
             // Script para Scroll Reveal (Animaciones al hacer scroll)
             const revealElements = document.querySelectorAll('.animate-scroll-reveal');
             
