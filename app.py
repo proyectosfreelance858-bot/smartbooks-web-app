@@ -414,7 +414,41 @@ def tienda():
     }
     
     return render_template('tienda_productos.html', **context)
+# =================================================================
+# RUTAS PARA PÁGINAS ESTÁTICAS (Quienes Somos, Contacto, etc.)
+# =================================================================
+
+@app.route('/quienes-somos')
+def quienes_somos():
+    return render_template('QuienesSomos.html')
+
+@app.route('/terminos-y-condiciones')
+def terminos_y_condiciones():
+    return render_template('TerminosYCondiciones.html')
+
+@app.route('/preguntas-frecuentes')
+def preguntas_frecuentes():
+    return render_template('PreguntasFrecuentes.html')
+
+@app.route('/colegios')
+def colegios():
+    return render_template('Colegios.html')
+
+@app.route('/contactanos')
+def contactanos():
+    return render_template('Contactanos.html')
+
+# Aunque Blog.html esté vacío, es bueno tener la ruta lista
+@app.route('/blog')
+def blog():
+    return render_template('Blog.html')
+
+# La ruta para Intranet debe coincidir con el nombre de tu archivo
+@app.route('/intranet')
+def intranet():
+    return render_template('Intranet.html')
 
 
+# ESTA LÍNEA DEBE QUEDAR AL FINAL DE TU ARCHIVO
 if __name__ == '__main__':
     app.run(host=HOST, port=PORT, debug=True)

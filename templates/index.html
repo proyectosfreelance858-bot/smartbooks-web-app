@@ -152,6 +152,34 @@
         .product-info {
             transition: all 0.3s ease;
         }
+
+        /* --- ESTILO MARQUESINA DE LOGOS --- */
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+        .marquee-container {
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+        }
+        .marquee-content {
+            display: flex;
+            width: 200%; /* El doble del ancho para el bucle */
+            animation: marquee 30s linear infinite;
+        }
+        .marquee-item {
+            flex-shrink: 0;
+            width: 10%; /* 5 logos originales + 5 duplicados = 10 items */
+            padding: 0 2rem;
+            box-sizing: content-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .marquee-container:hover .marquee-content {
+            animation-play-state: paused;
+        }
     </style>
 </head>
 
@@ -217,16 +245,16 @@
             <div class="max-w-7xl mx-auto px-4 h-full">
                 <nav class="flex justify-center space-x-8 font-outfit text-gray-800 font-semibold text-sm h-full">
                     
-                    <a href="index.html" class="menu-item active">Inicio</a>
+                    <a href="/" class="menu-item active">Inicio</a>
                     
                     <div class="dropdown relative h-full">
                         <a href="#" class="menu-item flex items-center">
                             Nosotros <i class="fas fa-chevron-down text-xs ml-1 transition-transform transform group-hover:rotate-180"></i>
                         </a>
                         <div class="dropdown-menu absolute bg-white shadow-xl rounded-b-md w-56 border-t-2 border-brand-accent top-full">
-                            <a href="QuienesSomos.html" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Quienes Somos</a>
-                            <a href="TerminosYCondiciones.html" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Términos y Condiciones</a>
-                            <a href="PreguntasFrecuentes.html" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Preguntas Frecuentes – FAQ</a>
+                            <a href="/quienes-somos" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Quienes Somos</a>
+                            <a href="/terminos-y-condiciones" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Términos y Condiciones</a>
+                            <a href="/preguntas-frecuentes" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Preguntas Frecuentes – FAQ</a>
                         </div>
                     </div>
                     
@@ -235,15 +263,15 @@
                             Aliados <i class="fas fa-chevron-down text-xs ml-1 transition-transform transform group-hover:rotate-180"></i>
                         </a>
                         <div class="dropdown-menu absolute bg-white shadow-xl rounded-b-md w-40 border-t-2 border-brand-accent top-full">
-                            <a href="Castillo.html" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Castillo</a>
-                            <a href="MacMillan.html" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">MacMillan</a>
+                            <a href="/aliados/castillo" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Castillo</a>
+                            <a href="/aliados/macmillan" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">MacMillan</a>
                         </div>
                     </div>
 
-                    <a href="Tienda.html" class="menu-item">Tienda</a>
-                    <a href="Colegios.html" class="menu-item">Colegios</a>
-                    <a href="Contactanos.html" class="menu-item">Contáctanos</a>
-                    <a href="Intranet.html" class="menu-item">Intranet</a>
+                    <a href="/tienda" class="menu-item">Tienda</a>
+                    <a href="/colegios" class="menu-item">Colegios</a>
+                    <a href="/contactanos" class="menu-item">Contáctanos</a>
+                    <a href="/intranet" class="menu-item">Intranet</a>
 
                 </nav>
             </div>
@@ -283,16 +311,24 @@
             </div>
         </section>
         
-        <section id="editoriales" class="py-16 bg-gray-100"> <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section id="editoriales" class="py-16 bg-gray-100">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 class="font-outfit text-xl md:text-2xl text-center font-bold text-gray-900 mb-10 animate-scroll-reveal">
                     Trabajamos con las mejores <span class="text-brand-primary">Editoriales Globales</span>
                 </h2>
-                <div class="flex flex-wrap justify-center items-center gap-x-12 gap-y-6">
-                    <img src="{{ url_editorial1 }}" alt="Logo Editorial 1" class="h-10 opacity-70 hover:opacity-100 transition duration-300 animate-scroll-reveal" style="animation-delay: 100ms;">
-                    <img src="{{ url_editorial2 }}" alt="Logo Editorial 2" class="h-10 opacity-70 hover:opacity-100 transition duration-300 animate-scroll-reveal" style="animation-delay: 200ms;">
-                    <img src="{{ url_editorial3 }}" alt="Logo Editorial 3" class="h-10 opacity-70 hover:opacity-100 transition duration-300 animate-scroll-reveal" style="animation-delay: 300ms;">
-                    <img src="{{ url_editorial4 }}" alt="Logo Editorial 4" class="h-10 opacity-70 hover:opacity-100 transition duration-300 animate-scroll-reveal" style="animation-delay: 400ms;">
-                    <img src="{{ url_editorial5 }}" alt="Logo Editorial 5" class="h-10 opacity-70 hover:opacity-100 transition duration-300 animate-scroll-reveal" style="animation-delay: 500ms;">
+                <div class="marquee-container">
+                    <div class="marquee-content">
+                        <div class="marquee-item"><img src="{{ url_editorial1 }}" alt="Logo Editorial 1" class="h-10 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
+                        <div class="marquee-item"><img src="{{ url_editorial2 }}" alt="Logo Editorial 2" class="h-10 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
+                        <div class="marquee-item"><img src="{{ url_editorial3 }}" alt="Logo Editorial 3" class="h-10 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
+                        <div class="marquee-item"><img src="{{ url_editorial4 }}" alt="Logo Editorial 4" class="h-10 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
+                        <div class="marquee-item"><img src="{{ url_editorial5 }}" alt="Logo Editorial 5" class="h-10 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
+                        <div class="marquee-item"><img src="{{ url_editorial1 }}" alt="Logo Editorial 1" class="h-10 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
+                        <div class="marquee-item"><img src="{{ url_editorial2 }}" alt="Logo Editorial 2" class="h-10 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
+                        <div class="marquee-item"><img src="{{ url_editorial3 }}" alt="Logo Editorial 3" class="h-10 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
+                        <div class="marquee-item"><img src="{{ url_editorial4 }}" alt="Logo Editorial 4" class="h-10 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
+                        <div class="marquee-item"><img src="{{ url_editorial5 }}" alt="Logo Editorial 5" class="h-10 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -303,7 +339,7 @@
                     <h2 class="font-outfit text-4xl font-extrabold text-gray-900">
                         Productos más <span class="text-brand-accent">Vendidos</span>
                     </h2>
-                    <a href="Tienda.html" class="inline-block px-6 py-2 text-base font-medium text-white bg-brand-accent rounded-lg hover:bg-red-600 transition duration-300 shadow-md">
+                    <a href="/tienda" class="inline-block px-6 py-2 text-base font-medium text-white bg-brand-accent rounded-lg hover:bg-red-600 transition duration-300 shadow-md">
                         Ver Todos
                     </a>
                 </div>
@@ -364,7 +400,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     
                     <div class="bg-white rounded-lg shadow-xl overflow-hidden animate-scroll-reveal delay-300
-                                transform transition duration-500 hover:shadow-2xl hover:translate-y-[-5px]">
+                                transform transition duration-500 hover:shadow-2xl hover:-translate-y-1">
                         <img src="{{ url_recuadro1 }}" alt="Imagen Recuadro 1" class="w-full h-64 object-cover">
                         <div class="p-6">
                             <h3 class="font-outfit text-xl font-bold text-gray-800 mb-2">Conoce y decide tu mejor elección</h3>
@@ -374,7 +410,7 @@
                     </div>
 
                     <div class="bg-white rounded-lg shadow-xl overflow-hidden animate-scroll-reveal delay-500
-                                transform transition duration-500 hover:shadow-2xl hover:translate-y-[-5px]">
+                                transform transition duration-500 hover:shadow-2xl hover:-translate-y-1">
                         <img src="{{ url_recuadro2 }}" alt="Imagen Recuadro 2" class="w-full h-64 object-cover">
                         <div class="p-6">
                             <h3 class="font-outfit text-xl font-bold text-gray-800 mb-2">Más que libros, soluciones integrales</h3>
@@ -384,7 +420,7 @@
                     </div>
                     
                     <div class="bg-white rounded-lg shadow-xl overflow-hidden animate-scroll-reveal delay-700
-                                transform transition duration-500 hover:shadow-2xl hover:translate-y-[-5px]">
+                                transform transition duration-500 hover:shadow-2xl hover:-translate-y-1">
                         <img src="{{ url_recuadro3 }}" alt="Imagen Recuadro 3" class="w-full h-64 object-cover">
                         <div class="p-6">
                             <h3 class="font-outfit text-xl font-bold text-gray-800 mb-2">Nuevo Programa Académico Bilingüe</h3>
@@ -442,11 +478,11 @@
             <div>
                 <h4 class="font-outfit text-lg font-semibold text-gray-900 mb-4">Explorar</h4>
                 <ul class="space-y-2 text-sm">
-                    <li><a href="QuienesSomos.html" class="text-gray-600 hover:text-brand-primary transition duration-300">Quienes Somos</a></li>
-                    <li><a href="Tienda.html" class="text-gray-600 hover:text-brand-primary transition duration-300">Nuestros Productos</a></li>
-                    <li><a href="Colegios.html" class="text-gray-600 hover:text-brand-primary transition duration-300">Colegios</a></li>
-                    <li><a href="Blog.html" class="text-gray-600 hover:text-brand-primary transition duration-300">Blog</a></li>
-                    <li><a href="Intranet.html" class="text-gray-600 hover:text-brand-primary transition duration-300">Intranet (Iniciar Sesión)</a></li>
+                    <li><a href="/quienes-somos" class="text-gray-600 hover:text-brand-primary transition duration-300">Quienes Somos</a></li>
+                    <li><a href="/tienda" class="text-gray-600 hover:text-brand-primary transition duration-300">Nuestros Productos</a></li>
+                    <li><a href="/colegios" class="text-gray-600 hover:text-brand-primary transition duration-300">Colegios</a></li>
+                    <li><a href="/blog" class="text-gray-600 hover:text-brand-primary transition duration-300">Blog</a></li>
+                    <li><a href="/intranet" class="text-gray-600 hover:text-brand-primary transition duration-300">Intranet (Iniciar Sesión)</a></li>
                 </ul>
             </div>
 
@@ -454,8 +490,8 @@
                 <h4 class="font-outfit text-lg font-semibold text-gray-900 mb-4">Nuestro Servicio</h4>
                 <ul class="space-y-2 text-sm">
                     <li><a href="#" class="text-gray-600 hover:text-brand-primary transition duration-300">Ayuda y Soporte</a></li>
-                    <li><a href="PreguntasFrecuentes.html" class="text-gray-600 hover:text-brand-primary transition duration-300">Preguntas Frecuentes – FAQ</a></li>
-                    <li><a href="TerminosYCondiciones.html" class="text-gray-600 hover:text-brand-primary transition duration-300">Términos y Condiciones</a></li>
+                    <li><a href="/preguntas-frecuentes" class="text-gray-600 hover:text-brand-primary transition duration-300">Preguntas Frecuentes – FAQ</a></li>
+                    <li><a href="/terminos-y-condiciones" class="text-gray-600 hover:text-brand-primary transition duration-300">Términos y Condiciones</a></li>
                     <li><a href="#" class="text-gray-600 hover:text-brand-primary transition duration-300">Política de Privacidad</a></li>
                     <li><a href="#" class="text-gray-600 hover:text-brand-primary transition duration-300">Servicio al Cliente</a></li>
                 </ul>
