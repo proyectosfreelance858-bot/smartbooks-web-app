@@ -280,21 +280,24 @@
 
     <main>
         
-        <section class="max-w-full mx-auto overflow-hidden relative shadow-lg animate-scroll-reveal" style="height: 75vh; min-height: 550px;">
+            <section class="max-w-full mx-auto overflow-hidden relative shadow-lg animate-scroll-reveal" style="height: 75vh; min-height: 550px;">
             <div id="banner-carousel" class="w-full h-full">
-                <div class="carousel-item active w-full h-full">
-                    <img src="{{ url_banner1 }}" alt="Banner Principal 1" class="w-full h-full object-cover">
+                
+                {% for url in banner_urls %}
+                <div class="carousel-item {% if loop.first %}active{% endif %} w-full h-full">
+                    <img src="{{ url }}" alt="Banner Principal {{ loop.index }}" class="w-full h-full object-cover">
                 </div>
-                <div class="carousel-item w-full h-full">
-                    <img src="{{ url_banner2 }}" alt="Banner Principal 2" class="w-full h-full object-cover">
-                </div>
+                {% endfor %}
+
             </div>
             
             <div class="absolute bottom-6 left-0 right-0 flex justify-center space-x-3 z-30">
-                <div class="dot w-4 h-4 bg-white rounded-full opacity-70 cursor-pointer transition duration-300 transform hover:scale-125" data-slide="0"></div>
-                <div class="dot w-4 h-4 bg-white rounded-full opacity-70 cursor-pointer transition duration-300 transform hover:scale-125" data-slide="1"></div>
+                {% for url in banner_urls %}
+                <div class="dot w-4 h-4 bg-white rounded-full opacity-70 cursor-pointer transition duration-300 transform hover:scale-125" data-slide="{{ loop.index0 }}"></div>
+                {% endfor %}
             </div>
         </section>
+        <section class="py-16 md:py-24 text-center">
         
         <section class="py-16 md:py-24 text-center">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 animate-scroll-reveal delay-300">
