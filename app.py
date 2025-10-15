@@ -69,11 +69,6 @@ def index():
     
     # Se definen valores por defecto para mostrar en caso de un error de base de datos.
     context = {
-        'banner_urls': [f'https://via.placeholder.com/1920x600.png?text=Error+DB+{i}' for i in range(1, 7)],
-        'url_recuadro1': 'https://via.placeholder.com/600x400.png?text=Error+DB',
-        'url_recuadro2': 'https://via.placeholder.com/600x400.png?text=Error+DB',
-        'url_recuadro3': 'https://via.placeholder.com/600x400.png?text=Error+DB',
-        'editoriales_urls': ['https://via.placeholder.com/150x80.png?text=Error+DB'] * 5,
         'blogs': [],
         'productos_destacados': []
     }
@@ -94,18 +89,23 @@ def index():
         db_config = cur.fetchall()
         config_data = dict(db_config)
             
-        # Crea una lista dinámica de banners, usando un placeholder si falta alguna URL
-        banner_urls = [config_data.get(f'url_banner{i}', f'https://via.placeholder.com/1920x600.png?text=Falta+Banner+{i}') for i in range(1, 7)]
+        # --- INICIO DE LA CORRECCIÓN ---
+        # Se agregan las URLs de banners y editoriales al contexto como variables individuales,
+        # que es el formato que la plantilla index.html espera.
         
-        # Crea una lista para los logos de las editoriales
-        editoriales_urls = [config_data.get(f'url_editorial{i}', f'https://via.placeholder.com/150x80.png?text=Editorial+{i}') for i in range(1, 6)]
+        # Asigna las URLs de los banners individualmente
+        for i in range(1, 7):
+            context[f'url_banner{i}'] = config_data.get(f'url_banner{i}', f'https://via.placeholder.com/1920x600.png?text=Falta+Banner+{i}')
+        
+        # Asigna las URLs de las editoriales individualmente
+        for i in range(1, 6):
+            context[f'url_editorial{i}'] = config_data.get(f'url_editorial{i}', f'https://via.placeholder.com/150x80.png?text=Editorial+{i}')
 
-        # Actualiza el contexto con los datos de la base de datos
-        context['banner_urls'] = banner_urls
+        # Asigna las URLs de los recuadros (esto ya estaba correcto)
         context['url_recuadro1'] = config_data.get('url_recuadro1', 'https://via.placeholder.com/600x400.png?text=Falta+Recuadro+1')
         context['url_recuadro2'] = config_data.get('url_recuadro2', 'https://via.placeholder.com/600x400.png?text=Falta+Recuadro+2')
         context['url_recuadro3'] = config_data.get('url_recuadro3', 'https://via.placeholder.com/600x400.png?text=Falta+Recuadro+3')
-        context['editoriales_urls'] = editoriales_urls
+        # --- FIN DE LA CORRECCIÓN ---
 
         # Consulta 2: Artículos del Blog
         sql_blog_query = """
@@ -142,6 +142,15 @@ def index():
 
     except psycopg2.OperationalError as e:
         print(f"ERROR CRÍTICO: FALLA DE CONEXIÓN A LA BASE DE DATOS. Mensaje: {e}")
+        # En caso de error de DB, se asegura de que las variables esperadas por el template existan
+        for i in range(1, 7):
+            context.setdefault(f'url_banner{i}', f'https://via.placeholder.com/1920x600.png?text=Error+DB+{i}')
+        for i in range(1, 6):
+            context.setdefault(f'url_editorial{i}', f'https://via.placeholder.com/150x80.png?text=Error+DB')
+        context.setdefault('url_recuadro1', 'https://via.placeholder.com/600x400.png?text=Error+DB')
+        context.setdefault('url_recuadro2', 'https://via.placeholder.com/600x400.png?text=Error+DB')
+        context.setdefault('url_recuadro3', 'https://via.placeholder.com/600x400.png?text=Error+DB')
+
     except Exception as e:
         print(f"Error inesperado durante la consulta de datos para la página de inicio: {e}")
     finally:
