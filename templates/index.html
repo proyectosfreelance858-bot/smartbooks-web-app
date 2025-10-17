@@ -43,7 +43,7 @@
         /* --- ESTILO DEL BUSCADOR MINIMALISTA --- */
         .search-input {
             width: 100%;
-            padding: 0.5rem 1.5rem; /* py-2 pl-6 pr-4 */
+            padding: 0.75rem 1.75rem; /* Aumentado un 20% */
             border: 1px solid #d1d5db; 
             border-radius: 9999px; /* rounded-full */
             outline: none;
@@ -54,9 +54,9 @@
         }
 
         .search-button-separate {
-            width: 44px; /* Tamaño del círculo */
-            height: 44px;
-            margin-left: 10px; /* Espacio entre el campo de búsqueda y el botón */
+            width: 52px; /* Aumentado un 20% */
+            height: 52px; /* Aumentado un 20% */
+            margin-left: 12px; /* Espacio entre el campo de búsqueda y el botón */
             background-color: #163d6a; 
             border-radius: 50%; /* Botón redondo */
             display: flex; 
@@ -97,7 +97,7 @@
 
         /* Estilo para opción activa/hover del menú (con línea azul) */
         .menu-item {
-            padding: 0 1rem;
+            padding: 0 1.25rem; /* Padding aumentado */
             display: flex;
             align-items: center;
             height: 100%;
@@ -170,8 +170,8 @@
         }
         .marquee-item {
             flex-shrink: 0;
-            width: 10%; /* 5 logos originales + 5 duplicados = 10 items */
-            padding: 0 2rem;
+            width: 20%; /* Ajustado para 5 logos visibles a la vez */
+            padding: 0 2.5rem; /* Padding aumentado */
             box-sizing: content-box;
             display: flex;
             justify-content: center;
@@ -179,6 +179,16 @@
         }
         .marquee-container:hover .marquee-content {
             animation-play-state: paused;
+        }
+
+        /* Animación para Proyectos Destacados */
+        @keyframes subtle-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+        .animate-subtle-pulse {
+            animation: subtle-pulse 2.5s ease-in-out infinite;
+            display: inline-block; /* Requerido para transform */
         }
     </style>
 </head>
@@ -205,47 +215,33 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
             
             <a href="/" class="flex-shrink-0">
-                <img src="https://sbooks.com.co/wp-content/uploads/2022/10/Logo-Azul-2048x1078.png" alt="Logo Smart Books Holding" class="h-14 w-auto">
-            </a>
+                <img src="https://sbooks.com.co/wp-content/uploads/2022/10/Logo-Azul-2048x1078.png" alt="Logo Smart Books Holding" class="h-16 w-auto"> </a>
 
             <form action="#" class="relative max-w-xl flex-grow mx-10 hidden lg:block">
                 <div class="flex items-center">
-                    <input type="text" placeholder="Buscar por palabra clave..." class="search-input text-gray-700 text-base">
-                    
-                    <button type="submit" class="search-button-separate" title="Buscar">
-                        <img src="https://cdn-icons-png.flaticon.com/128/3031/3031293.png" alt="Lupa" class="w-6 h-6 icon-white">
-                    </button>
+                    <input type="text" placeholder="Buscar por palabra clave..." class="search-input text-gray-700 text-lg"> <button type="submit" class="search-button-separate" title="Buscar">
+                        <img src="https://cdn-icons-png.flaticon.com/128/3031/3031293.png" alt="Lupa" class="w-7 h-7 icon-white"> </button>
                 </div>
             </form>
 
-            <div class="flex space-x-4 items-center">
-                <div class="hidden xl:flex flex-col items-end text-xs">
-                    <span class="text-gray-500 font-instrument">Llámanos ahora</span>
-                    <span class="font-outfit text-base font-bold text-gray-800">333 602 50 29</span>
-                </div>
+            <div class="flex space-x-6 items-center"> <a href="#" class="hidden xl:flex items-center justify-center bg-brand-primary text-white font-outfit font-bold px-5 py-3 rounded-lg shadow-md hover:bg-indigo-800 transition transform hover:scale-105 duration-300">
+                    <span class="text-base">Compra tu Kit Educativo AQUÍ</span>
+                </a>
                 
-                <div class="flex space-x-3 items-center text-gray-800 text-xl">
-                    <a href="/login" class="p-2 hover:text-brand-primary transition duration-300 flex items-center justify-center" title="Mi Cuenta">
-                        <img src="https://cdn-icons-png.flaticon.com/128/18986/18986944.png" alt="Usuario" class="w-6 h-6">
-                    </a>
+                <div class="flex space-x-4 items-center text-gray-800 text-xl">
                     <a href="#" class="p-2 hover:text-brand-primary transition duration-300 relative flex items-center justify-center" title="Carrito de Compras">
-                        <img src="https://cdn-icons-png.flaticon.com/128/3144/3144456.png" alt="Carrito" class="w-6 h-6">
-                        <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-brand-accent rounded-full">
+                        <img src="https://cdn-icons-png.flaticon.com/128/3144/3144456.png" alt="Carrito" class="w-8 h-8"> <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-brand-accent rounded-full">
                             0
                         </span>
                     </a>
                 </div>
                 <button class="lg:hidden p-2 text-gray-800 hover:text-brand-primary transition duration-300">
-                    <i class="fas fa-bars text-xl"></i>
-                </button>
+                    <i class="fas fa-bars text-2xl"></i> </button>
             </div>
         </div>
 
-        <div class="bg-white border-t border-gray-100 hidden lg:block shadow-sm h-12">
-            <div class="max-w-7xl mx-auto px-4 h-full">
-                <nav class="flex justify-center space-x-8 font-outfit text-gray-800 font-semibold text-sm h-full">
-                    
-                    <a href="/" class="menu-item active">Inicio</a>
+        <div class="bg-white border-t border-gray-100 hidden lg:block shadow-sm h-14"> <div class="max-w-7xl mx-auto px-4 h-full">
+                <nav class="flex justify-center space-x-10 font-outfit text-gray-800 font-semibold text-base h-full"> <a href="/" class="menu-item active">Inicio</a>
                     
                     <div class="dropdown relative h-full">
                         <a href="#" class="menu-item flex items-center">
@@ -335,16 +331,16 @@
                 </h2>
                 <div class="marquee-container">
                     <div class="marquee-content">
-                        <div class="marquee-item"><img src="{{ url_editorial1 }}" alt="Logo Editorial 1" class="h-10 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
-                        <div class="marquee-item"><img src="{{ url_editorial2 }}" alt="Logo Editorial 2" class="h-10 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
-                        <div class="marquee-item"><img src="{{ url_editorial3 }}" alt="Logo Editorial 3" class="h-10 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
-                        <div class="marquee-item"><img src="{{ url_editorial4 }}" alt="Logo Editorial 4" class="h-10 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
-                        <div class="marquee-item"><img src="{{ url_editorial5 }}" alt="Logo Editorial 5" class="h-10 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
-                        <div class="marquee-item"><img src="{{ url_editorial1 }}" alt="Logo Editorial 1" class="h-10 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
-                        <div class="marquee-item"><img src="{{ url_editorial2 }}" alt="Logo Editorial 2" class="h-10 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
-                        <div class="marquee-item"><img src="{{ url_editorial3 }}" alt="Logo Editorial 3" class="h-10 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
-                        <div class="marquee-item"><img src="{{ url_editorial4 }}" alt="Logo Editorial 4" class="h-10 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
-                        <div class="marquee-item"><img src="{{ url_editorial5 }}" alt="Logo Editorial 5" class="h-10 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
+                        <div class="marquee-item"><img src="{{ url_editorial1 }}" alt="Logo Editorial 1" class="h-20 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
+                        <div class="marquee-item"><img src="{{ url_editorial2 }}" alt="Logo Editorial 2" class="h-20 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
+                        <div class="marquee-item"><img src="{{ url_editorial3 }}" alt="Logo Editorial 3" class="h-20 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
+                        <div class="marquee-item"><img src="{{ url_editorial4 }}" alt="Logo Editorial 4" class="h-20 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
+                        <div class="marquee-item"><img src="{{ url_editorial5 }}" alt="Logo Editorial 5" class="h-20 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
+                        <div class="marquee-item"><img src="{{ url_editorial1 }}" alt="Logo Editorial 1" class="h-20 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
+                        <div class="marquee-item"><img src="{{ url_editorial2 }}" alt="Logo Editorial 2" class="h-20 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
+                        <div class="marquee-item"><img src="{{ url_editorial3 }}" alt="Logo Editorial 3" class="h-20 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
+                        <div class="marquee-item"><img src="{{ url_editorial4 }}" alt="Logo Editorial 4" class="h-20 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
+                        <div class="marquee-item"><img src="{{ url_editorial5 }}" alt="Logo Editorial 5" class="h-20 max-w-full opacity-70 transition-opacity duration-300 hover:opacity-100"></div>
                     </div>
                 </div>
             </div>
@@ -411,8 +407,7 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 
                 <h2 class="font-outfit text-3xl md:text-4xl text-center font-extrabold text-gray-900 mb-12 animate-scroll-reveal">
-                    Nuestros Proyectos <span class="text-brand-accent">Destacados</span>
-                </h2>
+                    Nuestros Proyectos <span class="text-brand-accent animate-subtle-pulse">Destacados</span> </h2>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     
@@ -467,6 +462,9 @@
                     <a href="https://www.linkedin.com/company/smartbookscol/" target="_blank" class="hover:text-brand-primary transition duration-300"><i class="fab fa-linkedin-in text-lg"></i></a>
                     <a href="#" class="hover:text-brand-primary transition duration-300"><i class="fab fa-pinterest-p text-lg"></i></a>
                 </div>
+                <a href="/intranet" class="mt-6 text-sm text-gray-700 border border-gray-300 rounded-md px-5 py-2 hover:bg-gray-100 hover:text-brand-primary transition duration-300">
+                    Iniciar Sesión
+                </a>
             </div>
 
             <div>
