@@ -229,13 +229,14 @@
             display: inline-block; /* Requerido para transform */
         }
         
-        /* Animación para botón amarillo "Kit Educativo" */
-        @keyframes pulse-slow {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.9; transform: scale(1.03); }
+        /* Animación para botón amarillo "Kit Educativo" - Acentuado */
+        @keyframes super-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(253, 224, 71, 0.7); transform: scale(1); }
+            50% { box-shadow: 0 0 0 15px rgba(253, 224, 71, 0); transform: scale(1.05); }
+            100% { box-shadow: 0 0 0 0 rgba(253, 224, 71, 0); transform: scale(1); }
         }
-        .animate-pulse-slow {
-            animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        .animate-super-pulse {
+            animation: super-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
 
         /* Animación de zoom en imagen para tarjetas de Proyectos */
@@ -280,7 +281,7 @@
                 </div>
             </form>
 
-            <div class="flex space-x-6 items-center"> <a href="#" class="hidden xl:flex items-center justify-center bg-yellow-400 text-gray-900 font-outfit font-bold px-5 py-3 rounded-lg shadow-lg hover:bg-yellow-500 transition transform hover:scale-105 duration-300 animate-pulse-slow">
+            <div class="flex space-x-6 items-center"> <a href="#" class="hidden xl:flex items-center justify-center bg-yellow-400 text-gray-900 font-outfit font-bold px-5 py-3 rounded-lg shadow-lg hover:bg-yellow-500 transition transform duration-300 animate-super-pulse">
                     <span class="text-base">Compra tu Kit Educativo AQUÍ</span>
                 </a>
                 
@@ -611,15 +612,20 @@
                 </ul>
             </div>
 
-            <div>
-                <h4 class="font-outfit text-lg font-semibold text-gray-900 mb-4">Nuestro Servicio</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="#" class="text-gray-600 hover:text-brand-primary transition duration-300">Ayuda y Soporte</a></li>
-                    <li><a href="/preguntas-frecuentes" class="text-gray-600 hover:text-brand-primary transition duration-300">Preguntas Frecuentes – FAQ</a></li>
-                    <li><a href="/terminos-y-condiciones" class="text-gray-600 hover:text-brand-primary transition duration-300">Términos y Condiciones</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-brand-primary transition duration-300">Política de Privacidad</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-brand-primary transition duration-300">Servicio al Cliente</a></li>
-                </ul>
+            <div class="lg:col-span-1">
+                <h4 class="font-outfit text-lg font-semibold text-gray-900 mb-4">Encuéntranos</h4>
+                <div class="aspect-w-16 aspect-h-9 w-full rounded-lg overflow-hidden shadow-md">
+                    <iframe 
+                        src="https://maps.app.goo.gl/CWL5n84SdHzz2jVv6" 
+                        width="100%" 
+                        height="200" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade"
+                        class="rounded-lg">
+                    </iframe>
+                </div>
             </div>
 
         </div>
