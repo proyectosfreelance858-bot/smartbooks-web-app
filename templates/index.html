@@ -11,6 +11,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@300;400;700&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
     
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
     <style>
         /* Definición de las fuentes para el diseño */
         .font-outfit { font-family: 'Outfit', sans-serif; }
@@ -216,6 +218,44 @@
             transform: scale(1.05);
         }
 
+        /* --- ESTILO SWIPER PRODUCTOS --- */
+        .product-swiper {
+            padding-bottom: 50px; /* Espacio para la paginación */
+        }
+        .product-swiper .swiper-pagination-bullet-active {
+            background-color: #163D6A;
+        }
+        .product-swiper .swiper-button-next,
+        .product-swiper .swiper-button-prev {
+            color: #163D6A; /* Color de la marca */
+            background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco semitransparente */
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: background-color 0.3s;
+        }
+        .product-swiper .swiper-button-next:hover,
+        .product-swiper .swiper-button-prev:hover {
+            background-color: rgba(255, 255, 255, 1);
+        }
+        .product-swiper .swiper-button-next::after,
+        .product-swiper .swiper-button-prev::after {
+            font-size: 1.25rem; /* 20px */
+            font-weight: bold;
+        }
+        /* Asegura que el swiper-slide tenga la altura correcta */
+        .product-swiper .swiper-slide {
+            height: auto; /* Permite que el contenido defina la altura */
+        }
+        .product-swiper .product-card {
+            height: 100%; /* Asegura que la tarjeta llene el slide */
+        }
+        /* --- FIN ESTILO SWIPER --- */
+
     </style>
 </head>
 
@@ -372,7 +412,8 @@
             </div>
         </section>
 
-        <section id="productos-vendidos" class="py-16 md:py-24 bg-white"> <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section id="productos-vendidos" class="py-16 md:py-24 bg-white"> 
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 
                 <div class="flex justify-between items-center mb-10 animate-scroll-reveal">
                     <h2 class="font-outfit text-4xl font-extrabold text-gray-900">
@@ -383,50 +424,59 @@
                     </a>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    
-                    {% for producto in productos_destacados %}
-                    <div class="bg-gray-100 rounded-xl shadow-lg overflow-hidden product-card animate-scroll-reveal" 
-                        style="animation-delay: {{ loop.index * 150 }}ms;">
+                <div class="swiper product-swiper animate-scroll-reveal overflow-hidden">
+                    <div class="swiper-wrapper">
                         
-                        <div class="relative overflow-hidden h-96">
-                            <img src="{{ producto.url_imagen }}" alt="{{ producto.titulo }}" 
-                                 class="w-full h-full object-cover object-center absolute inset-0 
-                                        transform transition duration-500 hover:scale-105">
-                            
-                            <div class="product-info absolute inset-0 bg-white/90 p-4 flex flex-col justify-end 
-                                        transform translate-y-full opacity-0">
+                        {% for producto in productos_destacados %}
+                        <div class="swiper-slide h-auto">
+                            <div class="bg-gray-100 rounded-xl shadow-lg overflow-hidden product-card h-full">
                                 
-                                <p class="text-xs font-semibold text-gray-500 mb-1">{{ producto.categoria }}</p>
-                                <h3 class="font-outfit text-lg font-bold text-gray-900 mb-2 line-clamp-2">
-                                    {{ producto.titulo }}
-                                </h3>
-                                
-                                <p class="text-sm text-gray-600 mb-3 line-clamp-3">{{ producto.descripcion_corta }}</p>
-                                
-                                <div class="flex items-center text-yellow-500 text-sm mb-4">
-                                    {% for i in range(producto.rating) %}
-                                        <i class="fas fa-star"></i>
-                                    {% endfor %}
-                                    {% for i in range(5 - producto.rating) %}
-                                        <i class="far fa-star text-gray-300"></i>
-                                    {% endfor %}
-                                    <span class="text-xs text-gray-500 ml-2">(42)</span>
+                                <div class="relative overflow-hidden h-96">
+                                    <img src="{{ producto.url_imagen }}" alt="{{ producto.titulo }}" 
+                                         class="w-full h-full object-cover object-center absolute inset-0 
+                                                transform transition duration-500 hover:scale-105">
+                                    
+                                    <div class="product-info absolute inset-0 bg-white/90 p-4 flex flex-col justify-end 
+                                                transform translate-y-full opacity-0">
+                                        
+                                        <p class="text-xs font-semibold text-gray-500 mb-1">{{ producto.categoria }}</p>
+                                        <h3 class="font-outfit text-lg font-bold text-gray-900 mb-2 line-clamp-2">
+                                            {{ producto.titulo }}
+                                        </h3>
+                                        
+                                        <p class="text-sm text-gray-600 mb-3 line-clamp-3">{{ producto.descripcion_corta }}</p>
+                                        
+                                        <div class="flex items-center text-yellow-500 text-sm mb-4">
+                                            {% for i in range(producto.rating) %}
+                                                <i class="fas fa-star"></i>
+                                            {% endfor %}
+                                            {% for i in range(5 - producto.rating) %}
+                                                <i class="far fa-star text-gray-300"></i>
+                                            {% endfor %}
+                                            <span class="text-xs text-gray-500 ml-2">(42)</span>
+                                        </div>
+        
+                                        <div class="flex justify-between items-center">
+                                            <span class="font-outfit text-xl font-black text-brand-primary">{{ producto.precio_formateado }}</span>
+                                            <a href="#" class="px-4 py-2 text-xs font-semibold text-white bg-brand-accent rounded-full hover:bg-red-600 transition duration-300">
+                                                Añadir al carrito
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
-
-                                <div class="flex justify-between items-center">
-                                    <span class="font-outfit text-xl font-black text-brand-primary">{{ producto.precio_formateado }}</span>
-                                    <a href="#" class="px-4 py-2 text-xs font-semibold text-white bg-brand-accent rounded-full hover:bg-red-600 transition duration-300">
-                                        Añadir al carrito
-                                    </a>
-                                </div>
+        
                             </div>
                         </div>
-
+                        {% endfor %}
+                        
                     </div>
-                    {% endfor %}
+                    
+                    <div class="swiper-pagination"></div>
+                    
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
                 </div>
-            </div>
+                </div>
         </section>
         
         <section id="recuadros" class="bg-gray-100 py-16 md:py-24">
@@ -550,10 +600,12 @@
         <i class="fab fa-whatsapp"></i>
     </a>
 
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Script para el Carrusel
+            
+            // Script para el Carrusel de Banner Principal
             const items = document.querySelectorAll('.carousel-item');
             const dots = document.querySelectorAll('.dot');
             let currentIndex = 0;
@@ -613,6 +665,41 @@
                     element.style.animationDelay = '0s'; // Valor por defecto
                 }
                 observer.observe(element);
+            });
+
+            // --- NUEVO SCRIPT: Inicialización de Swiper.js para Productos ---
+            const productSwiper = new Swiper('.product-swiper', {
+                loop: true,
+                autoplay: {
+                    delay: 3000, // 3 segundos
+                    disableOnInteraction: false, // Sigue rotando después del clic
+                },
+                slidesPerView: 1, // 1 slide en móvil
+                spaceBetween: 24, // Corresponde a 'gap-6' de Tailwind
+                
+                // Paginación (puntos)
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                
+                // Navegación (flechas)
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+
+                // Breakpoints para responsive
+                breakpoints: {
+                    // >= 640px (Tailwind 'sm')
+                    640: {
+                        slidesPerView: 2,
+                    },
+                    // >= 1024px (Tailwind 'lg')
+                    1024: {
+                        slidesPerView: 4,
+                    },
+                }
             });
             
         });
