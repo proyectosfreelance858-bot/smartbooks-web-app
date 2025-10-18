@@ -82,8 +82,8 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%; /* Asegura que cubra todo el contenedor */
-            height: 100%; /* Asegura que cubra todo el contenedor */
+            width: 100%;
+            height: 100%;
             opacity: 0;
             transition: opacity 1s ease-in-out;
             z-index: 10;
@@ -91,6 +91,14 @@
         .carousel-item.active {
             opacity: 1;
             z-index: 20;
+        }
+        /* Efecto Ken Burns (Zoom lento) para el carrusel */
+        .carousel-item img {
+            transform: scale(1.15); /* Estado inicial (zoom in) */
+            transition: transform 5s linear; /* Duración de la animación (coincide con el slide) */
+        }
+        .carousel-item.active img {
+            transform: scale(1); /* Estado final (zoom out) */
         }
         /* --- FIN ESTILO CARRUSEL --- */
 
@@ -171,7 +179,7 @@
         .marquee-item {
             flex-shrink: 0;
             width: 20%; /* Ajustado para 5 logos visibles a la vez */
-            padding: 0 2.5rem; /* Padding aumentado */
+            padding: 0 1.5rem; /* Padding reducido para acercar logos */
             box-sizing: content-box;
             display: flex;
             justify-content: center;
@@ -190,6 +198,24 @@
             animation: subtle-pulse 2.5s ease-in-out infinite;
             display: inline-block; /* Requerido para transform */
         }
+        
+        /* Animación para botón amarillo "Kit Educativo" */
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.9; transform: scale(1.03); }
+        }
+        .animate-pulse-slow {
+            animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        /* Animación de zoom en imagen para tarjetas de Proyectos */
+        #recuadros .bg-white img {
+            transition: transform 0.4s ease-out;
+        }
+        #recuadros .bg-white:hover img {
+            transform: scale(1.05);
+        }
+
     </style>
 </head>
 
@@ -215,7 +241,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
             
             <a href="/" class="flex-shrink-0">
-                <img src="https://sbooks.com.co/wp-content/uploads/2022/10/Logo-Azul-2048x1078.png" alt="Logo Smart Books Holding" class="h-16 w-auto"> </a>
+                <img src="https://sbooks.com.co/wp-content/uploads/2022/10/Logo-Azul-2048x1078.png" alt="Logo Smart Books Holding" class="h-20 w-auto"> </a>
 
             <form action="#" class="relative max-w-xl flex-grow mx-10 hidden lg:block">
                 <div class="flex items-center">
@@ -224,7 +250,7 @@
                 </div>
             </form>
 
-            <div class="flex space-x-6 items-center"> <a href="#" class="hidden xl:flex items-center justify-center bg-brand-primary text-white font-outfit font-bold px-5 py-3 rounded-lg shadow-md hover:bg-indigo-800 transition transform hover:scale-105 duration-300">
+            <div class="flex space-x-6 items-center"> <a href="#" class="hidden xl:flex items-center justify-center bg-yellow-400 text-gray-900 font-outfit font-bold px-5 py-3 rounded-lg shadow-lg hover:bg-yellow-500 transition transform hover:scale-105 duration-300 animate-pulse-slow">
                     <span class="text-base">Compra tu Kit Educativo AQUÍ</span>
                 </a>
                 
@@ -352,8 +378,8 @@
                     <h2 class="font-outfit text-4xl font-extrabold text-gray-900">
                         Productos más <span class="text-brand-accent">Vendidos</span>
                     </h2>
-                    <a href="/tienda" class="inline-block px-6 py-2 text-base font-medium text-white bg-brand-accent rounded-lg hover:bg-red-600 transition duration-300 shadow-md">
-                        Ver Todos
+                    <a href="/tienda" class="inline-block px-6 py-2 text-base font-medium text-white bg-brand-accent rounded-lg hover:bg-red-600 transition-all duration-300 shadow-md hover:translate-x-1">
+                        Ver Todos &rarr;
                     </a>
                 </div>
 
