@@ -139,7 +139,7 @@
 
             <div class="space-y-6">
 
-                <div id="school-dropdown-container" class="relative custom-dropdown animate-scroll-reveal delay-200">
+                <div id="school-dropdown-container" class="relative custom-dropdown animate-scroll-reveal delay-200 z-50"> 
                     <button id="school-select-button" 
                             class="w-full bg-white border border-gray-300 rounded-lg shadow-md py-4 px-6 text-xl text-left text-gray-500 font-semibold flex items-center justify-between transition duration-300 school-loading" disabled>
                         Cargando Colegios...
@@ -153,7 +153,7 @@
                     </div>
                 </div>
 
-                <div id="course-dropdown-container" class="relative course-dropdown">
+                <div id="course-dropdown-container" class="relative course-dropdown z-40">
                     <button id="course-select-button" 
                             class="w-full bg-white border border-gray-300 rounded-lg shadow-md py-4 px-6 text-xl text-left text-gray-500 font-semibold flex items-center justify-between transition duration-300 cursor-not-allowed" disabled>
                         Selecciona el Curso
@@ -315,6 +315,8 @@
                 if (!schoolSelectButton.disabled) {
                     schoolDropdownContainer.classList.toggle('active');
                     schoolSearchInput.focus();
+                    // Asegurar que el dropdown de cursos esté cerrado al abrir el de colegios
+                    courseDropdownContainer.classList.remove('active'); 
                 }
             });
             
@@ -322,9 +324,11 @@
             courseSelectButton.addEventListener('click', () => {
                  if (!courseSelectButton.disabled) {
                     courseDropdownContainer.classList.toggle('active');
+                    // Asegurar que el dropdown de colegios esté cerrado al abrir el de cursos
+                    schoolDropdownContainer.classList.remove('active');
                  }
             });
-
+            
             // Función para renderizar la lista de colegios (usada también para la búsqueda)
             function renderSchoolList(schools) {
                 schoolList.innerHTML = '';
@@ -492,7 +496,9 @@
                 try {
                     const response = await fetch('/api/colegios');
                     if (!response.ok) {
-                        throw new Error(`Error HTTP: ${response.status}`);
+                        // El 500 error es capturado aquí
+                        const errorData = await response.json(); 
+                        throw new Error(`Error HTTP: ${response.status}. Detalle: ${errorData.detail || 'Error desconocido'}`);
                     }
                     ALL_SCHOOLS = await response.json();
                     
@@ -511,7 +517,7 @@
                     schoolSelectButton.innerHTML = `Error de Carga <i class="fas fa-exclamation-triangle text-red-500 text-base ml-2"></i>`;
                     schoolSelectButton.classList.remove('school-loading');
                     schoolSelectButton.classList.add('text-red-600', 'border-red-500', 'cursor-not-allowed');
-                    initialMessage.textContent = 'Hubo un error al conectar con la base de datos de colegios.';
+                    initialMessage.textContent = 'Hubo un error al conectar con la base de datos de colegios. Por favor, revisa el log del servidor.';
                     
                 }
             }
