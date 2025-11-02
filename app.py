@@ -309,31 +309,37 @@ def get_colegios_data():
     conn = None
     colegios_data = []
     
-    # Lista de todas las columnas de la tabla colegios (incluyendo los grados)
-    COLUMNS = [
+    # 1. Lista de KEYS que el JavaScript del cliente ESPERA (Mayúsculas)
+    JSON_KEYS = [
         'id', 'COLEGIO', 'CIUDAD', 'IMAGEN', 'UBICACION', 
         'PREJARDIN', 'JARDIN', 'TRANSICION', 'PRIMERO', 'SEGUNDO', 
         'TERCERO', 'CUARTO', 'QUINTO', 'SEXTO', 'SEPTIMO', 
         'OCTAVO', 'NOVENO', 'DECIMO', 'ONCE'
     ]
     
+    # 2. Lista de COLUMNAS SQL (Minúsculas para PostgreSQL)
+    SQL_COLUMNS = [k.lower() for k in JSON_KEYS] # ['id', 'colegio', 'ciudad', ...]
+    
     try:
         conn = get_db_connection()
         cur = conn.cursor()
         
-        # Consulta que trae toda la información necesaria para el cliente
-        query = f"SELECT {', '.join(COLUMNS)} FROM colegios ORDER BY COLEGIO ASC;"
+        # Consulta: Usamos las columnas en minúscula para la consulta SQL
+        query = f"SELECT {', '.join(SQL_COLUMNS)} FROM colegios ORDER BY colegio ASC;"
         cur.execute(query)
         
-        # Mapea los resultados a una lista de diccionarios
-        colegios_data = [dict(zip(COLUMNS, row)) for row in cur.fetchall()]
+        # Mapea los resultados: Usamos JSON_KEYS (mayúsculas) como claves
+        # para el diccionario, asegurando que el cliente reciba lo que espera.
+        colegios_data = [dict(zip(JSON_KEYS, row)) for row in cur.fetchall()]
         
         return jsonify(colegios_data), 200
 
     except Exception as e:
-        print(f"Error al obtener la lista de colegios: {e}")
-        # En caso de error, devolvemos un JSON con el error
-        return jsonify({"error": "Error interno del servidor al obtener datos de colegios"}), 500
+        # Esto captura errores de conexión o errores en la consulta SQL
+        # Se imprime el error para el registro del servidor
+        print(f"Error al obtener la lista de colegios (FATAL DB ERROR): {e}") 
+        # Devuelve el error 500 al cliente
+        return jsonify({"error": "Error interno del servidor al obtener datos de colegios", "detail": str(e)}), 500
     finally:
         if conn:
             conn.close()
