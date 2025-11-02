@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify, request
 import psycopg2
 from datetime import datetime
 from dotenv import load_dotenv
@@ -10,10 +10,12 @@ load_dotenv()
 # =================================================================
 # 1. CONFIGURACIÓN DE BASE DE DATOS Y HOSTING
 # =================================================================
+# Las variables se leen del archivo .env o se usan valores por defecto
 DB_HOST = os.environ.get("DB_HOST", "localhost") 
 DB_NAME = os.environ.get("DB_NAME", "nombre_de_tu_base_de_datos") 
 DB_USER = os.environ.get("DB_USER", "tu_usuario_postgres") 
 DB_PASS = os.environ.get("DB_PASS", "tu_contraseña_postgres") 
+DB_PORT = os.environ.get("DB_PORT", "5432") # PUERTO (Importante para Render)
 
 PORT = int(os.environ.get('PORT', 5000))
 HOST = '0.0.0.0' 
@@ -21,275 +23,107 @@ HOST = '0.0.0.0'
 app = Flask(__name__)
 
 def get_db_connection():
-    """Intenta establecer la conexión a la base de datos PostgreSQL."""
-    if not all([DB_HOST, DB_NAME, DB_USER, DB_PASS]):
+    """
+    Intenta establecer la conexión a la base de datos PostgreSQL.
+    Añade sslmode='require' para conexiones remotas (CRUCIAL para Render).
+    """
+    # Verificamos que todas las variables estén presentes
+    if not all([DB_HOST, DB_NAME, DB_USER, DB_PASS, DB_PORT]):
           raise psycopg2.OperationalError("Faltan variables de conexión a la base de datos.")
           
     conn = psycopg2.connect(
         host=DB_HOST,
         database=DB_NAME,
         user=DB_USER,
-        password=DB_PASS
+        password=DB_PASS,
+        port=DB_PORT,
+        sslmode='require' # SOLUCIÓN PARA EL ERROR DE CONEXIÓN REMOTA (500)
     )
     return conn
 
-# Función auxiliar para formatear productos (evita repetir código)
-def format_products(db_productos):
-    """Convierte los resultados de la consulta de productos en un formato de lista de diccionarios."""
-    productos = []
-    for producto_data in db_productos:
-        # Asegúrate de que el orden de las columnas sea:
-        # (sku, titulo, categoria, precio, url_imagen, descripcion)
-        (sku, titulo, categoria, precio, url_imagen, descripcion) = producto_data
-        
-        precio_formateado = f"${precio:,.0f}".replace(",", ".")
-        
-        imagen_url = url_imagen
-        if not imagen_url or not imagen_url.strip():
-            imagen_url = 'https://via.placeholder.com/400x500.png?text=Producto'
-        
-        productos.append({
-            'sku': sku,
-            'titulo': titulo,
-            'categoria': categoria, 
-            'precio': precio,
-            'precio_formateado': precio_formateado,
-            'url_imagen': imagen_url,
-            'rating': 5, # Valor fijo de ejemplo
-            'descripcion_corta': descripcion.split('.')[0] if descripcion else "Descripción no disponible."
-        })
-    return productos
+# Columnas esperadas para la tabla de productos
+PRODUCT_COLUMNS = [
+    'id', 'nombre_producto', 'sku', 'descripcion', 'precio', 'editorial', 
+    'tipo_texto', 'imagen_url', 'stock', 'fecha_creacion', 'es_kit'
+]
 
-# =================================================================
-# RUTA PRINCIPAL (PÁGINA DE INICIO)
-# =================================================================
-@app.route('/')
-def index():
+def format_product(row):
+    """Mapea una fila de producto a un diccionario usando las claves de PRODUCT_COLUMNS."""
+    return dict(zip(PRODUCT_COLUMNS, row))
+
+# Función para obtener todas las editoriales para filtros de la tienda
+def get_editoriales():
     conn = None
-    
-    # Se definen valores por defecto para mostrar en caso de un error de base de datos.
-    context = {
-        'blogs': [],
-        'productos_destacados': []
-    }
-    
+    editoriales = []
     try:
         conn = get_db_connection()
         cur = conn.cursor()
-
-        # Consulta 1: Configuración (Ahora busca los 6 banners y demás claves)
-        claves_config = [
-            'url_banner1', 'url_banner2', 'url_banner3', 'url_banner4', 'url_banner5', 'url_banner6',
-            'url_recuadro1', 'url_recuadro2', 'url_recuadro3',
-            'url_editorial1', 'url_editorial2', 'url_editorial3', 'url_editorial4', 'url_editorial5'
-        ]
-        
-        sql_config = "SELECT clave, valor FROM configuracion_web WHERE clave IN %s;"
-        cur.execute(sql_config, (tuple(claves_config),))
-        db_config = cur.fetchall()
-        config_data = dict(db_config)
-            
-        # --- INICIO DE LA CORRECCIÓN ---
-        # Se agregan las URLs de banners y editoriales al contexto como variables individuales,
-        # que es el formato que la plantilla index.html espera.
-        
-        # Asigna las URLs de los banners individualmente
-        for i in range(1, 7):
-            context[f'url_banner{i}'] = config_data.get(f'url_banner{i}', f'https://via.placeholder.com/1920x600.png?text=Falta+Banner+{i}')
-        
-        # Asigna las URLs de las editoriales individualmente
-        for i in range(1, 6):
-            context[f'url_editorial{i}'] = config_data.get(f'url_editorial{i}', f'https://via.placeholder.com/150x80.png?text=Editorial+{i}')
-
-        # Asigna las URLs de los recuadros (esto ya estaba correcto)
-        context['url_recuadro1'] = config_data.get('url_recuadro1', 'https://via.placeholder.com/600x400.png?text=Falta+Recuadro+1')
-        context['url_recuadro2'] = config_data.get('url_recuadro2', 'https://via.placeholder.com/600x400.png?text=Falta+Recuadro+2')
-        context['url_recuadro3'] = config_data.get('url_recuadro3', 'https://via.placeholder.com/600x400.png?text=Falta+Recuadro+3')
-        # --- FIN DE LA CORRECCIÓN ---
-
-        # Consulta 2: Artículos del Blog
-        sql_blog_query = """
-            SELECT id, titulo, descripcion_corta, url_imagen_principal, fecha_creacion, slug FROM articulos_blog 
-            ORDER BY fecha_creacion DESC LIMIT 8; 
-        """
-        cur.execute(sql_blog_query)
-        db_blogs = cur.fetchall()
-        
-        blogs = []
-        for blog_data in db_blogs:
-            (id, titulo, descripcion_corta, url_imagen_principal, fecha_creacion, slug) = blog_data
-            fecha_formateada = fecha_creacion.strftime("%d %b, %Y")
-            meses_espanol = {'Jan': 'Ene', 'Apr': 'Abr', 'Aug': 'Ago', 'Dec': 'Dic'}
-            for en, es in meses_espanol.items():
-                fecha_formateada = fecha_formateada.replace(en, es)
-            imagen_url = url_imagen_principal if url_imagen_principal and url_imagen_principal.strip() else 'https://via.placeholder.com/600x400.png?text=Smart+Books+Blog'
-
-            blogs.append({
-                'id': id, 'titulo': titulo, 'url_imagen_principal': imagen_url,
-                'descripcion_corta': descripcion_corta, 'fecha': fecha_formateada,
-                'autor': 'Smart Books Team', 'categoria': 'Educación',        
-                'url_articulo': f'/blog/{slug}'  
-            })
-        context['blogs'] = blogs
-            
-        # Consulta 3: Productos Destacados
-        sql_productos_query = "SELECT sku, titulo, categoria, precio, url_imagen, descripcion FROM productos_escolares ORDER BY sku LIMIT 4;"
-        cur.execute(sql_productos_query)
-        db_productos = cur.fetchall()
-        context['productos_destacados'] = format_products(db_productos)
-            
-        cur.close()
-
-    except psycopg2.OperationalError as e:
-        print(f"ERROR CRÍTICO: FALLA DE CONEXIÓN A LA BASE DE DATOS. Mensaje: {e}")
-        # En caso de error de DB, se asegura de que las variables esperadas por el template existan
-        for i in range(1, 7):
-            context.setdefault(f'url_banner{i}', f'https://via.placeholder.com/1920x600.png?text=Error+DB+{i}')
-        for i in range(1, 6):
-            context.setdefault(f'url_editorial{i}', f'https://via.placeholder.com/150x80.png?text=Error+DB')
-        context.setdefault('url_recuadro1', 'https://via.placeholder.com/600x400.png?text=Error+DB')
-        context.setdefault('url_recuadro2', 'https://via.placeholder.com/600x400.png?text=Error+DB')
-        context.setdefault('url_recuadro3', 'https://via.placeholder.com/600x400.png?text=Error+DB')
-
+        cur.execute("SELECT DISTINCT editorial FROM productos WHERE editorial IS NOT NULL ORDER BY editorial;")
+        editoriales = [row[0] for row in cur.fetchall()]
     except Exception as e:
-        print(f"Error inesperado durante la consulta de datos para la página de inicio: {e}")
+        print(f"Error al obtener editoriales: {e}")
     finally:
         if conn:
             conn.close()
+    return editoriales
 
-    return render_template('index.html', **context)
-
-
-# =================================================================
-# RUTA PARA LA PÁGINA DE EDICIONES CASTILLO
-# =================================================================
-@app.route('/aliados/castillo')
-def aliados_castillo():
-    productos = []
+# Función para obtener todas las categorías/tipos_texto para filtros de la tienda
+def get_tipos_texto():
     conn = None
-    
+    categorias = []
     try:
         conn = get_db_connection()
         cur = conn.cursor()
-
-        sql_castillo_query = """
-            SELECT sku, titulo, categoria, precio, url_imagen, descripcion FROM productos_escolares 
-            WHERE categoria LIKE 'Ediciones Castillo%%' 
-            ORDER BY titulo ASC; 
-        """
-        cur.execute(sql_castillo_query)
-        db_productos = cur.fetchall()
-        productos = format_products(db_productos)
-        cur.close()
-
-    except psycopg2.OperationalError as e:
-        print(f"ERROR CRÍTICO: FALLA DE CONEXIÓN A LA BASE DE DATOS. Mensaje: {e}")
+        cur.execute("SELECT DISTINCT tipo_texto FROM productos WHERE tipo_texto IS NOT NULL ORDER BY tipo_texto;")
+        categorias = [row[0] for row in cur.fetchall()]
     except Exception as e:
-        print(f"Error inesperado al cargar productos de Castillo: {e}")
+        print(f"Error al obtener categorías: {e}")
     finally:
         if conn:
             conn.close()
-
-    context = {
-        'titulo_pagina': 'Ediciones Castillo',
-        'productos': productos,
-        'url_logo_editorial': 'https://sbooks.com.co/wp-content/uploads/2023/09/Ediciones-Color-2.png', 
-        'texto_presentacion': 'Explora la colección completa de textos escolares, guías y plan lector de Ediciones Castillo, líder en innovación educativa.',
-        'total_productos': len(productos)
-    }
-    
-    return render_template('Castillo.html', **context)
+    return categorias
 
 
 # =================================================================
-# RUTA PARA LA PÁGINA DE MACMILLAN EDUCATION
+# 2. RUTAS DE TIENDA Y PRODUCTOS
 # =================================================================
-@app.route('/aliados/macmillan')
-def aliados_macmillan():
-    productos = []
-    conn = None
-    
-    macmillan_categories = [
-        'MacMillan', 'Give Me Five, MacMillan', 'Insta English, MacMillan', 
-        'Doodle Town, MacMillan', 'Ferris Wheel, MacMillan'
-    ]
-    
-    try:
-        conn = get_db_connection()
-        cur = conn.cursor()
 
-        sql_macmillan_query = "SELECT sku, titulo, categoria, precio, url_imagen, descripcion FROM productos_escolares WHERE categoria IN %s ORDER BY titulo ASC;"
-        cur.execute(sql_macmillan_query, (tuple(macmillan_categories),))
-        db_productos = cur.fetchall()
-        productos = format_products(db_productos)
-        cur.close()
-
-    except psycopg2.OperationalError as e:
-        print(f"ERROR CRÍTICO: FALLA DE CONEXIÓN A LA BASE DE DATOS. Mensaje: {e}")
-    except Exception as e:
-        print(f"Error inesperado al cargar productos de MacMillan: {e}")
-    finally:
-        if conn:
-            conn.close()
-
-    context = {
-        'titulo_pagina': 'MacMillan Education',
-        'productos_macmillan': productos,
-        'url_logo_editorial': 'https://sbooks.com.co/wp-content/uploads/2022/11/logo_MacMillanresized.webp', 
-        'texto_presentacion': 'Explora la colección completa de textos, plataformas y soluciones bilingües de MacMillan Education.',
-        'total_productos': len(productos)
-    }
-    
-    return render_template('aliados_macmillan.html', **context)
-
-
-# =================================================================
-# RUTA PARA LA TIENDA GENERAL DE PRODUCTOS
-# =================================================================
 @app.route('/tienda')
 def tienda():
-    productos = []
-    categorias = []
     conn = None
-    
+    productos = []
+    editoriales = get_editoriales()
+    categorias = get_tipos_texto()
+
+    # Base de la consulta, asegurando que las columnas estén en minúsculas para PostgreSQL
+    sql_product_columns = [col.lower() for col in PRODUCT_COLUMNS]
+    base_query = f"SELECT {', '.join(sql_product_columns)} FROM productos"
+    where_clauses = []
+    params = []
+
+    # Ejemplo de lógica de filtrado por URL (si la necesitas)
+    # editorial_filter = request.args.get('editorial')
+    # if editorial_filter:
+    #     where_clauses.append("editorial = %s")
+    #     params.append(editorial_filter)
+        
+    query = base_query
+    if where_clauses:
+        query += " WHERE " + " AND ".join(where_clauses)
+    query += " ORDER BY nombre_producto ASC;"
+
     try:
         conn = get_db_connection()
         cur = conn.cursor()
+        cur.execute(query, params)
+        
+        # Mapear los resultados
+        productos = [format_product(row) for row in cur.fetchall()]
 
-        # 1. Consulta para OBTENER TODOS los productos
-        sql_productos_query = "SELECT sku, titulo, categoria, precio, url_imagen, descripcion FROM productos_escolares ORDER BY titulo ASC;"
-        cur.execute(sql_productos_query)
-        db_productos = cur.fetchall()
-        productos = format_products(db_productos)
-            
-        # 2. Consulta para obtener las CATEGORÍAS únicas para los filtros
-        sql_categorias_query = "SELECT DISTINCT categoria FROM productos_escolares ORDER BY categoria ASC;"
-        cur.execute(sql_categorias_query)
-        db_categorias = cur.fetchall()
-        
-        editoriales = ['MacMillan', 'Ediciones Castillo']
-        
-        for (cat,) in db_categorias:
-            if 'MacMillan' in cat:
-                tipo_texto = cat.replace(', MacMillan', '').strip()
-            elif 'Ediciones Castillo' in cat:
-                tipo_texto = cat.replace('Ediciones Castillo', '').strip()
-            else:
-                tipo_texto = cat
-            
-            if tipo_texto and tipo_texto != cat:
-                categorias.append(tipo_texto)
-            if cat not in categorias:
-                 categorias.append(cat)
-        
-        categorias = sorted(list(set(categorias)))
-        
-        cur.close()
-
-    except psycopg2.OperationalError as e:
-        print(f"ERROR CRÍTICO: FALLA DE CONEXIÓN A LA BASE DE DATOS. Mensaje: {e}")
     except Exception as e:
         print(f"Error inesperado al cargar la tienda: {e}")
+        # En una aplicación real, aquí podrías manejar el error de forma amigable
+
     finally:
         if conn:
             conn.close()
@@ -304,6 +138,10 @@ def tienda():
     
     return render_template('tienda_productos.html', **context)
 
+
+# =================================================================
+# 3. RUTAS API PARA COLEGIOS (CON FIX DE MINÚSCULAS Y MAYÚSCULAS)
+# =================================================================
 @app.route('/api/colegios', methods=['GET'])
 def get_colegios_data():
     conn = None
@@ -317,8 +155,8 @@ def get_colegios_data():
         'OCTAVO', 'NOVENO', 'DECIMO', 'ONCE'
     ]
     
-    # 2. Lista de COLUMNAS SQL (Minúsculas para PostgreSQL)
-    SQL_COLUMNS = [k.lower() for k in JSON_KEYS] # ['id', 'colegio', 'ciudad', ...]
+    # 2. Lista de COLUMNAS SQL (Minúsculas para PostgreSQL por defecto)
+    SQL_COLUMNS = [k.lower() for k in JSON_KEYS] 
     
     try:
         conn = get_db_connection()
@@ -329,24 +167,26 @@ def get_colegios_data():
         cur.execute(query)
         
         # Mapea los resultados: Usamos JSON_KEYS (mayúsculas) como claves
-        # para el diccionario, asegurando que el cliente reciba lo que espera.
         colegios_data = [dict(zip(JSON_KEYS, row)) for row in cur.fetchall()]
         
         return jsonify(colegios_data), 200
 
     except Exception as e:
         # Esto captura errores de conexión o errores en la consulta SQL
-        # Se imprime el error para el registro del servidor
-        print(f"Error al obtener la lista de colegios (FATAL DB ERROR): {e}") 
-        # Devuelve el error 500 al cliente
+        print(f"Error FATAL al obtener la lista de colegios: {e}") 
+        # Devolvemos el error 500 al cliente con más detalle
         return jsonify({"error": "Error interno del servidor al obtener datos de colegios", "detail": str(e)}), 500
     finally:
         if conn:
             conn.close()
 
 # =================================================================
-# RUTAS PARA PÁGINAS ESTÁTICAS (Quienes Somos, Contacto, etc.)
+# 4. RUTAS PARA PÁGINAS ESTÁTICAS
 # =================================================================
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 @app.route('/quienes-somos')
 def quienes_somos():
@@ -370,13 +210,13 @@ def contactanos():
 
 @app.route('/blog')
 def blog():
-    return render_template('Blog.html')
+    return render_template('Blog.html') 
 
 @app.route('/intranet')
 def intranet():
     return render_template('Intranet.html')
 
 
-# Esta línea debe quedar al final de tu archivo para ejecutar la app
 if __name__ == '__main__':
+    # Usar debug=True solo para desarrollo local
     app.run(host=HOST, port=PORT, debug=True)
