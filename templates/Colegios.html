@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Books | Colegios</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@300;400;700&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Estilos del diseño (Mantienen la consistencia) */
+        .font-outfit { font-family: 'Outfit', sans-serif; }
+        .font-instrument { font-family: 'Instrument Sans', sans-serif; }
+        .bg-brand-primary { background-color: #163D6A; }
+        .text-brand-primary { color: #163D6A; }
+        .bg-brand-accent { background-color: #163d6a; }
+        .text-active { color: #163D6A; }
+        .dropdown:hover .dropdown-menu { display: block; opacity: 1; transform: translateY(0); visibility: visible; }
+        .dropdown-menu { display: none; opacity: 0; visibility: hidden; transition: all 0.3s ease-out; transform: translateY(10px); z-index: 50; min-width: 14rem; }
+        .search-input { width: 100%; padding: 0.75rem 1.75rem; border: 1px solid #d1d5db; border-radius: 9999px; outline: none; transition: border-color 0.3s; }
+        .search-input:focus { border-color: #163d6a; }
+        .search-button-separate { width: 52px; height: 52px; margin-left: 12px; background-color: #163d6a; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .icon-white { filter: brightness(0) invert(1); }
+        .menu-item { padding: 0 1.25rem; display: flex; align-items: center; height: 100%; border-bottom: 4px solid transparent; transition: all 0.2s ease-in-out; }
+        .menu-item:hover, .menu-item.active { color: #163d6a; border-bottom-color: #163D6A; }
+        .whatsapp-float { position: fixed; width: 55px; height: 55px; bottom: 30px; right: 30px; background-color: #25d366; color: #FFF; border-radius: 50%; text-align: center; font-size: 28px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); z-index: 1000; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-scroll-reveal { opacity: 0; animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+
+        /* --- ESTILO ESPECÍFICO DEL DROPBOX CON BÚSQUEDA --- */
+        .custom-dropdown-menu { max-height: 250px; overflow-y: auto; display: none; opacity: 0; visibility: hidden; transition: all 0.3s ease-out; transform: translateY(10px); z-index: 50; }
+        .custom-dropdown.active .custom-dropdown-menu { display: block; opacity: 1; transform: translateY(0); visibility: visible; }
+        .course-dropdown-menu { opacity: 0; visibility: hidden; max-height: 0; transition: opacity 0.3s ease-out, transform 0.3s ease-out, max-height 0.3s ease-out; transform: translateY(-10px); }
+        .course-dropdown.active .course-dropdown-menu { opacity: 1; visibility: visible; max-height: 250px; transform: translateY(0); }
+        #search-loading { display: none; transition: opacity 0.3s; }
+        
+        /* Estilo para el botón de colegio al cargar */
+        .school-loading { 
+            background-color: #f3f4f6;
+            color: #9ca3af;
+            cursor: wait !important;
+        }
+    </style>
+</head>
+
+<body class="font-instrument text-gray-700 bg-white antialiased">
+
+    <div class="bg-gray-100 border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 text-sm flex justify-between items-center">
+            <div class="flex-grow text-center text-gray-700 font-outfit font-semibold text-sm sm:text-base tracking-wider">
+                Encuentra <span class="font-black text-gray-800">AQUÍ</span> los textos escolares de las mejores casas editoriales
+            </div>
+            <div class="flex space-x-3 items-center text-gray-500 flex-shrink-0">
+                <a href="https://www.facebook.com/smartbookscol" target="_blank" class="hover:text-brand-primary"><i class="fab fa-facebook-f text-lg"></i></a>
+                <a href="https://www.instagram.com/smartbookscol" target="_blank" class="hover:text-brand-primary"><i class="fab fa-instagram-f text-lg"></i></a>
+                <a href="https://www.linkedin.com/company/smartbookscol/" target="_blank" class="hover:text-brand-primary"><i class="fab fa-linkedin-in text-lg"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <header class="bg-white sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="/" class="flex-shrink-0">
+                <img src="https://sbooks.com.co/wp-content/uploads/2022/10/Logo-Azul-2048x1078.png" alt="Logo Smart Books Holding" class="h-20 w-auto">
+            </a>
+            <form action="#" class="relative max-w-xl flex-grow mx-10 hidden lg:block">
+                <div class="flex items-center">
+                    <input type="text" placeholder="Buscar por palabra clave..." class="search-input text-gray-700 text-lg">
+                    <button type="submit" class="search-button-separate" title="Buscar">
+                        <img src="https://cdn-icons-png.flaticon.com/128/3031/3031293.png" alt="Lupa" class="w-7 h-7 icon-white">
+                    </button>
+                </div>
+            </form>
+            <div class="flex space-x-6 items-center">
+                <a href="#" class="hidden xl:flex items-center justify-center bg-yellow-400 text-gray-900 font-outfit font-bold px-5 py-3 rounded-lg shadow-lg hover:bg-yellow-500 transition transform duration-300 animate-super-pulse">
+                    <span class="text-base">Compra tu Kit Educativo AQUÍ</span>
+                </a>
+                <div class="flex space-x-4 items-center text-gray-800 text-xl">
+                    <a href="#" class="p-2 hover:text-brand-primary transition duration-300 relative flex items-center justify-center" title="Carrito de Compras">
+                        <img src="https://cdn-icons-png.flaticon.com/128/3144/3144456.png" alt="Carrito" class="w-8 h-8">
+                        <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-brand-accent rounded-full">
+                            0
+                        </span>
+                    </a>
+                </div>
+                <button class="lg:hidden p-2 text-gray-800 hover:text-brand-primary transition duration-300">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-white border-t border-gray-100 hidden lg:block shadow-sm h-14">
+            <div class="max-w-7xl mx-auto px-4 h-full">
+                <nav class="flex justify-center space-x-10 font-outfit text-gray-800 font-semibold text-base h-full">
+                    <a href="/" class="menu-item">Inicio</a>
+                    
+                    <div class="dropdown relative h-full">
+                        <a href="#" class="menu-item flex items-center">
+                            Nosotros <i class="fas fa-chevron-down text-xs ml-1 transition-transform transform group-hover:rotate-180"></i>
+                        </a>
+                        <div class="dropdown-menu absolute bg-white shadow-xl rounded-b-md w-56 border-t-2 border-brand-accent top-full">
+                            <a href="/quienes-somos" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Quienes Somos</a>
+                            <a href="/terminos-y-condiciones" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Términos y Condiciones</a>
+                            <a href="/preguntas-frecuentes" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Preguntas Frecuentes – FAQ</a>
+                        </div>
+                    </div>
+                    
+                    <div class="dropdown relative h-full">
+                        <a href="#" class="menu-item flex items-center">
+                            Aliados <i class="fas fa-chevron-down text-xs ml-1 transition-transform transform group-hover:rotate-180"></i>
+                        </a>
+                        <div class="dropdown-menu absolute bg-white shadow-xl rounded-b-md w-40 border-t-2 border-brand-accent top-full">
+                            <a href="/aliados/castillo" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Castillo</a>
+                            <a href="/aliados/macmillan" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">MacMillan</a>
+                        </div>
+                    </div>
+
+                    <a href="/tienda" class="menu-item">Tienda</a>
+                    <a href="/colegios" class="menu-item active">Colegios</a>
+                    <a href="/contactanos" class="menu-item">Contáctanos</a>
+                    <a href="/intranet" class="menu-item">Intranet</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <main class="py-16 md:py-24">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-scroll-reveal">
+            <h1 class="font-outfit text-5xl sm:text-6xl md:text-7xl font-black text-gray-900 mb-8 leading-tight">
+                ENCUENTRA TU <span class="text-brand-primary">COLEGIO</span>
+            </h1>
+            <p class="text-xl text-gray-600 mb-12">
+                Selecciona tu institución y el curso para ver el kit educativo exacto que necesitas.
+            </p>
+
+            <div class="space-y-6">
+
+                <div id="school-dropdown-container" class="relative custom-dropdown animate-scroll-reveal delay-200">
+                    <button id="school-select-button" 
+                            class="w-full bg-white border border-gray-300 rounded-lg shadow-md py-4 px-6 text-xl text-left text-gray-500 font-semibold flex items-center justify-between transition duration-300 school-loading" disabled>
+                        Cargando Colegios...
+                        <i class="fas fa-spinner fa-spin text-base ml-2"></i>
+                    </button>
+                    
+                    <div id="school-dropdown-menu" class="custom-dropdown-menu absolute bg-white shadow-2xl rounded-b-lg w-full mt-1 border border-brand-primary border-t-0 p-3">
+                        <input type="text" id="school-search-input" placeholder="Buscar colegio..." class="w-full p-3 mb-3 border border-gray-300 rounded-md outline-none focus:border-brand-primary transition duration-300" disabled>
+                        <div id="school-list" class="space-y-1">
+                            </div>
+                    </div>
+                </div>
+
+                <div id="course-dropdown-container" class="relative course-dropdown">
+                    <button id="course-select-button" 
+                            class="w-full bg-white border border-gray-300 rounded-lg shadow-md py-4 px-6 text-xl text-left text-gray-500 font-semibold flex items-center justify-between transition duration-300 cursor-not-allowed" disabled>
+                        Selecciona el Curso
+                        <i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>
+                    </button>
+
+                    <div id="course-dropdown-menu" class="course-dropdown-menu absolute bg-white shadow-2xl rounded-b-lg w-full mt-1 border border-brand-primary border-t-0 p-3">
+                        <div id="course-list" class="space-y-1">
+                            </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="results-container" class="mt-12 pt-8 border-t border-gray-200 min-h-[250px] flex flex-col justify-center items-center">
+                
+                <div id="search-loading" class="flex flex-col items-center justify-center p-8">
+                    <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExdHZrdnZoZnNpdTBvdW1kcnRkOGl0anl1d25ld2F5N3o4MTJ5ZG5kOCZlcD12MV9pbnRlcm5hbF9naWYmY3Q9Zw/3o7bu8ZpM249R4Q3FC/giphy.gif" alt="Buscando..." class="w-20 h-20 mb-4 rounded-full border-4 border-yellow-400 p-1">
+                    <p class="text-lg font-outfit font-semibold text-brand-primary">Buscando tu kit...</p>
+                </div>
+
+                <div id="package-card" class="bg-white rounded-xl shadow-2xl border-t-4 border-brand-primary overflow-hidden w-full max-w-lg hidden animate-scroll-reveal" style="animation-delay: 0.5s;">
+                    <div class="p-6">
+                        <p class="text-xs font-outfit uppercase tracking-widest text-gray-500 mb-1">Paquete Educativo Encontrado</p>
+                        <h3 id="package-title" class="font-outfit text-2xl font-black text-gray-900 mb-4"></h3>
+                        <div class="text-sm text-gray-600 space-y-2" id="package-details">
+                            <p><span class="font-semibold text-gray-800">Colegio:</span> <span id="card-colegio"></span></p>
+                            <p><span class="font-semibold text-gray-800">Curso:</span> <span id="card-curso"></span></p>
+                            <p><span class="font-semibold text-gray-800">Ciudad:</span> <span id="card-ciudad"></span></p>
+                            <p><span class="font-semibold text-gray-800">Ubicación:</span> <a href="#" id="card-ubicacion" target="_blank" class="text-brand-primary hover:underline">Ver en Mapa</a></p>
+                        </div>
+                        
+                        <div id="card-imagen-container" class="mt-4 flex justify-center">
+                            <img id="card-imagen" src="" alt="Logo del Colegio" class="w-24 h-24 object-contain rounded-full border border-gray-100">
+                        </div>
+
+                        <a href="#" class="mt-6 w-full inline-block text-center px-8 py-3 text-lg font-bold text-white bg-brand-primary rounded-lg hover:bg-indigo-700 transition duration-300 shadow-md">
+                            Añadir Kit Completo al Carrito
+                        </a>
+                    </div>
+                </div>
+
+                <p id="initial-message" class="text-lg text-gray-400 italic">Cargando datos de colegios...</p>
+
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-white py-12 border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="flex flex-col items-start">
+                <img src="https://sbooks.com.co/wp-content/uploads/2022/10/Logo-Azul-2048x1078.png" alt="Logo Smart Books" class="h-10 mb-4">
+                <p class="text-sm text-gray-600 mb-2">¿Tienes preguntas? ¡Llámanos!</p>
+                <a href="tel:+573336025029" class="text-brand-accent font-outfit text-2xl font-bold mb-4 hover:text-red-700 transition duration-300">
+                    +57 (333) 602 50 29
+                </a>
+                <div class="flex space-x-4 text-gray-500">
+                    <a href="https://www.facebook.com/smartbookscol" target="_blank" class="hover:text-brand-primary transition duration-300"><i class="fab fa-facebook-f text-lg"></i></a>
+                    <a href="https://www.instagram.com/smartbookscol" target="_blank" class="hover:text-brand-primary transition duration-300"><i class="fab fa-instagram text-lg"></i></a>
+                    <a href="https://www.linkedin.com/company/smartbookscol/" target="_blank" class="hover:text-brand-primary transition duration-300"><i class="fab fa-linkedin-in text-lg"></i></a>
+                    <a href="#" class="hover:text-brand-primary transition duration-300"><i class="fab fa-pinterest-p text-lg"></i></a>
+                </div>
+                <a href="/intranet" class="mt-6 text-sm text-gray-700 border border-gray-300 rounded-md px-5 py-2 hover:bg-gray-100 hover:text-brand-primary transition duration-300">
+                    Iniciar Sesión
+                </a>
+            </div>
+            <div>
+                <h4 class="font-outfit text-lg font-semibold text-gray-900 mb-4">Información de Contacto</h4>
+                <ul class="space-y-2 text-sm text-gray-600">
+                    <li>
+                        <p class="font-semibold text-gray-800">Bogotá:</p>
+                        <p>Carrera 58 No 164A-55, C.C Punto 170 Local 113</p>
+                        <p>(Cerrado Temporalmente)</p>
+                        <p>Calle 159A # 21A – 39 – Barrio Magdalena – Casa Blanca</p>
+                        <p>PBX: 333 602 50 29</p>
+                    </li>
+                    <li>
+                        <p class="font-semibold text-gray-800">Medellín, Antioquia:</p>
+                        <p>Edificio San Sebastian de La 70</p>
+                        <p>DQ 2 # 70 – 24 – INT 202</p>
+                        <p>LAURELES</p>
+                        <p>PBX: 333 602 50 29 EXT: 1100</p>
+                    </li>
+                    <li>
+                        <a href="mailto:contacto@smartbooks.com.co" class="text-brand-primary hover:underline">contacto@smartbooks.com.co</a>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-outfit text-lg font-semibold text-gray-900 mb-4">Explorar</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="/quienes-somos" class="text-gray-600 hover:text-brand-primary transition duration-300">Quienes Somos</a></li>
+                    <li><a href="/tienda" class="text-gray-600 hover:text-brand-primary transition duration-300">Nuestros Productos</a></li>
+                    <li><a href="/colegios" class="text-gray-600 hover:text-brand-primary transition duration-300">Colegios</a></li>
+                    <li><a href="/blog" class="text-gray-600 hover:text-brand-primary transition duration-300">Blog</a></li>
+                    <li><a href="/intranet" class="text-gray-600 hover:text-brand-primary transition duration-300">Intranet (Iniciar Sesión)</a></li>
+                </ul>
+            </div>
+            <div class="lg:col-span-1">
+                <h4 class="font-outfit text-lg font-semibold text-gray-900 mb-4">Encuéntranos</h4>
+                <div class="w-full rounded-lg overflow-hidden shadow-md">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d618.676350650165!2d-74.05854276815452!3d4.753396005441487!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f85a3816c4b63%3A0xbdecd40be274ea2!2sSmart%20Books%20Colombia!5e1!3m2!1ses-419!2sco!4v1760823591513!5m2!1ses-419!2sco" 
+                        width="100%" 
+                        height="200" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade"
+                        class="rounded-lg">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t border-gray-100 text-sm text-gray-500 text-center">
+            <p>© 2024 Smart Books. Todos los derechos reservados. | Diseñado con ❤️</p>
+        </div>
+    </footer>
+    <a href="https://api.whatsapp.com/send?phone=573115572243" target="_blank" class="whatsapp-float" aria-label="Contactar por WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- 1. CONFIGURACIÓN Y DATOS ---
+            let ALL_SCHOOLS = [];
+            let selectedSchool = null;
+
+            const GRADES_MAP = {
+                'PREJARDIN': 'Prejardín', 'JARDIN': 'Jardín', 'TRANSICION': 'Transición', 
+                'PRIMERO': '1° (Primero)', 'SEGUNDO': '2° (Segundo)', 'TERCERO': '3° (Tercero)', 
+                'CUARTO': '4° (Cuarto)', 'QUINTO': '5° (Quinto)', 'SEXTO': '6° (Sexto)', 
+                'SEPTIMO': '7° (Séptimo)', 'OCTAVO': '8° (Octavo)', 'NOVENO': '9° (Noveno)', 
+                'DECIMO': '10° (Décimo)', 'ONCE': '11° (Once)'
+            };
+            const GRADE_KEYS = Object.keys(GRADES_MAP);
+
+            // --- 2. REFERENCIAS DE ELEMENTOS ---
+            const schoolDropdownContainer = document.getElementById('school-dropdown-container');
+            const schoolSelectButton = document.getElementById('school-select-button');
+            const schoolSearchInput = document.getElementById('school-search-input');
+            const schoolList = document.getElementById('school-list');
+
+            const courseDropdownContainer = document.getElementById('course-dropdown-container');
+            const courseSelectButton = document.getElementById('course-select-button');
+            const courseList = document.getElementById('course-list');
+
+            const searchLoading = document.getElementById('search-loading');
+            const packageCard = document.getElementById('package-card');
+            const initialMessage = document.getElementById('initial-message');
+            
+            // --- 3. FUNCIONES DE MANEJO DE UI ---
+
+            // Muestra/Oculta el dropdown de colegios
+            schoolSelectButton.addEventListener('click', () => {
+                if (!schoolSelectButton.disabled) {
+                    schoolDropdownContainer.classList.toggle('active');
+                    schoolSearchInput.focus();
+                }
+            });
+            
+            // Muestra/Oculta el dropdown de cursos
+            courseSelectButton.addEventListener('click', () => {
+                 if (!courseSelectButton.disabled) {
+                    courseDropdownContainer.classList.toggle('active');
+                 }
+            });
+
+            // Función para renderizar la lista de colegios (usada también para la búsqueda)
+            function renderSchoolList(schools) {
+                schoolList.innerHTML = '';
+                if (schools.length === 0) {
+                    schoolList.innerHTML = '<p class="text-center p-3 text-gray-500">No se encontraron colegios.</p>';
+                }
+
+                schools.forEach(school => {
+                    const item = document.createElement('a');
+                    item.href = '#';
+                    item.className = 'block px-3 py-2 text-gray-800 hover:bg-gray-100 hover:text-brand-primary transition duration-300 text-sm rounded-md';
+                    item.textContent = school.COLEGIO + ' (' + school.CIUDAD + ')';
+                    // Usamos una función anónima para pasar el objeto colegio completo
+                    item.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        handleSchoolSelection(school);
+                        schoolDropdownContainer.classList.remove('active');
+                    });
+                    schoolList.appendChild(item);
+                });
+            }
+
+            // Funcionalidad de búsqueda en el dropdown de colegios (filtra la lista local)
+            schoolSearchInput.addEventListener('keyup', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const filteredSchools = ALL_SCHOOLS.filter(school => 
+                    school.COLEGIO.toLowerCase().includes(searchTerm) || 
+                    (school.CIUDAD && school.CIUDAD.toLowerCase().includes(searchTerm))
+                );
+                renderSchoolList(filteredSchools);
+            });
+            
+            // Maneja la selección de colegio
+            function handleSchoolSelection(school) {
+                selectedSchool = school;
+                
+                // 1. Actualiza el botón de colegio
+                schoolSelectButton.innerHTML = school.COLEGIO + 
+                    `<i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>`;
+                schoolSelectButton.classList.remove('text-gray-500');
+                schoolSelectButton.classList.add('text-gray-700', 'hover:border-brand-primary');
+                
+                // 2. Prepara el dropdown de cursos
+                courseSelectButton.textContent = 'Selecciona el Curso';
+                courseDropdownContainer.classList.remove('active');
+                
+                // 3. Muestra los cursos disponibles (renderCourseList)
+                renderCourseList(school);
+                
+                // 4. Limpia resultados anteriores
+                packageCard.classList.add('hidden');
+                initialMessage.textContent = `Selecciona un curso para ${school.COLEGIO}.`;
+                initialMessage.classList.remove('hidden');
+            }
+            
+            // Renderiza la lista de cursos disponibles
+            function renderCourseList(school) {
+                courseList.innerHTML = '';
+                let coursesFound = false;
+                
+                GRADE_KEYS.forEach(key => {
+                    // Accede al valor del grado (ej. school.PREJARDIN) y lo limpia de posibles espacios en blanco
+                    const packageInfo = school[key] ? school[key].trim() : '0'; 
+                    
+                    if (packageInfo && packageInfo !== '0' && packageInfo.toUpperCase() !== 'NULL') {
+                        coursesFound = true;
+                        const gradeName = GRADES_MAP[key];
+                        const item = document.createElement('a');
+                        item.href = '#';
+                        item.className = 'block px-3 py-2 text-gray-800 hover:bg-gray-100 hover:text-brand-primary transition duration-300 text-sm rounded-md';
+                        item.textContent = gradeName;
+                        item.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            handleCourseSelection(key, gradeName, packageInfo);
+                            courseDropdownContainer.classList.remove('active');
+                        });
+                        courseList.appendChild(item);
+                    }
+                });
+                
+                if (coursesFound) {
+                    courseSelectButton.classList.add('text-gray-700', 'hover:border-brand-primary');
+                    courseSelectButton.classList.remove('text-gray-500', 'cursor-not-allowed');
+                    courseSelectButton.disabled = false;
+                } else {
+                    courseSelectButton.textContent = 'No hay cursos disponibles para este colegio';
+                    courseSelectButton.classList.add('text-gray-500', 'cursor-not-allowed');
+                    courseSelectButton.classList.remove('text-gray-700', 'hover:border-brand-primary');
+                    courseSelectButton.disabled = true;
+                }
+            }
+
+            // Maneja la selección del curso
+            function handleCourseSelection(key, gradeName, packageInfo) {
+                
+                // 1. Actualiza el botón de curso
+                courseSelectButton.innerHTML = gradeName + 
+                    `<i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>`;
+                
+                // 2. Inicia la animación de búsqueda
+                packageCard.classList.add('hidden');
+                initialMessage.classList.add('hidden');
+                searchLoading.style.display = 'flex';
+                
+                // 3. Simula el tiempo de carga de 1.5 segundos
+                setTimeout(() => {
+                    searchLoading.style.display = 'none';
+                    displayPackageCard(selectedSchool, gradeName, packageInfo);
+                }, 1500);
+            }
+            
+            // Muestra la tarjeta de resultado
+            function displayPackageCard(school, gradeName, packageInfo) {
+                
+                // Título del paquete
+                const title = packageInfo.includes(',') ? 
+                    'Múltiples Kits Educativos' : 
+                    packageInfo.toUpperCase().replace('PAQUETE EDUCATIVO', 'KIT'); // Un poco de limpieza en el título
+                
+                // 1. Llenar la tarjeta
+                document.getElementById('package-title').textContent = title;
+                document.getElementById('card-colegio').textContent = school.COLEGIO;
+                document.getElementById('card-curso').textContent = gradeName;
+                document.getElementById('card-ciudad').textContent = school.CIUDAD;
+                
+                const ubicacionLink = document.getElementById('card-ubicacion');
+                if (school.UBICACION) {
+                    ubicacionLink.href = school.UBICACION;
+                    ubicacionLink.parentNode.classList.remove('hidden');
+                } else {
+                    ubicacionLink.parentNode.classList.add('hidden');
+                }
+                
+                document.getElementById('card-imagen').src = school.IMAGEN || 'https://sbooks.com.co/wp-content/uploads/2024/12/no-image.png'; // Fallback image
+                
+                // 2. Detalle de libros/kits
+                const packageDetails = document.getElementById('package-details');
+                packageDetails.innerHTML = '';
+                
+                if (packageInfo.includes(',')) {
+                    const kits = packageInfo.split(',').map(item => item.trim());
+                    const ul = document.createElement('ul');
+                    ul.className = 'list-disc list-inside mt-2 text-sm text-gray-700 space-y-1 text-left';
+                    kits.forEach(kit => {
+                        const li = document.createElement('li');
+                        li.textContent = kit;
+                        ul.appendChild(li);
+                    });
+                    
+                    packageDetails.innerHTML = `<p class="font-semibold text-gray-800 mb-2">Paquetes Disponibles:</p>`;
+                    packageDetails.appendChild(ul);
+                    
+                } else {
+                    // Si es un solo paquete
+                     packageDetails.innerHTML = `<p class="font-semibold text-gray-800">Nombre del Kit:</p><p class="mt-1 text-sm text-gray-700">${packageInfo}</p>`;
+                }
+                
+                
+                // 3. Mostrar la tarjeta con animación
+                packageCard.classList.remove('hidden');
+            }
+            
+            // --- 4. FUNCIÓN PRINCIPAL DE CARGA DE DATOS ---
+            async function fetchSchools() {
+                try {
+                    const response = await fetch('/api/colegios');
+                    if (!response.ok) {
+                        throw new Error(`Error HTTP: ${response.status}`);
+                    }
+                    ALL_SCHOOLS = await response.json();
+                    
+                    // Actualiza el UI al cargar
+                    renderSchoolList(ALL_SCHOOLS);
+                    schoolSelectButton.innerHTML = `Selecciona tu Colegio <i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>`;
+                    schoolSelectButton.classList.remove('school-loading', 'text-gray-500');
+                    schoolSelectButton.classList.add('text-gray-700', 'hover:border-brand-primary');
+                    schoolSelectButton.disabled = false;
+                    schoolSearchInput.disabled = false;
+                    
+                    initialMessage.textContent = 'Por favor, selecciona un colegio para empezar.';
+                    
+                } catch (error) {
+                    console.error('Error al cargar los colegios:', error);
+                    schoolSelectButton.innerHTML = `Error de Carga <i class="fas fa-exclamation-triangle text-red-500 text-base ml-2"></i>`;
+                    schoolSelectButton.classList.remove('school-loading');
+                    schoolSelectButton.classList.add('text-red-600', 'border-red-500', 'cursor-not-allowed');
+                    initialMessage.textContent = 'Hubo un error al conectar con la base de datos de colegios.';
+                    
+                }
+            }
+            
+            // --- 5. INICIALIZACIÓN ---
+            fetchSchools();
+
+            // Script para Scroll Reveal (Mantenido para consistencia)
+            const revealElements = document.querySelectorAll('.animate-scroll-reveal');
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            revealElements.forEach(element => {
+                if (!element.style.animationDelay) {
+                    element.style.animationDelay = '0s';
+                }
+                observer.observe(element);
+            });
+            
+        });
+    </script>
+
+</body>
+</html>

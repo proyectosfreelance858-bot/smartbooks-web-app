@@ -304,6 +304,40 @@ def tienda():
     
     return render_template('tienda_productos.html', **context)
 
+@app.route('/api/colegios', methods=['GET'])
+def get_colegios_data():
+    conn = None
+    colegios_data = []
+    
+    # Lista de todas las columnas de la tabla colegios (incluyendo los grados)
+    COLUMNS = [
+        'id', 'COLEGIO', 'CIUDAD', 'IMAGEN', 'UBICACION', 
+        'PREJARDIN', 'JARDIN', 'TRANSICION', 'PRIMERO', 'SEGUNDO', 
+        'TERCERO', 'CUARTO', 'QUINTO', 'SEXTO', 'SEPTIMO', 
+        'OCTAVO', 'NOVENO', 'DECIMO', 'ONCE'
+    ]
+    
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        
+        # Consulta que trae toda la información necesaria para el cliente
+        query = f"SELECT {', '.join(COLUMNS)} FROM colegios ORDER BY COLEGIO ASC;"
+        cur.execute(query)
+        
+        # Mapea los resultados a una lista de diccionarios
+        colegios_data = [dict(zip(COLUMNS, row)) for row in cur.fetchall()]
+        
+        return jsonify(colegios_data), 200
+
+    except Exception as e:
+        print(f"Error al obtener la lista de colegios: {e}")
+        # En caso de error, devolvemos un JSON con el error
+        return jsonify({"error": "Error interno del servidor al obtener datos de colegios"}), 500
+    finally:
+        if conn:
+            conn.close()
+
 # =================================================================
 # RUTAS PARA PÁGINAS ESTÁTICAS (Quienes Somos, Contacto, etc.)
 # =================================================================
