@@ -30,10 +30,10 @@
         .whatsapp-float { position: fixed; width: 55px; height: 55px; bottom: 30px; right: 30px; background-color: #25d366; color: #FFF; border-radius: 50%; text-align: center; font-size: 28px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); z-index: 1000; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        /* ESTILO PARA SCROLL REVEAL (NO AFECTA A package-card AHORA) */
+        /* ESTILO PARA SCROLL REVEAL (NO AFECTA A package-card) */
         .animate-scroll-reveal { opacity: 0; animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
 
-        /* --- ESTILO CORREGIDO DEL DROPBOX CON BÚSQUEDA (Z-INDEX ALTO) --- */
+        /* --- ESTILOS DE LOS DROPBOX (Z-INDEX) --- */
         .custom-dropdown-menu { 
             max-height: 250px; 
             overflow-y: auto; 
@@ -42,18 +42,16 @@
             visibility: hidden; 
             transition: all 0.3s ease-out; 
             transform: translateY(10px); 
-            z-index: 60; /* ¡CORRECCIÓN CLAVE! */
-            position: absolute; /* Aseguramos que se posicione correctamente */
+            z-index: 60; 
+            position: absolute; 
         }
         .custom-dropdown.active .custom-dropdown-menu { display: block; opacity: 1; transform: translateY(0); visibility: visible; }
         
-        /* Aseguramos que el contenedor del colegio esté arriba */
         .custom-dropdown {
             position: relative;
-            z-index: 60; /* Contenedor padre con z-index alto */
+            z-index: 60; 
         }
 
-        /* El menú de cursos puede tener un z-index más bajo */
         .course-dropdown-menu { 
             opacity: 0; 
             visibility: hidden; 
@@ -61,14 +59,14 @@
             transition: opacity 0.3s ease-out, transform 0.3s ease-out, max-height 0.3s ease-out; 
             transform: translateY(-10px); 
             z-index: 50; 
-            overflow-y: hidden; /* Oculta el scrollbar cuando está colapsado */
+            overflow-y: hidden; 
         }
         .course-dropdown.active .course-dropdown-menu { 
             opacity: 1; 
             visibility: visible; 
             max-height: 250px; 
             transform: translateY(0); 
-            overflow-y: auto; /* Permite scroll cuando está activo */
+            overflow-y: auto; 
         }
         
         #search-loading { display: none; transition: opacity 0.3s; }
@@ -352,9 +350,8 @@
             
             // Muestra/Oculta el dropdown de colegios
             schoolSelectButton.addEventListener('click', (e) => {
-                e.stopPropagation(); // Evita que el click se propague al document
+                e.stopPropagation(); 
                 if (!schoolSelectButton.disabled) {
-                    // Cerrar el de cursos antes de abrir el de colegios
                     courseDropdownContainer.classList.remove('active'); 
                     schoolDropdownContainer.classList.toggle('active');
                     if (schoolDropdownContainer.classList.contains('active')) {
@@ -365,9 +362,8 @@
             
             // Muestra/Oculta el dropdown de cursos
             courseSelectButton.addEventListener('click', (e) => {
-                 e.stopPropagation(); // Evita que el click se propague al document
+                 e.stopPropagation(); 
                  if (!courseSelectButton.disabled) {
-                    // Cerrar el de colegios antes de abrir el de cursos
                     schoolDropdownContainer.classList.remove('active');
                     courseDropdownContainer.classList.toggle('active');
                  }
@@ -375,7 +371,6 @@
 
             // Cierra los dropdowns si se hace clic fuera de ellos
             document.addEventListener('click', (e) => {
-                // Si el click no es dentro de ninguno de los contenedores, cerrarlos
                 if (!schoolDropdownContainer.contains(e.target) && 
                     !courseDropdownContainer.contains(e.target)) {
                     closeDropdowns();
@@ -395,7 +390,6 @@
                     item.href = '#';
                     item.className = 'block px-3 py-2 text-gray-800 hover:bg-gray-100 hover:text-brand-primary transition duration-300 text-sm rounded-md';
                     item.textContent = school.COLEGIO + ' (' + school.CIUDAD + ')';
-                    // Usamos una función anónima para pasar el objeto colegio completo
                     item.addEventListener('click', (e) => {
                         e.preventDefault();
                         handleSchoolSelection(school);
@@ -432,12 +426,13 @@
                 // 3. Muestra los cursos disponibles (renderCourseList)
                 renderCourseList(school);
                 
-                // 4. Limpia resultados anteriores
+                // 4. Limpia resultados anteriores (AQUÍ ESTÁ EL REFUERZO)
                 packageCard.classList.add('hidden');
+                packageCard.style.display = 'none'; // FIX: Forzar el display: none
                 initialMessage.textContent = `Selecciona un curso para ${school.COLEGIO}.`;
                 initialMessage.classList.remove('hidden');
                 
-                // FIX: Limpiar cualquier estilo inline (opacity/transform) que haya dejado la animación de la primera búsqueda
+                // Limpiar cualquier estilo inline que haya dejado la animación de la primera búsqueda
                 packageCard.style.opacity = ''; 
                 packageCard.style.transform = '';
             }
@@ -486,9 +481,9 @@
                 courseSelectButton.innerHTML = gradeName + 
                     `<i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>`;
                 
-                // 2. Oculta la tarjeta y limpia cualquier estilo de animación anterior
+                // 2. Oculta la tarjeta y limpia cualquier estilo de animación anterior (REFORZADO)
                 packageCard.classList.add('hidden');
-                // Esto es crucial para la repetición: limpia cualquier estilo inline dejado por el observador o búsquedas anteriores
+                packageCard.style.display = 'none'; // FIX: Forzar display: none
                 packageCard.style.opacity = ''; 
                 packageCard.style.transform = '';
 
@@ -509,7 +504,7 @@
                 // Título del paquete
                 const title = packageInfo.includes(',') ? 
                     'Múltiples Kits Educativos' : 
-                    packageInfo.toUpperCase().replace('PAQUETE EDUCATIVO', 'KIT'); // Un poco de limpieza en el título
+                    packageInfo.toUpperCase().replace('PAQUETE EDUCATIVO', 'KIT'); 
                 
                 // 1. Llenar la tarjeta
                 document.getElementById('package-title').textContent = title;
@@ -550,8 +545,9 @@
                 }
                 
                 
-                // 3. Mostrar la tarjeta
+                // 3. Mostrar la tarjeta (REFORZADO)
                 packageCard.classList.remove('hidden');
+                packageCard.style.display = 'block'; // FIX: Forzar display: block
             }
             
             // --- 4. FUNCIÓN PRINCIPAL DE CARGA DE DATOS ---
@@ -587,7 +583,7 @@
             // --- 5. INICIALIZACIÓN ---
             fetchSchools();
 
-            // Script para Scroll Reveal (Mantenido solo para elementos no interactivos)
+            // Script para Scroll Reveal (Solo para encabezados y elementos estáticos)
             const revealElements = document.querySelectorAll('.animate-scroll-reveal');
             const observer = new IntersectionObserver(entries => {
                 entries.forEach(entry => {
