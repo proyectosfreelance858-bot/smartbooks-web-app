@@ -32,11 +32,45 @@
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         .animate-scroll-reveal { opacity: 0; animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
 
-        /* --- ESTILO ESPECÍFICO DEL DROPBOX CON BÚSQUEDA --- */
-        .custom-dropdown-menu { max-height: 250px; overflow-y: auto; display: none; opacity: 0; visibility: hidden; transition: all 0.3s ease-out; transform: translateY(10px); z-index: 50; }
+        /* --- ESTILO CORREGIDO DEL DROPBOX CON BÚSQUEDA (Z-INDEX ALTO) --- */
+        /* Z-index 60 para que el menú de colegios se superponga al menú de cursos */
+        .custom-dropdown-menu { 
+            max-height: 250px; 
+            overflow-y: auto; 
+            display: none; 
+            opacity: 0; 
+            visibility: hidden; 
+            transition: all 0.3s ease-out; 
+            transform: translateY(10px); 
+            z-index: 60; /* ¡CORRECCIÓN CLAVE! */
+            position: absolute; /* Aseguramos que se posicione correctamente */
+        }
         .custom-dropdown.active .custom-dropdown-menu { display: block; opacity: 1; transform: translateY(0); visibility: visible; }
-        .course-dropdown-menu { opacity: 0; visibility: hidden; max-height: 0; transition: opacity 0.3s ease-out, transform 0.3s ease-out, max-height 0.3s ease-out; transform: translateY(-10px); }
-        .course-dropdown.active .course-dropdown-menu { opacity: 1; visibility: visible; max-height: 250px; transform: translateY(0); }
+        
+        /* Aseguramos que el contenedor del colegio esté arriba */
+        .custom-dropdown {
+            position: relative;
+            z-index: 60; /* Contenedor padre con z-index alto */
+        }
+
+        /* El menú de cursos puede tener un z-index más bajo */
+        .course-dropdown-menu { 
+            opacity: 0; 
+            visibility: hidden; 
+            max-height: 0; 
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out, max-height 0.3s ease-out; 
+            transform: translateY(-10px); 
+            z-index: 50; 
+            overflow-y: hidden; /* Oculta el scrollbar cuando está colapsado */
+        }
+        .course-dropdown.active .course-dropdown-menu { 
+            opacity: 1; 
+            visibility: visible; 
+            max-height: 250px; 
+            transform: translateY(0); 
+            overflow-y: auto; /* Permite scroll cuando está activo */
+        }
+        
         #search-loading { display: none; transition: opacity 0.3s; }
         
         /* Estilo para el botón de colegio al cargar */
@@ -139,7 +173,7 @@
 
             <div class="space-y-6">
 
-                <div id="school-dropdown-container" class="relative custom-dropdown animate-scroll-reveal delay-200 z-50"> 
+                <div id="school-dropdown-container" class="relative custom-dropdown animate-scroll-reveal delay-200">
                     <button id="school-select-button" 
                             class="w-full bg-white border border-gray-300 rounded-lg shadow-md py-4 px-6 text-xl text-left text-gray-500 font-semibold flex items-center justify-between transition duration-300 school-loading" disabled>
                         Cargando Colegios...
@@ -153,7 +187,7 @@
                     </div>
                 </div>
 
-                <div id="course-dropdown-container" class="relative course-dropdown z-40">
+                <div id="course-dropdown-container" class="relative course-dropdown z-50">
                     <button id="course-select-button" 
                             class="w-full bg-white border border-gray-300 rounded-lg shadow-md py-4 px-6 text-xl text-left text-gray-500 font-semibold flex items-center justify-between transition duration-300 cursor-not-allowed" disabled>
                         Selecciona el Curso
@@ -310,25 +344,45 @@
             
             // --- 3. FUNCIONES DE MANEJO DE UI ---
 
+            // Función para cerrar ambos dropdowns
+            function closeDropdowns() {
+                schoolDropdownContainer.classList.remove('active');
+                courseDropdownContainer.classList.remove('active');
+            }
+            
             // Muestra/Oculta el dropdown de colegios
-            schoolSelectButton.addEventListener('click', () => {
+            schoolSelectButton.addEventListener('click', (e) => {
+                e.stopPropagation(); // Evita que el click se propague al document
                 if (!schoolSelectButton.disabled) {
-                    schoolDropdownContainer.classList.toggle('active');
-                    schoolSearchInput.focus();
-                    // Asegurar que el dropdown de cursos esté cerrado al abrir el de colegios
+                    // Cerrar el de cursos antes de abrir el de colegios
                     courseDropdownContainer.classList.remove('active'); 
+                    schoolDropdownContainer.classList.toggle('active');
+                    if (schoolDropdownContainer.classList.contains('active')) {
+                         schoolSearchInput.focus();
+                    }
                 }
             });
             
             // Muestra/Oculta el dropdown de cursos
-            courseSelectButton.addEventListener('click', () => {
+            courseSelectButton.addEventListener('click', (e) => {
+                 e.stopPropagation(); // Evita que el click se propague al document
                  if (!courseSelectButton.disabled) {
-                    courseDropdownContainer.classList.toggle('active');
-                    // Asegurar que el dropdown de colegios esté cerrado al abrir el de cursos
+                    // Cerrar el de colegios antes de abrir el de cursos
                     schoolDropdownContainer.classList.remove('active');
+                    courseDropdownContainer.classList.toggle('active');
                  }
             });
-            
+
+            // Cierra los dropdowns si se hace clic fuera de ellos
+            document.addEventListener('click', (e) => {
+                // Si el click no es dentro de ninguno de los contenedores, cerrarlos
+                if (!schoolDropdownContainer.contains(e.target) && 
+                    !courseDropdownContainer.contains(e.target)) {
+                    closeDropdowns();
+                }
+            });
+
+
             // Función para renderizar la lista de colegios (usada también para la búsqueda)
             function renderSchoolList(schools) {
                 schoolList.innerHTML = '';
@@ -372,7 +426,7 @@
                 schoolSelectButton.classList.add('text-gray-700', 'hover:border-brand-primary');
                 
                 // 2. Prepara el dropdown de cursos
-                courseSelectButton.textContent = 'Selecciona el Curso';
+                courseSelectButton.innerHTML = `Selecciona el Curso <i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>`;
                 courseDropdownContainer.classList.remove('active');
                 
                 // 3. Muestra los cursos disponibles (renderCourseList)
@@ -391,7 +445,7 @@
                 
                 GRADE_KEYS.forEach(key => {
                     // Accede al valor del grado (ej. school.PREJARDIN) y lo limpia de posibles espacios en blanco
-                    const packageInfo = school[key] ? school[key].trim() : '0'; 
+                    const packageInfo = school[key] ? String(school[key]).trim() : '0'; 
                     
                     if (packageInfo && packageInfo !== '0' && packageInfo.toUpperCase() !== 'NULL') {
                         coursesFound = true;
@@ -414,7 +468,7 @@
                     courseSelectButton.classList.remove('text-gray-500', 'cursor-not-allowed');
                     courseSelectButton.disabled = false;
                 } else {
-                    courseSelectButton.textContent = 'No hay cursos disponibles para este colegio';
+                    courseSelectButton.innerHTML = `No hay cursos disponibles para este colegio <i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>`;
                     courseSelectButton.classList.add('text-gray-500', 'cursor-not-allowed');
                     courseSelectButton.classList.remove('text-gray-700', 'hover:border-brand-primary');
                     courseSelectButton.disabled = true;
@@ -496,9 +550,9 @@
                 try {
                     const response = await fetch('/api/colegios');
                     if (!response.ok) {
-                        // El 500 error es capturado aquí
-                        const errorData = await response.json(); 
-                        throw new Error(`Error HTTP: ${response.status}. Detalle: ${errorData.detail || 'Error desconocido'}`);
+                        // El 500 viene aquí
+                        const errorDetails = await response.json().then(data => data.detail || 'Error desconocido del servidor.');
+                        throw new Error(`Error HTTP: ${response.status}. Detalle: ${errorDetails}`);
                     }
                     ALL_SCHOOLS = await response.json();
                     
@@ -517,7 +571,7 @@
                     schoolSelectButton.innerHTML = `Error de Carga <i class="fas fa-exclamation-triangle text-red-500 text-base ml-2"></i>`;
                     schoolSelectButton.classList.remove('school-loading');
                     schoolSelectButton.classList.add('text-red-600', 'border-red-500', 'cursor-not-allowed');
-                    initialMessage.textContent = 'Hubo un error al conectar con la base de datos de colegios. Por favor, revisa el log del servidor.';
+                    initialMessage.textContent = 'Hubo un error al conectar con la base de datos de colegios o la API falló.';
                     
                 }
             }
