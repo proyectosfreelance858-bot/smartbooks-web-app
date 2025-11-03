@@ -63,7 +63,6 @@ def get_editoriales():
                 editoriales = [row[0] for row in cur.fetchall()]
     except Exception as e:
         print(f"Error al obtener editoriales: {e}")
-    # El bloque finally se elimina
     return editoriales
 
 # Función para obtener todas las categorías/tipos_texto para filtros de la tienda
@@ -77,7 +76,6 @@ def get_tipos_texto():
                 categorias = [row[0] for row in cur.fetchall()]
     except Exception as e:
         print(f"Error al obtener categorías: {e}")
-    # El bloque finally se elimina
     return categorias
 
 
@@ -119,9 +117,7 @@ def tienda():
 
     except Exception as e:
         print(f"Error inesperado al cargar la tienda: {e}")
-        # En una aplicación real, aquí podrías manejar el error de forma amigable
 
-    # El bloque finally se elimina
     context = {
         'titulo_pagina': 'Tienda de Textos Escolares',
         'productos': productos,
@@ -170,7 +166,6 @@ def get_colegios_data():
         print(f"Error FATAL al obtener la lista de colegios: {e}") 
         # Devolvemos el error 500 al cliente con más detalle
         return jsonify({"error": "Error interno del servidor al obtener datos de colegios", "detail": str(e)}), 500
-    # El bloque finally se elimina
 
 # =================================================================
 # 4. RUTAS PARA PÁGINAS ESTÁTICAS
