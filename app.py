@@ -31,6 +31,7 @@ def get_db_connection():
     if not all([DB_HOST, DB_NAME, DB_USER, DB_PASS, DB_PORT]):
           raise psycopg2.OperationalError("Faltan variables de conexión a la base de datos.")
           
+    # La función connect devuelve un objeto de conexión, el cual es un context manager
     conn = psycopg2.connect(
         host=DB_HOST,
         database=DB_NAME,
@@ -53,34 +54,30 @@ def format_product(row):
 
 # Función para obtener todas las editoriales para filtros de la tienda
 def get_editoriales():
-    conn = None
     editoriales = []
     try:
-        conn = get_db_connection()
-        cur = conn.cursor()
-        cur.execute("SELECT DISTINCT editorial FROM productos WHERE editorial IS NOT NULL ORDER BY editorial;")
-        editoriales = [row[0] for row in cur.fetchall()]
+        # **USO DE 'WITH' para asegurar el cierre de la conexión y cursor**
+        with get_db_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT DISTINCT editorial FROM productos WHERE editorial IS NOT NULL ORDER BY editorial;")
+                editoriales = [row[0] for row in cur.fetchall()]
     except Exception as e:
         print(f"Error al obtener editoriales: {e}")
-    finally:
-        if conn:
-            conn.close()
+    # El bloque finally se elimina
     return editoriales
 
 # Función para obtener todas las categorías/tipos_texto para filtros de la tienda
 def get_tipos_texto():
-    conn = None
     categorias = []
     try:
-        conn = get_db_connection()
-        cur = conn.cursor()
-        cur.execute("SELECT DISTINCT tipo_texto FROM productos WHERE tipo_texto IS NOT NULL ORDER BY tipo_texto;")
-        categorias = [row[0] for row in cur.fetchall()]
+        # **USO DE 'WITH' para asegurar el cierre de la conexión y cursor**
+        with get_db_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT DISTINCT tipo_texto FROM productos WHERE tipo_texto IS NOT NULL ORDER BY tipo_texto;")
+                categorias = [row[0] for row in cur.fetchall()]
     except Exception as e:
         print(f"Error al obtener categorías: {e}")
-    finally:
-        if conn:
-            conn.close()
+    # El bloque finally se elimina
     return categorias
 
 
@@ -90,7 +87,6 @@ def get_tipos_texto():
 
 @app.route('/tienda')
 def tienda():
-    conn = None
     productos = []
     editoriales = get_editoriales()
     categorias = get_tipos_texto()
@@ -113,21 +109,19 @@ def tienda():
     query += " ORDER BY nombre_producto ASC;"
 
     try:
-        conn = get_db_connection()
-        cur = conn.cursor()
-        cur.execute(query, params)
-        
-        # Mapear los resultados
-        productos = [format_product(row) for row in cur.fetchall()]
+        # **USO DE 'WITH' para asegurar el cierre de la conexión y cursor**
+        with get_db_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(query, params)
+                
+                # Mapear los resultados
+                productos = [format_product(row) for row in cur.fetchall()]
 
     except Exception as e:
         print(f"Error inesperado al cargar la tienda: {e}")
         # En una aplicación real, aquí podrías manejar el error de forma amigable
 
-    finally:
-        if conn:
-            conn.close()
-
+    # El bloque finally se elimina
     context = {
         'titulo_pagina': 'Tienda de Textos Escolares',
         'productos': productos,
@@ -140,11 +134,10 @@ def tienda():
 
 
 # =================================================================
-# 3. RUTAS API PARA COLEGIOS (CON FIX DE MINÚSCULAS Y MAYÚSCULAS)
+# 3. RUTAS API PARA COLEGIOS (CORREGIDA CON 'WITH')
 # =================================================================
 @app.route('/api/colegios', methods=['GET'])
 def get_colegios_data():
-    conn = None
     colegios_data = []
     
     # 1. Lista de KEYS que el JavaScript del cliente ESPERA (Mayúsculas)
@@ -159,15 +152,16 @@ def get_colegios_data():
     SQL_COLUMNS = [k.lower() for k in JSON_KEYS] 
     
     try:
-        conn = get_db_connection()
-        cur = conn.cursor()
-        
-        # Consulta: Usamos las columnas en minúscula para la consulta SQL
-        query = f"SELECT {', '.join(SQL_COLUMNS)} FROM colegios ORDER BY colegio ASC;"
-        cur.execute(query)
-        
-        # Mapea los resultados: Usamos JSON_KEYS (mayúsculas) como claves
-        colegios_data = [dict(zip(JSON_KEYS, row)) for row in cur.fetchall()]
+        # **USO DE 'WITH' para asegurar el cierre de la conexión y cursor**
+        with get_db_connection() as conn:
+            with conn.cursor() as cur:
+                
+                # Consulta: Usamos las columnas en minúscula para la consulta SQL
+                query = f"SELECT {', '.join(SQL_COLUMNS)} FROM colegios ORDER BY colegio ASC;"
+                cur.execute(query)
+                
+                # Mapea los resultados: Usamos JSON_KEYS (mayúsculas) como claves
+                colegios_data = [dict(zip(JSON_KEYS, row)) for row in cur.fetchall()]
         
         return jsonify(colegios_data), 200
 
@@ -176,9 +170,7 @@ def get_colegios_data():
         print(f"Error FATAL al obtener la lista de colegios: {e}") 
         # Devolvemos el error 500 al cliente con más detalle
         return jsonify({"error": "Error interno del servidor al obtener datos de colegios", "detail": str(e)}), 500
-    finally:
-        if conn:
-            conn.close()
+    # El bloque finally se elimina
 
 # =================================================================
 # 4. RUTAS PARA PÁGINAS ESTÁTICAS
