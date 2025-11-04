@@ -213,16 +213,13 @@
                     <div class="p-6">
                         <p class="text-xs font-outfit uppercase tracking-widest text-gray-500 mb-1">Paquete Educativo Encontrado</p>
                         <h3 id="package-title" class="font-outfit text-2xl font-black text-gray-900 mb-4"></h3>
-                        <div class="text-sm text-gray-600 space-y-2" id="package-details-base">
+                        <div class="text-sm text-gray-600 space-y-2" id="package-details">
                             <p><span class="font-semibold text-gray-800">Colegio:</span> <span id="card-colegio"></span></p>
                             <p><span class="font-semibold text-gray-800">Curso:</span> <span id="card-curso"></span></p>
                             <p><span class="font-semibold text-gray-800">Ciudad:</span> <span id="card-ciudad"></span></p>
-                            <p class="hidden"><span class="font-semibold text-gray-800">Ubicación:</span> <a href="#" id="card-ubicacion" target="_blank" class="text-brand-primary hover:underline">Ver en Mapa</a></p>
+                            <p id="card-ubicacion-container"><span class="font-semibold text-gray-800">Ubicación:</span> <a href="#" id="card-ubicacion" target="_blank" class="text-brand-primary hover:underline">Ver en Mapa</a></p>
                         </div>
                         
-                        <div id="package-details" class="mt-4 text-sm text-gray-600">
-                             </div>
-
                         <div id="card-imagen-container" class="mt-4 flex justify-center">
                             <img id="card-imagen" src="" alt="Logo del Colegio" class="w-24 h-24 object-contain rounded-full border border-gray-100">
                         </div>
@@ -322,6 +319,7 @@
             let ALL_SCHOOLS = [];
             let selectedSchool = null;
 
+            // Mapeo de las claves de la DB/JSON a los nombres de curso para el usuario
             const GRADES_MAP = {
                 'PREJARDIN': 'Prejardín', 'JARDIN': 'Jardín', 'TRANSICION': 'Transición', 
                 'PRIMERO': '1° (Primero)', 'SEGUNDO': '2° (Segundo)', 'TERCERO': '3° (Tercero)', 
@@ -345,15 +343,16 @@
             const packageCard = document.getElementById('package-card');
             const initialMessage = document.getElementById('initial-message');
             
-            // Elementos de la tarjeta de resultados
-            const packageTitle = document.getElementById('package-title');
+            // Referencias de la tarjeta de resultado (corregidas para evitar null)
             const cardColegio = document.getElementById('card-colegio');
             const cardCurso = document.getElementById('card-curso');
             const cardCiudad = document.getElementById('card-ciudad');
+            const cardUbicacionContainer = document.getElementById('card-ubicacion-container');
             const cardUbicacionLink = document.getElementById('card-ubicacion');
-            const cardUbicacionParent = cardUbicacionLink.parentNode;
             const cardImagen = document.getElementById('card-imagen');
+            const packageTitle = document.getElementById('package-title');
             const packageDetails = document.getElementById('package-details');
+
             
             // --- 3. FUNCIONES DE MANEJO DE UI ---
 
@@ -406,8 +405,10 @@
                 schools.forEach(school => {
                     const item = document.createElement('a');
                     item.href = '#';
+                    // Usar un valor por defecto si CIUDAD es null
+                    const city = school.CIUDAD && school.CIUDAD.trim() !== '' ? ` (${school.CIUDAD})` : '';
                     item.className = 'block px-3 py-2 text-gray-800 hover:bg-gray-100 hover:text-brand-primary transition duration-300 text-sm rounded-md';
-                    item.textContent = school.COLEGIO + ' (' + school.CIUDAD + ')';
+                    item.textContent = school.COLEGIO + city;
                     // Usamos una función anónima para pasar el objeto colegio completo
                     item.addEventListener('click', (e) => {
                         e.preventDefault();
@@ -462,6 +463,7 @@
                 
                 GRADE_KEYS.forEach(key => {
                     // Accede al valor del grado (ej. school.PREJARDIN) y lo limpia de posibles espacios en blanco
+                    // Usamos String() para manejar valores nulos/undefined desde la DB
                     const packageInfo = school[key] ? String(school[key]).trim() : '0'; 
                     
                     if (packageInfo && packageInfo !== '0' && packageInfo.toUpperCase() !== 'NULL') {
@@ -516,40 +518,35 @@
                 }, 1500);
             }
             
-            // Muestra la tarjeta de resultado - ¡FUNCIÓN CORREGIDA!
+            // Muestra la tarjeta de resultado - CORRECCIÓN CLAVE AQUÍ
             function displayPackageCard(school, gradeName, packageInfo) {
                 
-                // Título del paquete
+                // Título del paquete: Limpia y capitaliza/formatea el nombre del paquete
                 const title = packageInfo.includes(',') ? 
                     'Múltiples Kits Educativos' : 
-                    packageInfo.toUpperCase().replace('PAQUETE EDUCATIVO', 'KIT'); // Un poco de limpieza en el título
+                    packageInfo.toUpperCase().replace(/PAQUETE\s+EDUCATIVO/g, 'KIT');
                 
-                // 1. Llenar los campos fijos de la tarjeta
+                // 1. Llenar la tarjeta. Usar el operador OR (||) para un valor de fallback en caso de null/undefined
                 packageTitle.textContent = title;
-                cardColegio.textContent = school.COLEGIO;
+                cardColegio.textContent = school.COLEGIO || 'N/A';
                 cardCurso.textContent = gradeName;
-                cardCiudad.textContent = school.CIUDAD;
+                cardCiudad.textContent = school.CIUDAD || 'No especificada';
                 
-                if (school.UBICACION) {
-                    cardUbicacionLink.href = school.UBICACION;
-                    cardUbicacionParent.classList.remove('hidden');
+                const ubicacion = school.UBICACION;
+                if (ubicacion && ubicacion.trim() !== '') {
+                    cardUbicacionLink.href = ubicacion;
+                    cardUbicacionContainer.classList.remove('hidden');
                 } else {
-                    cardUbicacionParent.classList.add('hidden');
+                    cardUbicacionContainer.classList.add('hidden');
                 }
                 
                 cardImagen.src = school.IMAGEN || 'https://sbooks.com.co/wp-content/uploads/2024/12/no-image.png'; // Fallback image
                 
-                // 2. Llenar el detalle dinámico de libros/kits
-                packageDetails.innerHTML = ''; // Limpiamos el contenedor dinámico
+                // 2. Detalle de libros/kits
+                packageDetails.innerHTML = ''; // Limpiar contenido anterior
                 
                 if (packageInfo.includes(',')) {
                     const kits = packageInfo.split(',').map(item => item.trim());
-                    
-                    const pTitle = document.createElement('p');
-                    pTitle.className = 'font-semibold text-gray-800 mb-2';
-                    pTitle.textContent = 'Paquetes Disponibles:';
-                    packageDetails.appendChild(pTitle);
-
                     const ul = document.createElement('ul');
                     ul.className = 'list-disc list-inside mt-2 text-sm text-gray-700 space-y-1 text-left';
                     kits.forEach(kit => {
@@ -558,20 +555,12 @@
                         ul.appendChild(li);
                     });
                     
+                    packageDetails.innerHTML = `<p class="font-semibold text-gray-800 mb-2">Paquetes Disponibles:</p>`;
                     packageDetails.appendChild(ul);
                     
                 } else {
                     // Si es un solo paquete
-                    const pName = document.createElement('p');
-                    pName.className = 'font-semibold text-gray-800';
-                    pName.textContent = 'Nombre del Kit:';
-                    
-                    const pValue = document.createElement('p');
-                    pValue.className = 'mt-1 text-sm text-gray-700';
-                    pValue.textContent = packageInfo;
-
-                    packageDetails.appendChild(pName);
-                    packageDetails.appendChild(pValue);
+                     packageDetails.innerHTML = `<p class="font-semibold text-gray-800">Nombre del Kit:</p><p class="mt-1 text-sm text-gray-700">${packageInfo}</p>`;
                 }
                 
                 
@@ -582,71 +571,12 @@
             // --- 4. FUNCIÓN PRINCIPAL DE CARGA DE DATOS ---
             async function fetchSchools() {
                 try {
-                    // La URL de la API debe coincidir con la de Flask: /api/colegios
-                    const response = await fetch('/api/colegios'); 
-                    
-                    // Si el servidor devuelve 200 pero la respuesta no es un JSON (ej. si Flask devuelve HTML por error)
+                    const response = await fetch('/api/colegios');
                     if (!response.ok) {
-                        // Intentar obtener más detalles del error si está disponible
-                        try {
-                            const errorDetails = await response.json().then(data => data.detail || 'Error desconocido del servidor.');
-                            throw new Error(`Error HTTP: ${response.status}. Detalle: ${errorDetails}`);
-                        } catch (e) {
-                            throw new Error(`Error HTTP: ${response.status}. Respuesta no JSON.`);
-                        }
+                        // En caso de error HTTP (ej. 500, aunque el app.py devuelve 200 con fallback)
+                        throw new Error(`Error HTTP: ${response.status}`);
                     }
-                    
-                    // Nota: Si la API devuelve los datos SIMULADOS con 200, este código funcionará.
                     ALL_SCHOOLS = await response.json();
-                    
-                    // Simulamos la estructura de los datos que debe devolver el backend para evitar la complejidad
-                    // de mapear campos genéricos a las propiedades PREJARDIN, JARDIN, etc. del frontend.
-                    // ESTO DEBE SER MANEJADO POR EL BACKEND (app.py) EN UN ENTORNO REAL.
-                    // Para que el frontend funcione con los datos simulados de app.py:
-                    // app.py devuelve: [{"ID_COLEGIO": 1, "COLEGIO": "Colegio Mayor del Sol", "GRADES": ["6º Grado", "7º Grado", "8º Grado"]}]
-                    // frontend espera: [{"ID_COLEGIO": 1, "COLEGIO": "Colegio Mayor del Sol", "CIUDAD": "Bogotá", "SEXTO": "Paquete Educativo Kit Alpha"}]
-                    // Por simplicidad, y ya que la lógica del frontend está bien, no modificaremos los datos que devuelve la API simulada.
-                    // **Asumiremos que el backend devuelve la estructura que el frontend espera.**
-                    
-                    // Si el backend devuelve datos simulados (los definidos en app.py), el frontend fallará
-                    // porque espera campos como 'PREJARDIN', 'CIUDAD', 'UBICACION', 'IMAGEN'.
-                    // Para que esto funcione con el `app.py` proporcionado, se requeriría una reescritura de los datos simulados en `app.py`.
-                    // PERO, dado que el objetivo es corregir el error de JS, asumo que `ALL_SCHOOLS` contiene la estructura esperada:
-                    // e.g., [{"ID_COLEGIO": 1, "COLEGIO": "Colegio Mayor del Sol", "CIUDAD": "Bogotá", "PREJARDIN": "Paquete Inicial", "SEXTO": "Kit Alfa", "IMAGEN": "url_logo.png", "UBICACION": "url_mapa"}]
-
-                    
-                    // ----------------------------------------------------------------------
-                    // FIX RÁPIDO PARA COMPATIBILIDAD CON DATOS SIMULADOS DE app.py:
-                    // Si el backend devuelve la estructura simple de app.py, transformarla.
-                    if (ALL_SCHOOLS.length > 0 && ALL_SCHOOLS[0].GRADES) {
-                         ALL_SCHOOLS = ALL_SCHOOLS.map(school => {
-                            const newSchool = {
-                                ID_COLEGIO: school.ID_COLEGIO,
-                                COLEGIO: school.COLEGIO,
-                                CIUDAD: "Ciudad Simulada", // Agregar campos faltantes
-                                IMAGEN: "https://sbooks.com.co/wp-content/uploads/2024/12/no-image.png",
-                                UBICACION: "#",
-                            };
-                            // Mapear los grados del array a las propiedades del objeto.
-                            // Esto no es 100% exacto ya que los nombres de los grados en el frontend son distintos
-                            // a los que genera la simulación (ej. '6º Grado' vs 'SEXTO').
-                            // Se simula un mapeo simple:
-                            school.GRADES.forEach(gradeText => {
-                                const gradeKey = Object.keys(GRADES_MAP).find(key => GRADES_MAP[key].includes(gradeText.replace('º Grado', '')));
-                                if (gradeKey) {
-                                    newSchool[gradeKey] = `Kit ${gradeText}`; // Asignar un valor de paquete simulado
-                                }
-                            });
-                            
-                            // Para el ejemplo de Colegios.html, necesitamos un ejemplo de múltiples kits:
-                            if (school.ID_COLEGIO === 4) {
-                                newSchool['SEPTIMO'] = "Kit Editorial Alpha, Kit Editorial Beta";
-                            }
-                            
-                            return newSchool;
-                         });
-                    }
-                    // ----------------------------------------------------------------------
                     
                     // Actualiza el UI al cargar
                     renderSchoolList(ALL_SCHOOLS);
@@ -663,6 +593,8 @@
                     schoolSelectButton.innerHTML = `Error de Carga <i class="fas fa-exclamation-triangle text-red-500 text-base ml-2"></i>`;
                     schoolSelectButton.classList.remove('school-loading');
                     schoolSelectButton.classList.add('text-red-600', 'border-red-500', 'cursor-not-allowed');
+                    schoolSelectButton.disabled = true;
+                    schoolSearchInput.disabled = true;
                     initialMessage.textContent = 'Hubo un error al conectar con la base de datos de colegios o la API falló.';
                     
                 }
