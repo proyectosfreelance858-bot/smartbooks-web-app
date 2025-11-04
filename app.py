@@ -1,166 +1,280 @@
 import os
+import sys
 from flask import Flask, render_template, jsonify, request
 import psycopg2 
 from datetime import datetime
 from dotenv import load_dotenv
 
-# Cargar las variables de entorno desde el archivo .env
+# =================================================================
+# 0. CONFIGURACIÓN INICIAL Y AMBIENTE
+# =================================================================
+
+# Cargar variables de entorno desde el archivo .env
 load_dotenv()
 
-# =================================================================
-# 1. CONFIGURACIÓN DE BASE DE DATOS Y HOSTING
-# =================================================================
-# Las variables se leen del archivo .env o se usan valores por defecto
+# Configuración de la base de datos y el servidor
 DB_HOST = os.environ.get("DB_HOST", "localhost") 
-DB_NAME = os.environ.get("DB_NAME", "smartbooks_db_duns") # Nombre de la DB según la imagen
+DB_NAME = os.environ.get("DB_NAME", "smartbooks_db_duns") 
 DB_USER = os.environ.get("DB_USER", "tu_usuario_postgres") 
 DB_PASS = os.environ.get("DB_PASS", "tu_contraseña_postgres") 
-DB_PORT = os.environ.get("DB_PORT", "5432") # PUERTO (Importante para Render)
+DB_PORT = os.environ.get("DB_PORT", "5432") 
 
+# Configuración del hosting (necesario para Render/Heroku)
 PORT = int(os.environ.get('PORT', 5000))
 HOST = '0.0.0.0' 
 
+# Inicialización de la aplicación Flask
 app = Flask(__name__)
+
+# =================================================================
+# 1. UTILIDADES Y CONEXIÓN A LA BASE DE DATOS
+# =================================================================
 
 def get_db_connection():
     """
     Intenta establecer la conexión a la base de datos PostgreSQL.
-    Añade sslmode='require' para conexiones remotas (CRUCIAL para Render).
+    Configura el modo SSL para conexiones remotas (ej. Render).
+
+    Returns:
+        psycopg2.connection or None: Objeto de conexión si es exitosa, None en caso contrario.
     """
+    # Verificar que las variables de conexión estén disponibles
     if not all([DB_HOST, DB_NAME, DB_USER, DB_PASS, DB_PORT]):
-        print("ADVERTENCIA: Faltan variables de entorno de DB. Usando configuración por defecto.")
+        print("ADVERTENCIA: Faltan variables de entorno de DB. No se puede conectar.", file=sys.stderr)
         return None
 
     try:
+        # Configurar sslmode='require' para hosting en la nube como Render
         conn = psycopg2.connect(
             host=DB_HOST,
             database=DB_NAME,
             user=DB_USER,
             password=DB_PASS,
             port=DB_PORT,
-            sslmode='require' if DB_HOST != 'localhost' else 'allow' 
+            sslmode='require' if DB_HOST != 'localhost' else 'allow',
+            connect_timeout=10 # Tiempo de espera para la conexión
         )
+        print("INFO: Conexión a la base de datos establecida con éxito.")
         return conn
-    except psycopg2.Error as e:
-        print(f"Error al conectar a PostgreSQL: {e}")
+    except psycopg2.OperationalError as e:
+        print(f"ERROR: Fallo operacional al conectar a PostgreSQL: {e}", file=sys.stderr)
+        return None
+    except Exception as e:
+        print(f"ERROR: Error desconocido al conectar a PostgreSQL: {e}", file=sys.stderr)
         return None
 
+def format_price(price):
+    """
+    Formatea un número a string de precio en formato español ($150.000).
+    Acepta None o 0 y devuelve un formato limpio.
+    """
+    if price is None or price == 0:
+        return "$0"
+    try:
+        # Convertir a entero (si es decimal) y formatear con puntos como separador de miles
+        price_int = int(price)
+        return f"${price_int:,}".replace(",", ".")
+    except (ValueError, TypeError):
+        return "$0"
+
 # =================================================================
-# 2. SIMULACIÓN DE DATOS DE FALLBACK (Para usar si falla la DB)
+# 2. DATOS DE FALLBACK Y SIMULACIÓN (MOCKS)
 # =================================================================
 
-# Datos de colegios simulados (usando la estructura de la tabla colegios para ser coherente con el frontend)
-SIMULATED_SCHOOLS = [
-    {"ID_COLEGIO": 1, "COLEGIO": "Colegio Mayor del Sol", "CIUDAD": "Bogotá", "IMAGEN": "url_imagen_sol", "UBICACION": "https://maps.google.com/?q=Colegio+Mayor+del+Sol", "PREJARDIN": "Kit Preescolar A", "JARDIN": "Kit Preescolar A", "TRANSICION": "Kit Preescolar B", "PRIMERO": "Kit Primaria 1", "SEGUNDO": "Kit Primaria 2", "TERCERO": "Kit Primaria 3", "CUARTO": "0", "QUINTO": "0", "SEXTO": "Kit Bachillerato", "SEPTIMO": "Kit Bachillerato", "OCTAVO": "0", "NOVENO": "0", "DECIMO": "0", "ONCE": "0"},
-    {"ID_COLEGIO": 2, "COLEGIO": "Instituto Británico", "CIUDAD": "Medellín", "IMAGEN": "url_imagen_britanico", "UBICACION": "https://maps.google.com/?q=Instituto+Británico", "PREJARDIN": "0", "JARDIN": "0", "TRANSICION": "Kit Cambridge Pre", "PRIMERO": "Kit Cambridge 1", "SEGUNDO": "Kit Cambridge 2", "TERCERO": "Kit Cambridge 3", "CUARTO": "Kit Cambridge 4", "QUINTO": "Kit Cambridge 5", "SEXTO": "Kit Bachillerato A, Kit Bachillerato B", "SEPTIMO": "Kit Bachillerato A, Kit Bachillerato B", "OCTAVO": "0", "NOVENO": "Kit IGCSE", "DECIMO": "Kit A-Levels", "ONCE": "Kit A-Levels"},
-]
-
-def simulate_package_data(school_id, grade_name):
-    """Genera datos de paquete de libros simulados basados en el colegio y el curso."""
-    base_price = 150000 
-    
-    if school_id == 2: base_price *= 1.2
-    if grade_name.startswith("Pre"): base_price *= 0.7
-    
-    package_id = f"PK-{school_id}-{grade_name.replace(' ', '-').lower()}"
-    
-    books = [
-        {"name": f"Matemáticas para {grade_name}", "author": "Dr. Álgebra", "isbn": "978-1234567890"},
-        {"name": f"Lengua y Literatura de {grade_name}", "author": "A. Machado", "isbn": "978-0987654321"},
-        {"name": f"Ciencias Naturales - Volumen I", "author": "B. Franklin", "isbn": "978-5555555555"},
-    ]
-    
-    return {
-        "package_id": package_id,
-        "school_id": school_id,
-        "grade": grade_name,
-        "price_total": base_price + (len(books) * 5000), 
-        "books_count": len(books),
-        "books_list": books,
-        "shipping_time": "3-5 días hábiles"
-    }
-
-# Datos de configuración (URLs) de fallback, si la DB falla.
+# 2.1 MOCK: Configuración Web (configuracion_web) - Banners y Editoriales
 FALLBACK_CONFIG_URLS = {
-    "url_editorial1": "https://simulada.com/editorial1.png",
-    "url_editorial2": "https://simulada.com/editorial2.png",
-    "url_editorial3": "https://simulada.com/editorial3.png",
-    "url_editorial4": "https://simulada.com/editorial4.png",
-    "url_editorial5": "https://simulada.com/editorial5.png",
-    "url_banner1": "https://simulada.com/banner1.png",
-    "url_banner2": "https://simulada.com/banner2.png",
-    "url_banner3": "https://simulada.com/banner3.png",
-    "url_banner4": "https://simulada.com/banner4.png",
-    "url_banner5": "https://simulada.com/banner5.png",
-    "url_banner6": "https://simulada.com/banner6.png",
-    "url_recuadro1": "https://simulada.com/recuadro1.png",
-    "url_recuadro2": "https://simulada.com/recuadro2.png",
-    "url_recuadro3": "https://simulada.com/recuadro3.png",
+    # URLs de Editoriales - Seis items para la marquesina, siguiendo la lógica del HTML
+    "url_editorial1": "https://placehold.co/150x50/3498db/ffffff?text=Editorial+1",
+    "url_editorial2": "https://placehold.co/150x50/2ecc71/ffffff?text=Editorial+2",
+    "url_editorial3": "https://placehold.co/150x50/f1c40f/ffffff?text=Editorial+3",
+    "url_editorial4": "https://placehold.co/150x50/e74c3c/ffffff?text=Editorial+4",
+    "url_editorial5": "https://placehold.co/150x50/9b59b6/ffffff?text=Editorial+5",
+    "url_editorial6": "https://placehold.co/150x50/1abc9c/ffffff?text=Editorial+6", # Se añadió uno extra por si el loop es de 6
+    # URLs de Banners - 6 items para el slider principal
+    "url_banner1": "https://placehold.co/1920x600/163D6A/ffffff?text=BANNER+PRINCIPAL+1", 
+    "url_banner2": "https://placehold.co/1920x600/2C5E8C/ffffff?text=BANNER+PRINCIPAL+2",
+    "url_banner3": "https://placehold.co/1920x600/447FAD/ffffff?text=BANNER+PRINCIPAL+3",
+    "url_banner4": "https://placehold.co/1920x600/5BA0CD/ffffff?text=BANNER+PRINCIPAL+4",
+    "url_banner5": "https://placehold.co/1920x600/73C1EE/ffffff?text=BANNER+PRINCIPAL+5",
+    "url_banner6": "https://placehold.co/1920x600/8BD3FF/ffffff?text=BANNER+PRINCIPAL+6",
+    # URLs de Recuadros (Tarjetas de Servicios)
+    "url_recuadro1": "https://placehold.co/400x300/F39C12/ffffff?text=Recuadro+1",
+    "url_recuadro2": "https://placehold.co/400x300/C0392B/ffffff?text=Recuadro+2",
+    "url_recuadro3": "https://placehold.co/400x300/8E44AD/ffffff?text=Recuadro+3",
 }
 
-# Datos de productos destacados (basados en articulos_blog para estructura, pero simulando más de 5)
+# 2.2 MOCK: Productos Destacados (articulos_blog)
 def get_simulated_featured_products(count=8):
+    """Genera datos de productos simulados con la estructura necesaria para index.html."""
     
-    # Usando los datos de la tabla 'articulos_blog' de la imagen para simular la estructura
+    # Estructura basada en las columnas de 'articulos_blog' y el loop del HTML
     base_products = [
-        {"titulo": "Cómo elegir los mejores textos escolares: Guía para Coordinadores", "descripcion_corta": "Guía para directores y coordinadores que buscan calidad, alineación pedagógica y adaptabilidad.", "url_imagen": "https://simulada.com/libro1.png", "rating": 5, "precio": 149900, "categoria": "Guías Pedagógicas"},
-        {"titulo": "Las Tendencias educativas que no puedes ignorar en 2024-2025", "descripcion_corta": "Análisis de nuestra alianza estratégica con una editorial líder para ofrecer programas bilingües.", "url_imagen": "https://simulada.com/libro2.png", "rating": 4, "precio": 99900, "categoria": "Artículos Blog"},
-        {"titulo": "Smart Books y MacMillan: El futuro de la educación bilingüe", "descripcion_corta": "Descubre cómo los textos escolares están evolucionando hacia modelos híbridos que combinan papel y digital.", "url_imagen": "https://simulada.com/libro3.png", "rating": 5, "precio": 199900, "categoria": "Plataformas Digitales"},
-        {"titulo": "Transformación Digital en el Aula: Plataformas y Libros Híbridos", "descripcion_corta": "Más allá del material, el éxito educativo depende del docente. Capacitación y herramientas de diagnóstico.", "url_imagen": "https://simulada.com/libro4.png", "rating": 4, "precio": 75900, "categoria": "Tecnología Educativa"},
-        {"titulo": "El Rol del Docente: Más allá del Libro", "descripcion_corta": "Un debate sobre la importancia del libro y el papel de las asignaturas en el currículo moderno. Incluye recursos digitales.", "url_imagen": "https://simulada.com/libro5.png", "rating": 5, "precio": 125900, "categoria": "Desarrollo Docente"},
+        {"titulo": "Guía para Coordinadores: Textos Escolares Óptimos", "descripcion_corta": "Guía para directores que buscan calidad, alineación pedagógica y adaptabilidad en textos.", "url_imagen_principal": "https://placehold.co/300x400/163D6A/ffffff?text=Producto+1", "rating": 5, "precio": 149900, "categoria": "Guías Pedagógicas"},
+        {"titulo": "Tendencias Educativas 2025: El Futuro del Aula", "descripcion_corta": "Análisis y proyecciones del sector educativo, modelos híbridos y tecnología en el aula.", "url_imagen_principal": "https://placehold.co/300x400/2C5E8C/ffffff?text=Producto+2", "rating": 4, "precio": 99900, "categoria": "Artículos Blog"},
+        {"titulo": "Programa Bilingüe Smart-MacMillan", "descripcion_corta": "Solución integral para la implementación de programas bilingües de alta calidad.", "url_imagen_principal": "https://placehold.co/300x400/447FAD/ffffff?text=Producto+3", "rating": 5, "precio": 199900, "categoria": "Plataformas Digitales"},
+        {"titulo": "Libros Híbridos y Transformación Digital", "descripcion_corta": "Combina la experiencia del papel con el poder de las plataformas digitales interactivas.", "url_imagen_principal": "https://placehold.co/300x400/5BA0CD/ffffff?text=Producto+4", "rating": 4, "precio": 75900, "categoria": "Tecnología Educativa"},
     ]
 
     simulated_products = []
     # Duplicar y modificar para tener al menos 'count' productos
     for i in range(count):
         product = base_products[i % len(base_products)].copy()
-        product["titulo"] = f"{product['titulo']} (Edición {i+1})"
+        product["titulo"] = f"{product['titulo']} (Ref. {i+1})"
         product["precio"] = product["precio"] + (i * 1000)
-        product["precio_formateado"] = f"${product['precio']:,}".replace(",", ".") # Formato de precio en español (e.g., $150.000)
+        product["precio_formateado"] = format_price(product["precio"])
+        # Alias para el template, que usa 'url_imagen'
+        product["url_imagen"] = product["url_imagen_principal"] 
         simulated_products.append(product)
         
     return simulated_products
 
+# 2.3 MOCK: Colegios (colegios)
+SIMULATED_SCHOOLS = [
+    # Datos de colegios simulados, incluyendo los kits por grado
+    {"ID_COLEGIO": 1, "COLEGIO": "Colegio Mayor del Sol", "CIUDAD": "Bogotá", "IMAGEN": "url_imagen_sol", "UBICACION": "https://maps.google.com/?q=Colegio+Mayor+del+Sol", "PREJARDIN": "Kit Preescolar A", "JARDIN": "Kit Preescolar A", "TRANSICION": "Kit Preescolar B", "PRIMERO": "Kit Primaria 1", "SEGUNDO": "Kit Primaria 2", "TERCERO": "Kit Primaria 3", "CUARTO": "0", "QUINTO": "0", "SEXTO": "Kit Bachillerato", "SEPTIMO": "Kit Bachillerato", "OCTAVO": "0", "NOVENO": "0", "DECIMO": "0", "ONCE": "0"},
+    {"ID_COLEGIO": 2, "COLEGIO": "Instituto Británico", "CIUDAD": "Medellín", "IMAGEN": "url_imagen_britanico", "UBICACION": "https://maps.google.com/?q=Instituto+Británico", "PREJARDIN": "0", "JARDIN": "0", "TRANSICION": "Kit Cambridge Pre", "PRIMERO": "Kit Cambridge 1", "SEGUNDO": "Kit Cambridge 2", "TERCERO": "Kit Cambridge 3", "CUARTO": "Kit Cambridge 4", "QUINTO": "Kit Cambridge 5", "SEXTO": "Kit Bachillerato A", "SEPTIMO": "Kit Bachillerato A", "OCTAVO": "0", "NOVENO": "Kit IGCSE", "DECIMO": "Kit A-Levels", "ONCE": "Kit A-Levels"},
+]
+
+def simulate_package_data(school_id, grade_name):
+    """
+    Simula la obtención de un paquete de libros detallado
+    basado en el ID del colegio y el nombre del grado.
+    """
+    base_price = 150000 
+    
+    # Ajuste de precio simulado
+    if school_id == 2: base_price *= 1.2
+    if grade_name.startswith("Pre") or grade_name.startswith("Jardin"): base_price *= 0.7
+    
+    package_id = f"PK-{school_id}-{grade_name.replace(' ', '-').lower()}"
+    
+    # Lista simulada de los libros que componen el paquete
+    books = [
+        {"name": f"Matemáticas para {grade_name}", "author": "Dr. Álgebra", "isbn": "978-1234567890"},
+        {"name": f"Lengua y Literatura de {grade_name}", "author": "A. Machado", "isbn": "978-0987654321"},
+        {"name": f"Ciencias Naturales - Volumen I", "author": "B. Franklin", "isbn": "978-5555555555"},
+        {"name": f"Sociales y Cívica", "author": "H. Arendt", "isbn": "978-1111111111"},
+        {"name": f"Música y Artes", "author": "L. Mozart", "isbn": "978-2222222222"},
+        {"name": f"Plataforma Digital Premium", "author": "Smart Books Tech", "isbn": "N/A"},
+    ]
+    
+    # Datos que necesita el frontend para mostrar el paquete
+    return {
+        "package_id": package_id,
+        "school_id": school_id,
+        "grade": grade_name,
+        "price_total": base_price + (len(books) * 5000), 
+        "price_formateado": format_price(base_price + (len(books) * 5000)),
+        "books_count": len(books),
+        "books_list": books,
+        "shipping_time": "3-5 días hábiles (Nacional)",
+        "available": True,
+        "last_update": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    }
 
 # =================================================================
-# 3. FUNCIONES DE BASE DE DATOS
+# 3. FUNCIONES DE CONSULTA A LA BASE DE DATOS
 # =================================================================
 
 def get_config_urls_from_db(conn):
-    """Obtiene las URLs de configuración de la tabla configuracion_web."""
+    """
+    Obtiene todas las URLs de configuración de la tabla configuracion_web.
+    Convierte las claves a snake_case para Jinja2.
+    """
     config_urls = {}
+    if conn is None:
+        return config_urls
+
     try:
         with conn.cursor() as cur:
+            # Query para obtener clave y valor
             sql_query = 'SELECT clave, valor FROM configuracion_web;'
             cur.execute(sql_query)
+            
+            # Mapear los resultados
             for clave, valor in cur.fetchall():
-                # El HTML usa nombres con guión bajo (url_banner1, url_editorial1)
+                # Reemplazar '-' por '_' para compatibilidad con Jinja2 en el HTML
                 config_urls[clave.replace('-', '_')] = valor 
-        return config_urls
+            
+            return config_urls
+    except psycopg2.Error as e:
+        print(f"ERROR DB: Fallo al obtener URLs de configuracion_web: {e}", file=sys.stderr)
+        return {}
     except Exception as e:
-        print(f"Error al obtener URLs de configuracion_web: {e}")
+        print(f"ERROR: Fallo inesperado al obtener configuracion_web: {e}", file=sys.stderr)
         return {}
 
-
-# =================================================================
-# 4. RUTAS DE API (DATOS DINÁMICOS)
-# =================================================================
-
-@app.route('/api/colegios', methods=['GET'])
-def get_colegios():
+def get_featured_products_from_db(conn):
     """
-    Ruta para obtener la lista de todos los colegios con sus kits de libros por grado.
-    Intenta conectar a la DB real; si falla, usa datos simulados.
+    Obtiene los productos destacados de la tabla articulos_blog, ordenados por ID
+    (asumiendo que ID alto = reciente/popular).
+    Añade datos simulados de precio y rating requeridos por el frontend.
     """
-    conn = get_db_connection()
+    productos = []
     if conn is None:
-        print("INFO: Usando datos simulados de colegios (Fallo de conexión a DB).")
-        return jsonify(SIMULATED_SCHOOLS), 200
+        return productos
+
+    try:
+        with conn.cursor() as cur:
+            # Columnas requeridas por index.html: titulo, descripcion_corta, url_imagen (principal)
+            sql_query = """
+            SELECT 
+                titulo, 
+                descripcion_corta, 
+                url_imagen_principal, 
+                precio_simulado, -- Columna simulada para el precio base
+                categoria_simulada -- Columna simulada para la categoría
+            FROM 
+                articulos_blog
+            ORDER BY 
+                id_articulo DESC -- Asumimos que los más recientes son 'destacados'
+            LIMIT 8; -- Limitar a los 8 elementos del carrusel
+            """
+            cur.execute(sql_query)
+            
+            # Datos simulados de metadatos (rating), ya que no están en la tabla articulos_blog de la imagen.
+            simulated_ratings = [5, 4, 5, 4, 5, 4, 5, 4] * 2
+            
+            # Mapeo y enriquecimiento de datos
+            for i, row in enumerate(cur.fetchall()):
+                # Nota: Los campos precio_simulado y categoria_simulada son PLACEHOLDERS, 
+                # deben ser columnas reales en tu tabla o calcularse.
+                precio = row[3] if len(row) > 3 and row[3] is not None else (100000 + i * 5000)
+                categoria = row[4] if len(row) > 4 and row[4] is not None else "Educación General"
+
+                producto = {
+                    "titulo": row[0],
+                    "descripcion_corta": row[1],
+                    "url_imagen": row[2], # Alias para el template, que usa 'url_imagen'
+                    "url_imagen_principal": row[2], # Nombre original de la DB
+                    "rating": simulated_ratings[i % len(simulated_ratings)],
+                    "precio": precio,
+                    "precio_formateado": format_price(precio),
+                    "categoria": categoria
+                }
+                productos.append(producto)
+
+        return productos
+    except psycopg2.ProgrammingError as e:
+        print(f"ERROR DB: Fallo de programación (columnas faltantes) en articulos_blog: {e}", file=sys.stderr)
+        # Si faltan las columnas simuladas (precio_simulado, categoria_simulada), se devuelve vacío
+        return []
+    except psycopg2.Error as e:
+        print(f"ERROR DB: Fallo al obtener productos de articulos_blog: {e}", file=sys.stderr)
+        return []
+
+def get_schools_from_db(conn):
+    """
+    Obtiene la lista de todos los colegios con sus kits de libros por grado.
+    """
+    colegios_data = []
+    if conn is None:
+        return colegios_data
 
     try:
         with conn.cursor() as cur:
             # Selecciona todas las columnas relevantes de la tabla colegios. 
-            # Se asume la estructura del HTML y JS (ID_COLEGIO, COLEGIO, CIUDAD, GRADOS...).
+            # Asegúrate de que los nombres de las columnas coincidan con tu DB real.
             sql_query = """
             SELECT 
                 "ID_COLEGIO", "COLEGIO", "CIUDAD", "IMAGEN", "UBICACION",
@@ -174,39 +288,123 @@ def get_colegios():
             """
             cur.execute(sql_query)
             
-            # Nombres de las columnas en el orden de la consulta
+            # Obtener los nombres de las columnas para crear diccionarios
             column_names = [desc[0] for desc in cur.description]
             
-            colegios_data = []
             for row in cur.fetchall():
-                # Crear un diccionario mapeando los nombres de columna a los valores de la fila
                 school_data = dict(zip(column_names, row))
-                # Limpiar valores NULL si los hay (psycopg2 devuelve None, lo que es seguro en JSON)
+                # Limpiar valores None para que JSON/JavaScript funcione correctamente
                 for key, value in school_data.items():
                     if value is None:
-                        # Asume '0' para grados sin kit y cadena vacía para otros campos NULL
+                        # '0' para grados sin kit, cadena vacía para otros campos NULL
                         school_data[key] = "0" if key in ["PREJARDIN", "JARDIN", "TRANSICION", "PRIMERO", "SEGUNDO", "TERCERO", "CUARTO", "QUINTO", "SEXTO", "SEPTIMO", "OCTAVO", "NOVENO", "DECIMO", "ONCE"] else ""
                 
                 colegios_data.append(school_data)
         
-        conn.close()
+        return colegios_data
+    except psycopg2.Error as e:
+        print(f"ERROR DB: Fallo al obtener la lista de colegios: {e}", file=sys.stderr)
+        return []
+    except Exception as e:
+        print(f"ERROR: Fallo inesperado al obtener colegios: {e}", file=sys.stderr)
+        return []
+
+
+# =================================================================
+# 4. RUTAS PRINCIPALES Y LÓGICA DE DATOS
+# =================================================================
+
+@app.route('/')
+def index():
+    """
+    Ruta principal (index.html). Carga todos los datos dinámicos 
+    (Banners, Editoriales, Recuadros y Productos Destacados) de la DB.
+    Utiliza fallbacks si la conexión o los datos fallan.
+    """
+    config_urls = {}
+    productos_destacados = []
+    conn = None # Inicializar la conexión fuera del try
+
+    try:
+        conn = get_db_connection()
+        if conn is not None:
+            # 1. Obtener URLs de configuracion_web
+            config_urls = get_config_urls_from_db(conn)
+            
+            # 2. Obtener productos de articulos_blog
+            productos_destacados = get_featured_products_from_db(conn)
+        
+        # 3. Aplicar Fallback si faltan datos
+        if not config_urls:
+            print("INFO: Usando URLs de configuración simuladas (Datos vacíos o DB Fallida).")
+            config_urls = FALLBACK_CONFIG_URLS
+
+        if not productos_destacados:
+            print("INFO: Usando productos destacados simulados (Datos vacíos o DB Fallida).")
+            productos_destacados = get_simulated_featured_products(count=8)
+
+        # 4. Renderizar el template
+        return render_template(
+            'index.html', 
+            **config_urls, # Pasa todas las URLs de configuracion_web a Jinja2
+            productos_destacados=productos_destacados
+        ) 
+    
+    except Exception as e:
+        print(f"ERROR FATAL en la ruta '/': {e}", file=sys.stderr)
+        # Fallback de emergencia en caso de error de servidor
+        return render_template(
+            'index.html', 
+            **FALLBACK_CONFIG_URLS,
+            productos_destacados=get_simulated_featured_products(count=8)
+        )
+    finally:
+        # 5. Cerrar la conexión
+        if conn:
+            try:
+                conn.close()
+            except Exception as e:
+                print(f"ERROR: No se pudo cerrar la conexión a la DB: {e}", file=sys.stderr)
+
+
+# =================================================================
+# 5. RUTAS DE API (JSON)
+# =================================================================
+
+@app.route('/api/colegios', methods=['GET'])
+def get_colegios_api():
+    """
+    Ruta API para obtener la lista de todos los colegios.
+    Utilizada por el frontend para la búsqueda de kits.
+    """
+    conn = None
+    try:
+        conn = get_db_connection()
+        colegios_data = []
+
+        if conn is not None:
+            colegios_data = get_schools_from_db(conn)
         
         if not colegios_data:
-            print("INFO: DB conectada pero la consulta SQL de colegios no devolvió resultados. Usando datos simulados.")
-            return jsonify(SIMULATED_SCHOOLS), 200
+            print("INFO: Usando datos simulados de colegios (DB Fallida o Datos Vacíos).")
+            return jsonify(SIMULATED_SCHOOLS), 200 # Devuelve 200 OK con datos simulados
 
         return jsonify(colegios_data), 200
 
     except Exception as e:
-        print(f"Error FATAL al obtener la lista de colegios: {e}") 
+        print(f"ERROR FATAL en /api/colegios: {e}", file=sys.stderr) 
         # Fallback a datos simulados en caso de error grave
-        return jsonify(SIMULATED_SCHOOLS), 200 # Devuelve 200 OK con datos simulados
+        return jsonify(SIMULATED_SCHOOLS), 200 
+    finally:
+        if conn:
+            conn.close()
 
 @app.route('/api/paquete', methods=['GET'])
-def get_course_package():
+def get_course_package_api():
     """
-    Ruta para obtener el paquete de libros específico para un colegio y curso.
-    Solo usa datos simulados por la complejidad de la búsqueda real.
+    Ruta API para obtener el paquete de libros específico para un colegio y curso.
+    Dado que esta lógica es compleja (depende de tablas 'kits', 'productos', 'precios'),
+    se utiliza solo la simulación de datos.
     """
     school_id_str = request.args.get('school_id')
     grade_name = request.args.get('grade_name') # Nombre del grado (ej. '1° (Primero)')
@@ -220,100 +418,100 @@ def get_course_package():
         return jsonify({"error": "El 'school_id' debe ser un número entero válido."}), 400
 
     # Usar simulación de datos (Mock de búsqueda de libros específicos)
+    # En un entorno real, aquí iría una consulta compleja a múltiples tablas de la DB.
     package_data = simulate_package_data(school_id, grade_name)
 
     if package_data:
         return jsonify(package_data), 200
     else:
-        return jsonify({"error": "No se encontró un paquete de libros para la selección."}), 404
+        # En caso de no encontrar un kit, se devuelve un 404
+        return jsonify({"error": f"No se encontró un paquete para el Colegio ID {school_id} y Grado {grade_name}."}), 404
+
 
 # =================================================================
-# 5. RUTAS PARA PÁGINAS ESTÁTICAS
+# 6. RUTAS DE PÁGINAS ESTÁTICAS (Templates)
 # =================================================================
-# NOTA: Estas rutas requieren que tengas los templates (.html) correspondientes 
-# en la carpeta 'templates' de tu aplicación Flask.
-
-@app.route('/')
-def index():
-    """
-    Ruta principal. Obtiene URLs de configuración y productos destacados.
-    """
-    config_urls = {}
-    
-    conn = get_db_connection()
-    if conn is not None:
-        # 1. Obtener URLs de configuracion_web
-        config_urls = get_config_urls_from_db(conn)
-        conn.close()
-    
-    # 2. Fallback si no hay URLs o falla la DB
-    if not config_urls:
-        print("INFO: Usando URLs simuladas (Fallo en DB o datos vacíos).")
-        config_urls = FALLBACK_CONFIG_URLS
-
-
-    # 3. Obtener productos destacados simulados (para el carrusel de productos)
-    productos_destacados = get_simulated_featured_products(count=8)
-
-    # 4. Renderizar el template con todos los datos
-    return render_template(
-        'index.html', 
-        **config_urls, # Pasa todas las URLs como argumentos individuales (url_banner1=..., etc.)
-        productos_destacados=productos_destacados
-    ) 
 
 @app.route('/quienes-somos')
 def quienes_somos():
+    """Ruta para la página Quiénes Somos."""
     return render_template('QuienesSomos.html') 
 
 @app.route('/terminos-y-condiciones')
 def terminos_y_condiciones():
+    """Ruta para la página de Términos y Condiciones."""
     return render_template('TerminosYCondiciones.html')
 
 @app.route('/preguntas-frecuentes')
 def preguntas_frecuentes():
+    """Ruta para la página de Preguntas Frecuentes."""
     return render_template('PreguntasFrecuentes.html')
 
 @app.route('/aliados/castillo')
 def aliados_castillo():
-    # Asume que tienes un template 'AliadosCastillo.html'
-    return "Página de Aliados: Castillo (Requiere Template)"
+    """Ruta para la página de Aliados Castillo."""
+    return render_template('AliadosCastillo.html') 
 
 @app.route('/aliados/macmillan')
 def aliados_macmillan():
-    # Asume que tienes un template 'AliadosMacmillan.html'
-    return "Página de Aliados: MacMillan (Requiere Template)"
+    """Ruta para la página de Aliados MacMillan."""
+    return render_template('AliadosMacmillan.html') 
 
 @app.route('/tienda')
 def tienda():
-    # Asume que tienes un template 'Tienda.html'
+    """Ruta para la página de la Tienda."""
     return render_template('Tienda.html')
 
 @app.route('/colegios')
 def colegios():
+    """Ruta para la página de Colegios (buscador de kits)."""
     return render_template('Colegios.html')
 
 @app.route('/contactanos')
 def contactanos():
+    """Ruta para la página de Contáctanos."""
     return render_template('Contactanos.html')
 
 @app.route('/intranet')
 def intranet():
-    # Asume que tienes un template 'Intranet.html'
+    """Ruta para la página de Intranet/Login."""
     return render_template('Intranet.html')
 
 @app.route('/blog')
 def blog():
+    """Ruta para la página principal del Blog."""
+    # En un entorno real, esta ruta cargaría la lista de articulos_blog
     return render_template('Blog.html')
+
+# =================================================================
+# 7. MANEJO DE ERRORES GLOBAL
+# =================================================================
 
 @app.errorhandler(404)
 def page_not_found(e):
+    """Manejo de la página no encontrada (404)."""
+    print(f"ERROR: Ruta no encontrada: {request.url}", file=sys.stderr)
+    # Asume que existe un template 404.html
     return render_template('404.html'), 404
 
+@app.errorhandler(500)
+def internal_server_error(e):
+    """Manejo de errores internos del servidor (500)."""
+    print(f"ERROR: Error interno del servidor: {e}", file=sys.stderr)
+    return render_template('500.html'), 500
+
 # =================================================================
-# 6. INICIALIZACIÓN
+# 8. INICIALIZACIÓN DEL SERVIDOR
 # =================================================================
 
 if __name__ == '__main__':
-    print(f"Flask corriendo en http://{HOST}:{PORT}")
+    # Mensaje de inicio para el entorno local
+    print("=====================================================")
+    print("  Smart Books Flask Server Inicializando")
+    print("=====================================================")
+    print(f"  HOST: {HOST}, PORT: {PORT}")
+    print(f"  DB: {DB_NAME}@{DB_HOST}:{DB_PORT} (User: {DB_USER})")
+    print("=====================================================")
+    
+    # Iniciar la aplicación en modo debug si es local
     app.run(host=HOST, port=PORT, debug=True)
