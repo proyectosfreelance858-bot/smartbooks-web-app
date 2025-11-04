@@ -328,6 +328,284 @@
             };
             const GRADE_KEYS = Object.keys(GRADES_MAP);
 
+            // DATOS ESTATICOS INYECTADOS
+            const STATIC_SCHOOL_DATA = [
+                {
+                    ID_COLEGIO: '0001',
+                    COLEGIO: 'Cosmo Schools',
+                    CIUDAD: 'MEDELLIN',
+                    PREJARDIN: '0',
+                    JARDIN: 'PAQUETE DE INGLÉS Cosmo- JARDÍN',
+                    TRANSICION: 'PAQUETE DE INGLÉS Cosmo – TRANSICIÓN°°',
+                    PRIMERO: 'PAQUETE DE INGLÉS Cosmo – 1°°',
+                    SEGUNDO: 'PAQUETE DE INGLÉS Cosmo – 2°°',
+                    TERCERO: 'PAQUETE DE INGLÉS Cosmo – 3°°',
+                    CUARTO: 'PAQUETE DE INGLÉS Cosmo – 4°°',
+                    QUINTO: 'PAQUETE DE INGLÉS Cosmo – 5°°',
+                    SEXTO: 'PAQUETE DE INGLÉS Cosmo – 6°°',
+                    SEPTIMO: 'PAQUETE DE INGLÉS Cosmo – 7°°',
+                    OCTAVO: 'PAQUETE DE INGLÉS Cosmo – 8°°', // Corregido el error de duplicación de SEPTIMO
+                    NOVENO: 'PAQUETE DE INGLÉS Cosmo – 9°°',
+                    DECIMO: 'PAQUETE DE INGLÉS Cosmo – 10°°',
+                    ONCE: 'PAQUETE DE INGLÉS Cosmo – 11°°',
+                    IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2024/11/LOGO-COLEGIO.png',
+                    UBICACION: 'https://www.google.com/maps/place/Cosmo+Schools+Laureles/@6.2494378,-75.5975453,82m/data=!3m1!1e3!4m6!3m5!1s0x8e44290054b4d00f:0x4ce9077585d3e1f3!8m2!3d6.2495572!4d-75.5974375!16s%2Fg%2F11w95xns5b?entry=ttu&g_ep=EgoyMDI1MTAyOS4yIKXMDSoASAFQAw%3D%3D'
+                },
+                {
+                    ID_COLEGIO: '0002',
+                    COLEGIO: 'GIMNASIO SAN ANGELO',
+                    CIUDAD: 'BOGOTA',
+                    PREJARDIN: 'PAQUETE EDUCATIVO San Angelo - PREJARDIN',
+                    JARDIN: 'PAQUETE EDUCATIVO San Angelo - JARDIN',
+                    TRANSICION: 'PAQUETE EDUCATIVO San Angelo - TRANSICIÓN',
+                    PRIMERO: 'PAQUETE EDUCATIVO San Angelo - 1°',
+                    SEGUNDO: 'PAQUETE EDUCATIVO San Angelo - 2°',
+                    TERCERO: 'PAQUETE EDUCATIVO San Angelo - 3°',
+                    CUARTO: 'PAQUETE EDUCATIVO San Angelo - 4°',
+                    QUINTO: 'PAQUETE EDUCATIVO San Angelo - 5°',
+                    SEXTO: 'PAQUETE EDUCATIVO San Angelo - 6°',
+                    SEPTIMO: 'PAQUETE EDUCATIVO San Angelo - 7°',
+                    OCTAVO: 'PAQUETE EDUCATIVO San Angelo - 8°',
+                    NOVENO: 'PAQUETE EDUCATIVO San Angelo - 9°',
+                    DECIMO: 'PAQUETE EDUCATIVO San Angelo - 10°',
+                    ONCE: 'PAQUETE EDUCATIVO San Angelo - 11°',
+                    IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2024/12/3-6-150x150.png',
+                    UBICACION: 'https://www.google.com/maps/place/Gimnasio+San+Angelo/@4.8013523,-74.0463802,1104m/data=!3m1!1e3!4m6!3m5!1s0x8e3f8616da249b53:0xab6aeb0b622dcf1!8m2!3d4.8013655!4d-74.0448845!16s%2Fg%2F11b6g89sgp?entry=ttu&g_ep=EgoyMDI1MTAyOS4yIKXMDSoASAFQAw%3D%3D'
+                },
+                {
+                    ID_COLEGIO: '0003',
+                    COLEGIO: 'CAFAM',
+                    CIUDAD: 'BOGOTA',
+                    PREJARDIN: '0',
+                    JARDIN: '0',
+                    TRANSICION: 'PAQUETE EDUCATIVO CAFAM 68 - TRANSICIÓN, PAQUETE EDUCATIVO CAFAM CAMPESTRE - TRANSICIÓN',
+                    PRIMERO: 'PAQUETE EDUCATIVO CAFAM 68- 1°, PAQUETE EDUCATIVO CAFAM CAMPESTRE- 1°',
+                    SEGUNDO: 'PAQUETE EDUCATIVO CAFAM 68- 2°, PAQUETE EDUCATIVO CAFAM CAMPESTRE- 2°',
+                    TERCERO: 'PAQUETE EDUCATIVO CAFAM 68- 3°, PAQUETE EDUCATIVO CAFAM CAMPESTRE- 3°',
+                    CUARTO: 'PAQUETE EDUCATIVO CAFAM 68- 4°, PAQUETE EDUCATIVO CAFAM CAMPESTRE- 4°',
+                    QUINTO: 'PAQUETE EDUCATIVO CAFAM 68- 5°, PAQUETE EDUCATIVO CAFAM CAMPESTRE- 5°',
+                    SEXTO: 'PAQUETE EDUCATIVO CAFAM 68- 6°, PAQUETE EDUCATIVO CAFAM CAMPESTRE- 6°',
+                    SEPTIMO: 'PAQUETE EDUCATIVO CAFAM 68- 7°, PAQUETE EDUCATIVO CAFAM CAMPESTRE- 7°',
+                    OCTAVO: 'PAQUETE EDUCATIVO CAFAM 68- 8°, PAQUETE EDUCATIVO CAFAM CAMPESTRE- 8°',
+                    NOVENO: 'PAQUETE EDUCATIVO CAFAM 68- 9°, PAQUETE EDUCATIVO CAFAM CAMPESTRE- 9°',
+                    DECIMO: 'PAQUETE EDUCATIVO CAFAM 68- 10°, PAQUETE EDUCATIVO CAFAM CAMPESTRE- 10°',
+                    ONCE: 'PAQUETE EDUCATIVO CAFAM 68- 11°, PAQUETE EDUCATIVO CAFAM CAMPESTRE- 11°',
+                    IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2024/12/1-6.png',
+                    UBICACION: 'https://maps.app.goo.gl/dpxuP9SRRmcr7fx97'
+                },
+                {
+                    ID_COLEGIO: '0004',
+                    COLEGIO: 'LICEO PARROQUIAL SAN JOSE',
+                    CIUDAD: 'BOGOTA',
+                    PREJARDIN: '0',
+                    JARDIN: '0',
+                    TRANSICION: '0',
+                    PRIMERO: 'PAQUETE EDUCATIVO PARROQUIAL SAN JOSÉ- 1°',
+                    SEGUNDO: 'PAQUETE EDUCATIVO PARROQUIAL SAN JOSÉ- 2°',
+                    TERCERO: 'PAQUETE EDUCATIVO PARROQUIAL SAN JOSÉ- 3°',
+                    CUARTO: 'PAQUETE EDUCATIVO PARROQUIAL SAN JOSÉ- 4°',
+                    QUINTO: 'PAQUETE EDUCATIVO PARROQUIAL SAN JOSÉ- 5°',
+                    SEXTO: 'PAQUETE EDUCATIVO PARROQUIAL SAN JOSÉ- 6°',
+                    SEPTIMO: 'PAQUETE EDUCATIVO PARROQUIAL SAN JOSÉ- 7°',
+                    OCTAVO: 'PAQUETE EDUCATIVO PARROQUIAL SAN JOSÉ- 8°',
+                    NOVENO: 'PAQUETE EDUCATIVO PARROQUIAL SAN JOSÉ- 9°',
+                    DECIMO: 'PAQUETE EDUCATIVO PARROQUIAL SAN JOSÉ- 10°',
+                    ONCE: 'PAQUETE EDUCATIVO PARROQUIAL SAN JOSÉ- 11°',
+                    IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2024/12/2-6.png',
+                    UBICACION: 'https://maps.app.goo.gl/JpyxsWPErC3i8oXp6'
+                },
+                // --- NUEVOS COLEGIOS INYECTADOS ---
+                {
+                    ID_COLEGIO: '0005',
+                    COLEGIO: 'CENTRO EDUCATIVO LOS ANDES',
+                    CIUDAD: 'BOGOTA',
+                    PREJARDIN: '0',
+                    JARDIN: '0',
+                    TRANSICION: '0',
+                    PRIMERO: 'PAQUETE EDUCATIVO Andes Almendros - 1°',
+                    SEGUNDO: 'PAQUETE EDUCATIVO Andes Almendros - 2°',
+                    TERCERO: 'PAQUETE EDUCATIVO Andes Almendros - 3°',
+                    CUARTO: 'PAQUETE EDUCATIVO Andes Almendros - 4°',
+                    QUINTO: 'PAQUETE EDUCATIVO Andes Almendros - 5°',
+                    SEXTO: 'PAQUETE EDUCATIVO Andes Almendros - 6°',
+                    SEPTIMO: 'PAQUETE EDUCATIVO Andes Almendros - 7°',
+                    OCTAVO: 'PAQUETE EDUCATIVO Andes Almendros - 8°',
+                    NOVENO: 'PAQUETE EDUCATIVO Andes Almendros - 9°',
+                    DECIMO: 'PAQUETE EDUCATIVO Andes Almendros - 10°',
+                    ONCE: 'PAQUETE EDUCATIVO Andes Almendros - 11°',
+                    IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2024/12/unnamed.jpg',
+                    UBICACION: 'https://maps.app.goo.gl/T8cpLrY6u5RumhCp6'
+                },
+                {
+                    ID_COLEGIO: '0006',
+                    COLEGIO: 'EMMANUEL DALZON',
+                    CIUDAD: 'BOGOTA',
+                    PREJARDIN: '0',
+                    JARDIN: 'PAQUETE EDUCATIVO Emmanuel Dalzon - JARDIN',
+                    TRANSICION: 'PAQUETE EDUCATIVO Emmanuel Dalzon - TRANSICIÓN',
+                    PRIMERO: 'PAQUETE EDUCATIVO Emmanuel Dalzon - 1°',
+                    SEGUNDO: 'PAQUETE EDUCATIVO Emmanuel Dalzon - 2°',
+                    TERCERO: 'PAQUETE EDUCATIVO Emmanuel Dalzon - 3°',
+                    CUARTO: 'PAQUETE EDUCATIVO Emmanuel Dalzon - 4°',
+                    QUINTO: 'PAQUETE EDUCATIVO Emmanuel Dalzon - 5°',
+                    SEXTO: 'PAQUETE EDUCATIVO Emmanuel Dalzon - 6°',
+                    SEPTIMO: 'PAQUETE EDUCATIVO Emmanuel Dalzon - 7°',
+                    OCTAVO: 'PAQUETE EDUCATIVO Emmanuel Dalzon - 8°',
+                    NOVENO: 'PAQUETE EDUCATIVO Emmanuel Dalzon - 9°',
+                    DECIMO: 'PAQUETE EDUCATIVO Emmanuel Dalzon - 10°',
+                    ONCE: 'PAQUETE EDUCATIVO Emmanuel Dalzon - 11°',
+                    IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2024/12/emma-769x1024.jpg',
+                    UBICACION: 'https://maps.app.goo.gl/8U1anggHH6MjraXJ7'
+                },
+                {
+                    ID_COLEGIO: '0007',
+                    COLEGIO: 'JORDAN DE SAJONIA',
+                    CIUDAD: 'BOGOTA',
+                    PREJARDIN: '0',
+                    JARDIN: '0',
+                    TRANSICION: 'PAQUETE EDUCATIVO Jordan de Sajonia - TRANSICIÓN',
+                    PRIMERO: 'PAQUETE EDUCATIVO Jordan de Sajonia - 1°',
+                    SEGUNDO: 'PAQUETE EDUCATIVO Jordan de Sajonia - 2°',
+                    TERCERO: 'PAQUETE EDUCATIVO Jordan de Sajonia - 3°',
+                    CUARTO: 'PAQUETE EDUCATIVO Jordan de Sajonia - 4°',
+                    QUINTO: 'PAQUETE EDUCATIVO Jordan de Sajonia - 5°',
+                    SEXTO: '0',
+                    SEPTIMO: '0',
+                    OCTAVO: '0',
+                    NOVENO: '0',
+                    DECIMO: '0',
+                    ONCE: '0',
+                    IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2024/12/sajonia.jpg',
+                    UBICACION: 'https://maps.app.goo.gl/KjvajaqftYoyjbSu9'
+                },
+                {
+                    ID_COLEGIO: '0008',
+                    COLEGIO: 'MAYOR DE INGLATERRA',
+                    CIUDAD: 'BOGOTA',
+                    PREJARDIN: '0',
+                    JARDIN: '0',
+                    TRANSICION: '0',
+                    PRIMERO: 'PAQUETE EDUCATIVO Mayor de Inglaterra - 1°',
+                    SEGUNDO: 'PAQUETE EDUCATIVO Mayor de Inglaterra - 2°',
+                    TERCERO: 'PAQUETE EDUCATIVO Mayor de Inglaterra - 3°',
+                    CUARTO: 'PAQUETE EDUCATIVO Mayor de Inglaterra - 4°',
+                    QUINTO: 'PAQUETE EDUCATIVO Mayor de Inglaterra - 5°',
+                    SEXTO: 'PAQUETE EDUCATIVO Mayor de Inglaterra - 6°',
+                    SEPTIMO: 'PAQUETE EDUCATIVO Mayor de Inglaterra - 7°',
+                    OCTAVO: 'PAQUETE EDUCATIVO Mayor de Inglaterra - 8°',
+                    NOVENO: 'PAQUETE EDUCATIVO Mayor de Inglaterra - 9°',
+                    DECIMO: 'PAQUETE EDUCATIVO Mayor de Inglaterra - 10°',
+                    ONCE: 'PAQUETE EDUCATIVO Mayor de Inglaterra - 11°',
+                    IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2024/12/MAYOR-DE-INGLATERRA.webp',
+                    UBICACION: 'https://maps.app.goo.gl/9nZ2V4m5ymJGvSu49'
+                },
+                {
+                    ID_COLEGIO: '0009',
+                    COLEGIO: 'SAN JUAN DE LOS PASTOS',
+                    CIUDAD: 'BOGOTA',
+                    PREJARDIN: '0',
+                    JARDIN: 'PAQUETE EDUCATIVO San Juan de los Pastos - JARDIN',
+                    TRANSICION: 'PAQUETE EDUCATIVO San Juan de los Pastos - TRANSICIÓN',
+                    PRIMERO: 'PAQUETE EDUCATIVO San Juan de los Pastos - 1°',
+                    SEGUNDO: 'PAQUETE EDUCATIVO San Juan de los Pastos - 2°',
+                    TERCERO: 'PAQUETE EDUCATIVO San Juan de los Pastos - 3°',
+                    CUARTO: 'PAQUETE EDUCATIVO San Juan de los Pastos - 4°',
+                    QUINTO: 'PAQUETE EDUCATIVO San Juan de los Pastos - 5°',
+                    SEXTO: 'PAQUETE EDUCATIVO San Juan de los Pastos - 6°',
+                    SEPTIMO: 'PAQUETE EDUCATIVO San Juan de los Pastos - 7°',
+                    OCTAVO: 'PAQUETE EDUCATIVO San Juan de los Pastos - 8°',
+                    NOVENO: 'PAQUETE EDUCATIVO San Juan de los Pastos - 9°',
+                    DECIMO: 'PAQUETE EDUCATIVO San Juan de los Pastos - 10°',
+                    ONCE: 'PAQUETE EDUCATIVO San Juan de los Pastos - 11°',
+                    IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2024/12/no-image.png', // Imagen no provista, usando fallback
+                    UBICACION: 'http://googleusercontent.com/maps.google.com/no-pastos' // Ubicación no provista, usando fallback
+                },
+                {
+                    ID_COLEGIO: '0010',
+                    COLEGIO: 'LA SALETTE',
+                    CIUDAD: 'BOGOTA',
+                    PREJARDIN: 'PAQUETE EDUCATIVO La Salette - PREJARDÍN',
+                    JARDIN: 'PAQUETE EDUCATIVO La Salette - JARDÍN',
+                    TRANSICION: 'PAQUETE EDUCATIVO La Salette - TRANSICIÓN',
+                    PRIMERO: '0',
+                    SEGUNDO: '0',
+                    TERCERO: '0',
+                    CUARTO: '0',
+                    QUINTO: '0',
+                    SEXTO: 'PAQUETE EDUCATIVO La Salette - 6°',
+                    SEPTIMO: 'PAQUETE EDUCATIVO La Salette - 7°',
+                    OCTAVO: 'PAQUETE EDUCATIVO La Salette - 8°',
+                    NOVENO: 'PAQUETE EDUCATIVO La Salette - 9°',
+                    DECIMO: 'PAQUETE EDUCATIVO La Salette - 10°',
+                    ONCE: 'PAQUETE EDUCATIVO La Salette - 11°',
+                    IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2025/01/la-salette.jpg',
+                    UBICACION: 'https://maps.app.goo.gl/Ge7Rzfc7c5S33p4P7'
+                },
+                {
+                    ID_COLEGIO: '0011',
+                    COLEGIO: 'SAN JUAN DE LA AVILA',
+                    CIUDAD: 'BOGOTA',
+                    PREJARDIN: 'PAQUETE EDUCATIVO San Juan De Ávila- PREJARDÍN',
+                    JARDIN: 'PAQUETE EDUCATIVO San Juan De Ávila- JARDIN',
+                    TRANSICION: 'PAQUETE EDUCATIVO San Juan De Ávila- TRANSICIÓN',
+                    PRIMERO: 'PAQUETE EDUCATIVO San Juan De Ávila- 1°',
+                    SEGUNDO: 'PAQUETE EDUCATIVO San Juan De Ávila- 2°',
+                    TERCERO: 'PAQUETE EDUCATIVO San Juan De Ávila- 3°',
+                    CUARTO: 'PAQUETE EDUCATIVO San Juan De Ávila- 4°',
+                    QUINTO: 'PAQUETE EDUCATIVO San Juan De Ávila- 5°',
+                    SEXTO: '0',
+                    SEPTIMO: '0',
+                    OCTAVO: '0',
+                    NOVENO: '0',
+                    DECIMO: '0',
+                    ONCE: '0',
+                    IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2025/01/328278769_1106333190034701_15577413265298029_n.jpg',
+                    UBICACION: 'https://maps.app.goo.gl/WfesjJHsGTxLknM9A'
+                },
+                {
+                    ID_COLEGIO: '0012',
+                    COLEGIO: 'PSICOPEDAGOGICO DE SUBA',
+                    CIUDAD: 'BOGOTA',
+                    PREJARDIN: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - PREJARDÍN',
+                    JARDIN: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - JARDIN',
+                    TRANSICION: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - TRANSICIÓN',
+                    PRIMERO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 1°',
+                    SEGUNDO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 2°',
+                    TERCERO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 3°',
+                    CUARTO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 4°',
+                    QUINTO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 5°',
+                    SEXTO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 6°',
+                    SEPTIMO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 7°',
+                    OCTAVO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 8°',
+                    NOVENO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 9°',
+                    DECIMO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 10°',
+                    ONCE: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 11°',
+                    IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2025/02/psicopeda.jpg',
+                    UBICACION: 'https://maps.app.goo.gl/NQ8H69rLrKxZcmsK6'
+                },
+                {
+                    ID_COLEGIO: '0013',
+                    COLEGIO: 'TECNOLOGICO DEL SUR',
+                    CIUDAD: 'BOGOTA',
+                    PREJARDIN: '0',
+                    JARDIN: '0',
+                    TRANSICION: '0',
+                    PRIMERO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 1°',
+                    SEGUNDO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 2°',
+                    TERCERO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 3°',
+                    CUARTO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 4°',
+                    QUINTO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 5°',
+                    SEXTO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 6°',
+                    SEPTIMO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 7°',
+                    OCTAVO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 8°',
+                    NOVENO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 9°',
+                    DECIMO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 10°',
+                    ONCE: 'PAQUETE DE INGLÉS Tecnológico del Sur - 11°',
+                    IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2025/02/ESCUDO-COLEGIO-FITS-2023.png',
+                    UBICACION: 'https://maps.app.goo.gl/hxQoJqjZ4oJ3REdx6'
+                }
+            ];
+
             // --- 2. REFERENCIAS DE ELEMENTOS ---
             const schoolDropdownContainer = document.getElementById('school-dropdown-container');
             const schoolSelectButton = document.getElementById('school-select-button');
@@ -481,6 +759,8 @@
             }
 
             // Maneja la selección del curso y llama al API /api/paquete
+            // NOTA: Esta función se mantiene asíncrona pero ya no hace un 'fetch' real,
+            // utiliza los datos ya cargados en 'selectedSchool'.
             async function handleCourseSelection(gradeKey, gradeName, schoolId) {
                 
                 // 1. Actualiza el botón de curso
@@ -496,29 +776,25 @@
                 initialMessage.classList.add('hidden');
                 searchLoading.style.display = 'flex';
                 
-                // 4. Llama al API para obtener el paquete (Simulación de 1.5s eliminada, se usa el tiempo real del fetch)
+                // SIMULACION de la llamada API para obtener el paquete
+                await new Promise(resolve => setTimeout(resolve, 800)); // Simula un pequeño retraso
+                
                 try {
-                    // Usamos gradeName (ej. '1° (Primero)') en el query param, no la key ('PRIMERO')
-                    // Esto asume que el backend está esperando un nombre de grado más legible o que gradeKey es suficiente.
-                    // Para el mock actual, el gradeName es más seguro para el hash.
-                    const response = await fetch(`/api/paquete?school_id=${schoolId}&grade_name=${encodeURIComponent(gradeName)}`);
-                    
-                    if (!response.ok) {
-                         throw new Error(`Error al obtener el paquete: ${response.status}`);
-                    }
-                    
-                    const packageData = await response.json();
-                    
-                    // El paquete de información que se muestra en la tarjeta es el campo del colegio (ej. selectedSchool.PRIMERO)
+                    // Simulación: El paquete de información ya está en selectedSchool
                     const packageInfo = selectedSchool[gradeKey] ? String(selectedSchool[gradeKey]).trim() : '0';
                     
+                    if (packageInfo === '0' || packageInfo.toUpperCase() === 'NULL') {
+                        throw new Error("Paquete no disponible");
+                    }
+
                     searchLoading.style.display = 'none';
+                    // Reutilizamos la función para mostrar la tarjeta con los datos estáticos
                     displayPackageCard(selectedSchool, gradeName, packageInfo);
                     
                 } catch (error) {
                     console.error('Error al obtener el paquete:', error);
                     searchLoading.style.display = 'none';
-                    initialMessage.textContent = 'Lo sentimos, no pudimos cargar la información del kit educativo. Intenta de nuevo más tarde.';
+                    initialMessage.textContent = 'Lo sentimos, no pudimos cargar la información del kit educativo para este curso/colegio. Intenta de nuevo más tarde.';
                     initialMessage.classList.remove('hidden');
                 }
             }
@@ -527,31 +803,19 @@
             function displayPackageCard(school, gradeName, packageInfo) {
                 
                 // Título del paquete
-                const title = packageInfo.includes(',') ? 
-                    'Múltiples Kits Educativos' : 
-                    (packageInfo || 'KIT EDUCATIVO ÚNICO').toUpperCase().replace('PAQUETE EDUCATIVO', 'KIT'); 
+                let title = 'KIT EDUCATIVO ÚNICO';
+                if (packageInfo.includes(',')) {
+                    title = 'Múltiples Kits Educativos';
+                } else if (packageInfo) {
+                    // Intenta limpiar y poner en mayúsculas el nombre del paquete si es único
+                    title = packageInfo.toUpperCase().replace('PAQUETE EDUCATIVO', 'KIT'); 
+                }
                 
                 // 1. Llenar la tarjeta
                 document.getElementById('package-title').textContent = title;
-                document.getElementById('card-colegio').textContent = school.COLEGIO || 'N/A';
-                document.getElementById('card-curso').textContent = gradeName || 'N/A';
-                document.getElementById('card-ciudad').textContent = school.CIUDAD || 'N/A';
                 
-                const ubicacionLink = document.getElementById('card-ubicacion');
-                if (school.UBICACION) {
-                    ubicacionLink.href = school.UBICACION;
-                    ubicacionLink.parentNode.classList.remove('hidden');
-                } else {
-                    ubicacionLink.parentNode.classList.add('hidden');
-                }
-                
-                document.getElementById('card-imagen').src = school.IMAGEN || 'https://sbooks.com.co/wp-content/uploads/2024/12/no-image.png'; // Fallback image
-                
-                // 2. Detalle de libros/kits (Esto es lo que estaba fallando, ahora se actualiza el contenido de package-details)
+                // Actualizar los campos fijos
                 const packageDetails = document.getElementById('package-details');
-                packageDetails.innerHTML = '';
-                
-                // Reinsertar los elementos fijos que se perdieron
                 packageDetails.innerHTML = `
                     <p><span class="font-semibold text-gray-800">Colegio:</span> <span id="card-colegio">${school.COLEGIO || 'N/A'}</span></p>
                     <p><span class="font-semibold text-gray-800">Curso:</span> <span id="card-curso">${gradeName || 'N/A'}</span></p>
@@ -559,6 +823,9 @@
                     <p class="${school.UBICACION ? '' : 'hidden'}"><span class="font-semibold text-gray-800">Ubicación:</span> <a href="${school.UBICACION || '#'}" id="card-ubicacion" target="_blank" class="text-brand-primary hover:underline">Ver en Mapa</a></p>
                 `;
 
+                
+                document.getElementById('card-imagen').src = school.IMAGEN || 'https://sbooks.com.co/wp-content/uploads/2024/12/no-image.png'; // Fallback image
+                
                 // Agregar los detalles dinámicos del paquete
                 if (packageInfo.includes(',')) {
                     const kits = packageInfo.split(',').map(item => item.trim());
@@ -584,37 +851,25 @@
             }
             
             // --- 4. FUNCIÓN PRINCIPAL DE CARGA DE DATOS ---
-            async function fetchSchools() {
-                try {
-                    const response = await fetch('/api/colegios');
-                    if (!response.ok) {
-                        // Si el backend devuelve un error, puede que intente usar la simulación, pero la manejaré aquí
-                        throw new Error(`Error HTTP: ${response.status}`);
-                    }
-                    ALL_SCHOOLS = await response.json();
-                    
-                    // Actualiza el UI al cargar
-                    renderSchoolList(ALL_SCHOOLS);
-                    schoolSelectButton.innerHTML = `Selecciona tu Colegio <i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>`;
-                    schoolSelectButton.classList.remove('school-loading', 'text-gray-500');
-                    schoolSelectButton.classList.add('text-gray-700', 'hover:border-brand-primary');
-                    schoolSelectButton.disabled = false;
-                    schoolSearchInput.disabled = false;
-                    
-                    initialMessage.textContent = 'Por favor, selecciona un colegio para empezar.';
-                    
-                } catch (error) {
-                    console.error('Error al cargar los colegios:', error);
-                    schoolSelectButton.innerHTML = `Error de Carga <i class="fas fa-exclamation-triangle text-red-500 text-base ml-2"></i>`;
-                    schoolSelectButton.classList.remove('school-loading');
-                    schoolSelectButton.classList.add('text-red-600', 'border-red-500', 'cursor-not-allowed');
-                    initialMessage.textContent = 'Hubo un error al conectar con la base de datos de colegios o la API falló.';
-                    
-                }
+            function loadSchools() {
+                // En lugar de fetch, usamos los datos estáticos
+                ALL_SCHOOLS = STATIC_SCHOOL_DATA;
+                
+                // Actualiza el UI al cargar
+                renderSchoolList(ALL_SCHOOLS);
+                schoolSelectButton.innerHTML = `Selecciona tu Colegio <i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>`;
+                schoolSelectButton.classList.remove('school-loading', 'text-gray-500');
+                schoolSelectButton.classList.add('text-gray-700', 'hover:border-brand-primary');
+                schoolSelectButton.disabled = false;
+                schoolSearchInput.disabled = false;
+                
+                initialMessage.textContent = 'Por favor, selecciona un colegio para empezar.';
+                
             }
             
             // --- 5. INICIALIZACIÓN ---
-            fetchSchools();
+            // Reemplazo de fetchSchools() por loadSchools()
+            loadSchools();
 
             // Script para Scroll Reveal (Mantenido solo para elementos no interactivos)
             const revealElements = document.querySelectorAll('.animate-scroll-reveal');
