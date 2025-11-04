@@ -12,7 +12,7 @@ load_dotenv()
 # =================================================================
 # Las variables se leen del archivo .env o se usan valores por defecto
 DB_HOST = os.environ.get("DB_HOST", "localhost") 
-DB_NAME = os.environ.get("DB_NAME", "nombre_de_tu_base_de_datos") 
+DB_NAME = os.environ.get("DB_NAME", "smartbooks_db_duns") # Nombre de la DB según la imagen
 DB_USER = os.environ.get("DB_USER", "tu_usuario_postgres") 
 DB_PASS = os.environ.get("DB_PASS", "tu_contraseña_postgres") 
 DB_PORT = os.environ.get("DB_PORT", "5432") # PUERTO (Importante para Render)
@@ -46,7 +46,7 @@ def get_db_connection():
         return None
 
 # =================================================================
-# 2. SIMULACIÓN DE DATOS DE FALLBACK
+# 2. SIMULACIÓN DE DATOS DE FALLBACK (Para usar si falla la DB)
 # =================================================================
 
 # Datos de colegios simulados (usando la estructura de la tabla colegios para ser coherente con el frontend)
@@ -80,8 +80,70 @@ def simulate_package_data(school_id, grade_name):
         "shipping_time": "3-5 días hábiles"
     }
 
+# Datos de configuración (URLs) de fallback, si la DB falla.
+FALLBACK_CONFIG_URLS = {
+    "url_editorial1": "https://simulada.com/editorial1.png",
+    "url_editorial2": "https://simulada.com/editorial2.png",
+    "url_editorial3": "https://simulada.com/editorial3.png",
+    "url_editorial4": "https://simulada.com/editorial4.png",
+    "url_editorial5": "https://simulada.com/editorial5.png",
+    "url_banner1": "https://simulada.com/banner1.png",
+    "url_banner2": "https://simulada.com/banner2.png",
+    "url_banner3": "https://simulada.com/banner3.png",
+    "url_banner4": "https://simulada.com/banner4.png",
+    "url_banner5": "https://simulada.com/banner5.png",
+    "url_banner6": "https://simulada.com/banner6.png",
+    "url_recuadro1": "https://simulada.com/recuadro1.png",
+    "url_recuadro2": "https://simulada.com/recuadro2.png",
+    "url_recuadro3": "https://simulada.com/recuadro3.png",
+}
+
+# Datos de productos destacados (basados en articulos_blog para estructura, pero simulando más de 5)
+def get_simulated_featured_products(count=8):
+    
+    # Usando los datos de la tabla 'articulos_blog' de la imagen para simular la estructura
+    base_products = [
+        {"titulo": "Cómo elegir los mejores textos escolares: Guía para Coordinadores", "descripcion_corta": "Guía para directores y coordinadores que buscan calidad, alineación pedagógica y adaptabilidad.", "url_imagen": "https://simulada.com/libro1.png", "rating": 5, "precio": 149900, "categoria": "Guías Pedagógicas"},
+        {"titulo": "Las Tendencias educativas que no puedes ignorar en 2024-2025", "descripcion_corta": "Análisis de nuestra alianza estratégica con una editorial líder para ofrecer programas bilingües.", "url_imagen": "https://simulada.com/libro2.png", "rating": 4, "precio": 99900, "categoria": "Artículos Blog"},
+        {"titulo": "Smart Books y MacMillan: El futuro de la educación bilingüe", "descripcion_corta": "Descubre cómo los textos escolares están evolucionando hacia modelos híbridos que combinan papel y digital.", "url_imagen": "https://simulada.com/libro3.png", "rating": 5, "precio": 199900, "categoria": "Plataformas Digitales"},
+        {"titulo": "Transformación Digital en el Aula: Plataformas y Libros Híbridos", "descripcion_corta": "Más allá del material, el éxito educativo depende del docente. Capacitación y herramientas de diagnóstico.", "url_imagen": "https://simulada.com/libro4.png", "rating": 4, "precio": 75900, "categoria": "Tecnología Educativa"},
+        {"titulo": "El Rol del Docente: Más allá del Libro", "descripcion_corta": "Un debate sobre la importancia del libro y el papel de las asignaturas en el currículo moderno. Incluye recursos digitales.", "url_imagen": "https://simulada.com/libro5.png", "rating": 5, "precio": 125900, "categoria": "Desarrollo Docente"},
+    ]
+
+    simulated_products = []
+    # Duplicar y modificar para tener al menos 'count' productos
+    for i in range(count):
+        product = base_products[i % len(base_products)].copy()
+        product["titulo"] = f"{product['titulo']} (Edición {i+1})"
+        product["precio"] = product["precio"] + (i * 1000)
+        product["precio_formateado"] = f"${product['precio']:,}".replace(",", ".") # Formato de precio en español (e.g., $150.000)
+        simulated_products.append(product)
+        
+    return simulated_products
+
+
 # =================================================================
-# 3. RUTAS DE API (DATOS DINÁMICOS)
+# 3. FUNCIONES DE BASE DE DATOS
+# =================================================================
+
+def get_config_urls_from_db(conn):
+    """Obtiene las URLs de configuración de la tabla configuracion_web."""
+    config_urls = {}
+    try:
+        with conn.cursor() as cur:
+            sql_query = 'SELECT clave, valor FROM configuracion_web;'
+            cur.execute(sql_query)
+            for clave, valor in cur.fetchall():
+                # El HTML usa nombres con guión bajo (url_banner1, url_editorial1)
+                config_urls[clave.replace('-', '_')] = valor 
+        return config_urls
+    except Exception as e:
+        print(f"Error al obtener URLs de configuracion_web: {e}")
+        return {}
+
+
+# =================================================================
+# 4. RUTAS DE API (DATOS DINÁMICOS)
 # =================================================================
 
 @app.route('/api/colegios', methods=['GET'])
@@ -122,6 +184,7 @@ def get_colegios():
                 # Limpiar valores NULL si los hay (psycopg2 devuelve None, lo que es seguro en JSON)
                 for key, value in school_data.items():
                     if value is None:
+                        # Asume '0' para grados sin kit y cadena vacía para otros campos NULL
                         school_data[key] = "0" if key in ["PREJARDIN", "JARDIN", "TRANSICION", "PRIMERO", "SEGUNDO", "TERCERO", "CUARTO", "QUINTO", "SEXTO", "SEPTIMO", "OCTAVO", "NOVENO", "DECIMO", "ONCE"] else ""
                 
                 colegios_data.append(school_data)
@@ -165,14 +228,39 @@ def get_course_package():
         return jsonify({"error": "No se encontró un paquete de libros para la selección."}), 404
 
 # =================================================================
-# 4. RUTAS PARA PÁGINAS ESTÁTICAS
+# 5. RUTAS PARA PÁGINAS ESTÁTICAS
 # =================================================================
 # NOTA: Estas rutas requieren que tengas los templates (.html) correspondientes 
 # en la carpeta 'templates' de tu aplicación Flask.
 
 @app.route('/')
 def index():
-    return render_template('index.html') 
+    """
+    Ruta principal. Obtiene URLs de configuración y productos destacados.
+    """
+    config_urls = {}
+    
+    conn = get_db_connection()
+    if conn is not None:
+        # 1. Obtener URLs de configuracion_web
+        config_urls = get_config_urls_from_db(conn)
+        conn.close()
+    
+    # 2. Fallback si no hay URLs o falla la DB
+    if not config_urls:
+        print("INFO: Usando URLs simuladas (Fallo en DB o datos vacíos).")
+        config_urls = FALLBACK_CONFIG_URLS
+
+
+    # 3. Obtener productos destacados simulados (para el carrusel de productos)
+    productos_destacados = get_simulated_featured_products(count=8)
+
+    # 4. Renderizar el template con todos los datos
+    return render_template(
+        'index.html', 
+        **config_urls, # Pasa todas las URLs como argumentos individuales (url_banner1=..., etc.)
+        productos_destacados=productos_destacados
+    ) 
 
 @app.route('/quienes-somos')
 def quienes_somos():
@@ -223,7 +311,7 @@ def page_not_found(e):
     return render_template('404.html'), 404
 
 # =================================================================
-# 5. INICIALIZACIÓN
+# 6. INICIALIZACIÓN
 # =================================================================
 
 if __name__ == '__main__':
