@@ -24,6 +24,9 @@
         .hover\:bg-brand-secondary:hover { background-color: #facc15; } /* Amarillo 500 */
 
 
+        /* Ocultamos el header y footer para el diseño "interior" solicitado */
+        header, footer { display: none !important; }
+
         .dropdown:hover .dropdown-menu { display: block; opacity: 1; transform: translateY(0); visibility: visible; }
         .dropdown-menu { display: none; opacity: 0; visibility: hidden; transition: all 0.3s ease-out; transform: translateY(10px); z-index: 50; min-width: 14rem; }
         .search-input { width: 100%; padding: 0.75rem 1.75rem; border: 1px solid #d1d5db; border-radius: 9999px; outline: none; transition: border-color 0.3s; }
@@ -35,7 +38,7 @@
         .whatsapp-float { position: fixed; width: 55px; height: 55px; bottom: 30px; right: 30px; background-color: #25d366; color: #FFF; border-radius: 50%; text-align: center; font-size: 28px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); z-index: 1000; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        /* ESTILO PARA SCROLL REVEAL (NO AFECTA A package-card AHORA) */
+        /* ESTILO PARA SCROLL REVEAL */
         .animate-scroll-reveal { opacity: 0; animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
 
         /* --- ESTILO CORREGIDO DEL DROPBOX CON BÚSQUEDA (Z-INDEX ALTO) --- */
@@ -47,18 +50,17 @@
             visibility: hidden; 
             transition: all 0.3s ease-out; 
             transform: translateY(10px); 
-            z-index: 60; /* ¡CORRECCIÓN CLAVE! */
-            position: absolute; /* Aseguramos que se posicione correctamente */
+            z-index: 60; 
+            position: absolute; 
         }
         .custom-dropdown.active .custom-dropdown-menu { display: block; opacity: 1; transform: translateY(0); visibility: visible; }
         
-        /* Aseguramos que el contenedor del colegio esté arriba */
         .custom-dropdown {
             position: relative;
-            z-index: 60; /* Contenedor padre con z-index alto */
+            z-index: 60; 
         }
 
-        /* El menú de cursos puede tener un z-index más bajo */
+        /* Control de visibilidad del Dropdown de Curso */
         .course-dropdown-menu { 
             opacity: 0; 
             visibility: hidden; 
@@ -66,14 +68,14 @@
             transition: opacity 0.3s ease-out, transform 0.3s ease-out, max-height 0.3s ease-out; 
             transform: translateY(-10px); 
             z-index: 50; 
-            overflow-y: hidden; /* Oculta el scrollbar cuando está colapsado */
+            overflow-y: hidden; 
         }
         .course-dropdown.active .course-dropdown-menu { 
             opacity: 1; 
             visibility: visible; 
             max-height: 250px; 
             transform: translateY(0); 
-            overflow-y: auto; /* Permite scroll cuando está activo */
+            overflow-y: auto; 
         }
         
         #search-loading { display: none; transition: opacity 0.3s; }
@@ -85,18 +87,19 @@
             cursor: wait !important;
         }
         
-        /* Estilo para el contenedor del curso antes de aparecer */
+        /* Estilo para el contenedor del curso (Controla la animación de aparición) */
         .course-dropdown-container-hidden {
             opacity: 0;
             max-height: 0;
             overflow: hidden;
             transition: opacity 0.5s ease-out, max-height 0.5s ease-out;
             margin-top: 0;
+            padding-top: 0;
         }
 
         .course-dropdown-container-visible {
             opacity: 1;
-            max-height: 200px; /* Ajusta esto según el padding y altura real */
+            max-height: 200px; 
             transition: opacity 0.5s ease-in, max-height 0.5s ease-in;
             margin-top: 1.5rem; /* space-y-6 */
         }
@@ -104,15 +107,15 @@
 
         /* --- ESTILOS MEJORADOS DEL NUEVO BANNER (package-card) --- */
         #package-card {
-            display: flex; /* Usamos flexbox para el diseño de banner */
+            display: none; /* Aseguramos que inicie oculto por JS y CSS */
             align-items: center;
-            padding: 2rem; /* Más padding */
-            max-width: none; /* De lado a lado */
-            border-radius: 0.75rem; /* rounded-xl */
+            padding: 2rem; 
+            max-width: none; 
+            border-radius: 0.75rem; 
             background: linear-gradient(135deg, #163D6A 0%, #205797 100%); /* Azul fuerte de fondo */
-            color: white; /* Texto blanco por defecto */
+            color: white; 
             border-top: 6px solid #fcd34d; /* Línea amarilla fuerte */
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2); /* Sombra intensa */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2); 
         }
         
         /* Ajustes de color dentro de la tarjeta */
@@ -136,94 +139,16 @@
             font-size: 1.125rem; /* text-lg */
         }
         .btn-add-to-cart:hover {
-            background-color: #facc15 !important; /* Amarillo 500 */
-            color: #1f2937 !important; /* Texto oscuro */
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 0 0 4px #f59e0b; /* Sombra y anillo amarillo más intenso (500) */
+            background-color: #facc15 !important; 
+            color: #1f2937 !important; 
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 0 0 4px #f59e0b; 
         }
     </style>
 </head>
 
 <body class="font-instrument text-gray-700 bg-white antialiased">
 
-    <div class="bg-gray-100 border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 text-sm flex justify-between items-center">
-            <div class="flex-grow text-center text-gray-700 font-outfit font-semibold text-sm sm:text-base tracking-wider">
-                Encuentra <span class="font-black text-gray-800">AQUÍ</span> los textos escolares de las mejores casas editoriales
-            </div>
-            <div class="flex space-x-3 items-center text-gray-500 flex-shrink-0">
-                <a href="https://www.facebook.com/smartbookscol" target="_blank" class="hover:text-brand-primary"><i class="fab fa-facebook-f text-lg"></i></a>
-                <a href="https://www.instagram.com/smartbookscol" target="_blank" class="hover:text-brand-primary"><i class="fab fa-instagram text-lg"></i></a>
-                <a href="https://www.linkedin.com/company/smartbookscol/" target="_blank" class="hover:text-brand-primary"><i class="fab fa-linkedin-in text-lg"></i></a>
-            </div>
-        </div>
-    </div>
-
-    <header class="bg-white sticky top-0 z-50 shadow-md">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            <a href="/" class="flex-shrink-0">
-                <img src="https://sbooks.com.co/wp-content/uploads/2022/10/Logo-Azul-2048x1078.png" alt="Logo Smart Books Holding" class="h-20 w-auto">
-            </a>
-            <form action="#" class="relative max-w-xl flex-grow mx-10 hidden lg:block">
-                <div class="flex items-center">
-                    <input type="text" placeholder="Buscar por palabra clave..." class="search-input text-gray-700 text-lg">
-                    <button type="submit" class="search-button-separate" title="Buscar">
-                        <img src="https://cdn-icons-png.flaticon.com/128/3031/3031293.png" alt="Lupa" class="w-7 h-7 icon-white">
-                    </button>
-                </div>
-            </form>
-            <div class="flex space-x-6 items-center">
-                <a href="#" class="hidden xl:flex items-center justify-center bg-yellow-400 text-gray-900 font-outfit font-bold px-5 py-3 rounded-lg shadow-lg hover:bg-yellow-500 transition transform duration-300 animate-super-pulse">
-                    <span class="text-base">Compra tu Kit Educativo AQUÍ</span>
-                </a>
-                <div class="flex space-x-4 items-center text-gray-800 text-xl">
-                    <a href="#" class="p-2 hover:text-brand-primary transition duration-300 relative flex items-center justify-center" title="Carrito de Compras">
-                        <img src="https://cdn-icons-png.flaticon.com/128/3144/3144456.png" alt="Carrito" class="w-8 h-8">
-                        <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-brand-accent rounded-full">
-                            0
-                        </span>
-                    </a>
-                </div>
-                <button class="lg:hidden p-2 text-gray-800 hover:text-brand-primary transition duration-300">
-                    <i class="fas fa-bars text-2xl"></i>
-                </button>
-            </div>
-        </div>
-
-        <div class="bg-white border-t border-gray-100 hidden lg:block shadow-sm h-14">
-            <div class="max-w-7xl mx-auto px-4 h-full">
-                <nav class="flex justify-center space-x-10 font-outfit text-gray-800 font-semibold text-base h-full">
-                    <a href="/" class="menu-item">Inicio</a>
-                    
-                    <div class="dropdown relative h-full">
-                        <a href="/quienes-somos" class="menu-item flex items-center">
-                            Nosotros <i class="fas fa-chevron-down text-xs ml-1 transition-transform transform group-hover:rotate-180"></i>
-                        </a>
-                        <div class="dropdown-menu absolute bg-white shadow-xl rounded-b-md w-56 border-t-2 border-brand-accent top-full">
-                            <a href="/quienes-somos" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Quienes Somos</a>
-                            <a href="/terminos-y-condiciones" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Términos y Condiciones</a>
-                            <a href="/preguntas-frecuentes" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Preguntas Frecuentes – FAQ</a>
-                        </div>
-                    </div>
-                    
-                    <div class="dropdown relative h-full">
-                        <a href="#" class="menu-item flex items-center">
-                            Aliados <i class="fas fa-chevron-down text-xs ml-1 transition-transform transform group-hover:rotate-180"></i>
-                        </a>
-                        <div class="dropdown-menu absolute bg-white shadow-xl rounded-b-md w-40 border-t-2 border-brand-accent top-full">
-                            <a href="/aliados/castillo" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Castillo</a>
-                            <a href="/aliados/macmillan" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">MacMillan</a>
-                        </div>
-                    </div>
-
-                    <a href="/tienda" class="menu-item">Tienda</a>
-                    <a href="/colegios" class="menu-item active">Colegios</a>
-                    <a href="/contactanos" class="menu-item">Contáctanos</a>
-                    <a href="/intranet" class="menu-item">Intranet</a>
-                </nav>
-            </div>
-        </div>
-    </header>
-    <main class="py-16 md:py-24 bg-gray-50">
+    <main class="py-16 md:py-24 bg-gray-50 min-h-screen flex items-center justify-center">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-scroll-reveal">
             <h1 class="font-outfit text-5xl sm:text-6xl md:text-7xl font-black text-gray-900 mb-8 leading-tight">
                 ENCUENTRA TU <span class="text-brand-primary">COLEGIO</span>
@@ -270,7 +195,7 @@
                     <p class="text-lg font-outfit font-semibold text-brand-primary">Buscando tu kit...</p>
                 </div>
 
-                <div id="package-card" class="rounded-xl shadow-2xl border-t-4 overflow-hidden w-full hidden text-left flex-col md:flex-row md:space-x-6 items-center">
+                <div id="package-card" class="rounded-xl shadow-2xl border-t-4 overflow-hidden w-full text-left flex-col md:flex-row md:space-x-6 items-center">
                     
                     <div id="card-imagen-container" class="flex-shrink-0 mb-4 md:mb-0">
                         <img id="card-imagen" src="" alt="Logo del Colegio" class="w-24 h-24 object-contain rounded-full bg-white p-1 shadow-inner">
@@ -305,79 +230,10 @@
 
         </div>
     </main>
-    <footer class="bg-white py-12 border-t border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div class="flex flex-col items-start">
-                <img src="https://sbooks.com.co/wp-content/uploads/2022/10/Logo-Azul-2048x1078.png" alt="Logo Smart Books" class="h-10 mb-4">
-                <p class="text-sm text-gray-600 mb-2">¿Tienes preguntas? ¡Llámanos!</p>
-                <a href="tel:+573336025029" class="text-brand-accent font-outfit text-2xl font-bold mb-4 hover:text-red-700 transition duration-300">
-                    +57 (333) 602 50 29
-                </a>
-                <div class="flex space-x-4 text-gray-500">
-                    <a href="https://www.facebook.com/smartbookscol" target="_blank" class="hover:text-brand-primary transition duration-300"><i class="fab fa-facebook-f text-lg"></i></a>
-                    <a href="https://www.instagram.com/smartbookscol" target="_blank" class="hover:text-brand-primary transition duration-300"><i class="fab fa-instagram text-lg"></i></a>
-                    <a href="https://www.linkedin.com/company/smartbookscol/" target="_blank" class="hover:text-brand-primary transition duration-300"><i class="fab fa-linkedin-in text-lg"></i></a>
-                    <a href="#" class="hover:text-brand-primary transition duration-300"><i class="fab fa-pinterest-p text-lg"></i></a>
-                </div>
-                <a href="/intranet" class="mt-6 text-sm text-gray-700 border border-gray-300 rounded-md px-5 py-2 hover:bg-gray-100 hover:text-brand-primary transition duration-300">
-                    Iniciar Sesión
-                </a>
-            </div>
-            <div>
-                <h4 class="font-outfit text-lg font-semibold text-gray-900 mb-4">Información de Contacto</h4>
-                <ul class="space-y-2 text-sm text-gray-600">
-                    <li>
-                        <p class="font-semibold text-gray-800">Bogotá:</p>
-                        <p>Carrera 58 No 164A-55, C.C Punto 170 Local 113</p>
-                        <p>(Cerrado Temporalmente)</p>
-                        <p>Calle 159A # 21A – 39 – Barrio Magdalena – Casa Blanca</p>
-                        <p>PBX: 333 602 50 29</p>
-                    </li>
-                    <li>
-                        <p class="font-semibold text-gray-800">Medellín, Antioquia:</p>
-                        <p>Edificio San Sebastian de La 70</p>
-                        <p>DQ 2 # 70 – 24 – INT 202</p>
-                        <p>LAURELES</p>
-                        <p>PBX: 333 602 50 29 EXT: 1100</p>
-                    </li>
-                    <li>
-                        <a href="mailto:contacto@smartbooks.com.co" class="text-brand-primary hover:underline">contacto@smartbooks.com.co</a>
-                    </li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="font-outfit text-lg font-semibold text-gray-900 mb-4">Explorar</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="/quienes-somos" class="text-gray-600 hover:text-brand-primary transition duration-300">Quienes Somos</a></li>
-                    <li><a href="/tienda" class="text-gray-600 hover:text-brand-primary transition duration-300">Nuestros Productos</a></li>
-                    <li><a href="/colegios" class="text-gray-600 hover:text-brand-primary transition duration-300">Colegios</a></li>
-                    <li><a href="/blog" class="text-gray-600 hover:text-brand-primary transition duration-300">Blog</a></li>
-                    <li><a href="/intranet" class="text-gray-600 hover:text-brand-primary transition duration-300">Intranet (Iniciar Sesión)</a></li>
-                </ul>
-            </div>
-            <div class="lg:col-span-1">
-                <h4 class="font-outfit text-lg font-semibold text-gray-900 mb-4">Encuéntranos</h4>
-                <div class="w-full rounded-lg overflow-hidden shadow-md">
-                    <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d618.676350650165!2d-74.05854276815452!3d4.753396005441487!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f85a3816c4b63%3A0xbdecd40be274ea2!2sSmart%20Books%20Colombia!5e1!3m2!1ses-419!2sco!4v1760823591513!5m2!1ses-419!2sco" 
-                        width="100%" 
-                        height="200" 
-                        style="border:0;" 
-                        allowfullscreen="" 
-                        loading="lazy" 
-                        referrerpolicy="no-referrer-when-downgrade"
-                        class="rounded-lg">
-                    </iframe>
-                </div>
-            </div>
-        </div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t border-gray-100 text-sm text-gray-500 text-center">
-            <p>© 2024 Smart Books. Todos los derechos reservados. | Diseñado con ❤️</p>
-        </div>
-    </footer>
     <a href="https://api.whatsapp.com/send?phone=573115572243" target="_blank" class="whatsapp-float" aria-label="Contactar por WhatsApp">
         <i class="fab fa-whatsapp"></i>
     </a>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             
@@ -410,7 +266,7 @@
                     QUINTO: 'PAQUETE DE INGLÉS Cosmo – 5°°',
                     SEXTO: 'PAQUETE DE INGLÉS Cosmo – 6°°',
                     SEPTIMO: 'PAQUETE DE INGLÉS Cosmo – 7°°',
-                    OCTAVO: 'PAQUETE DE INGLÉS Cosmo – 8°°', // Corregido el error de duplicación de SEPTIMO
+                    OCTAVO: 'PAQUETE DE INGLÉS Cosmo – 8°°', 
                     NOVENO: 'PAQUETE DE INGLÉS Cosmo – 9°°',
                     DECIMO: 'PAQUETE DE INGLÉS Cosmo – 10°°',
                     ONCE: 'PAQUETE DE INGLÉS Cosmo – 11°°',
@@ -480,7 +336,6 @@
                     IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2024/12/2-6.png',
                     UBICACION: 'https://maps.app.goo.gl/JpyxsWPErC3i8oXp6'
                 },
-                // --- NUEVOS COLEGIOS INYECTADOS ---
                 {
                     ID_COLEGIO: '0005',
                     COLEGIO: 'CENTRO EDUCATIVO LOS ANDES',
@@ -583,8 +438,8 @@
                     NOVENO: 'PAQUETE EDUCATIVO San Juan de los Pastos - 9°',
                     DECIMO: 'PAQUETE EDUCATIVO San Juan de los Pastos - 10°',
                     ONCE: 'PAQUETE EDUCATIVO San Juan de los Pastos - 11°',
-                    IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2024/12/no-image.png', // Imagen no provista, usando fallback
-                    UBICACION: 'http://googleusercontent.com/maps.google.com/no-pastos' // Ubicación no provista, usando fallback
+                    IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2024/12/no-image.png', 
+                    UBICACION: 'http://googleusercontent.com/maps.google.com/no-pastos' 
                 },
                 {
                     ID_COLEGIO: '0010',
@@ -698,7 +553,7 @@
             
             // Muestra/Oculta el dropdown de colegios
             schoolSelectButton.addEventListener('click', (e) => {
-                e.stopPropagation(); // Evita que el click se propague al document
+                e.stopPropagation(); 
                 if (!schoolSelectButton.disabled) {
                     // Cerrar el de cursos antes de abrir el de colegios
                     courseDropdownContainer.classList.remove('active'); 
@@ -711,7 +566,7 @@
             
             // Muestra/Oculta el dropdown de cursos
             courseSelectButton.addEventListener('click', (e) => {
-                 e.stopPropagation(); // Evita que el click se propague al document
+                 e.stopPropagation(); 
                  if (!courseSelectButton.disabled) {
                     // Cerrar el de colegios antes de abrir el de cursos
                     schoolDropdownContainer.classList.remove('active');
@@ -721,7 +576,6 @@
 
             // Cierra los dropdowns si se hace clic fuera de ellos
             document.addEventListener('click', (e) => {
-                // Si el click no es dentro de ninguno de los contenedores, cerrarlos
                 if (!schoolDropdownContainer.contains(e.target) && 
                     !courseDropdownContainer.contains(e.target)) {
                     closeDropdowns();
@@ -729,7 +583,7 @@
             });
 
 
-            // Función para renderizar la lista de colegios (usada también para la búsqueda)
+            // Función para renderizar la lista de colegios
             function renderSchoolList(schools) {
                 schoolList.innerHTML = '';
                 if (schools.length === 0) {
@@ -741,7 +595,6 @@
                     item.href = '#';
                     item.className = 'block px-3 py-2 text-gray-800 hover:bg-gray-100 hover:text-brand-primary transition duration-300 text-sm rounded-md';
                     item.textContent = school.COLEGIO + ' (' + school.CIUDAD + ')';
-                    // Usamos una función anónima para pasar el objeto colegio completo
                     item.addEventListener('click', (e) => {
                         e.preventDefault();
                         handleSchoolSelection(school);
@@ -751,7 +604,7 @@
                 });
             }
 
-            // Funcionalidad de búsqueda en el dropdown de colegios (filtra la lista local)
+            // Funcionalidad de búsqueda en el dropdown de colegios
             schoolSearchInput.addEventListener('keyup', (e) => {
                 const searchTerm = e.target.value.toLowerCase();
                 const filteredSchools = ALL_SCHOOLS.filter(school => 
@@ -765,8 +618,9 @@
             function handleSchoolSelection(school) {
                 selectedSchool = school;
                 
-                // 1. Oculta el resultado de búsqueda anterior
-                packageCard.classList.add('hidden');
+                // 1. Oculta el resultado de búsqueda anterior y el loading
+                packageCard.style.display = 'none'; // Usamos style.display para ser explícitos
+                searchLoading.style.display = 'none';
                 
                 // 2. Actualiza el botón de colegio
                 schoolSelectButton.innerHTML = school.COLEGIO + 
@@ -784,10 +638,6 @@
                 // 5. Muestra el mensaje de selección de curso
                 initialMessage.textContent = `Selecciona un curso para ${school.COLEGIO}.`;
                 initialMessage.classList.remove('hidden');
-                
-                // FIX: Limpiar cualquier estilo inline (opacity/transform) que haya dejado la animación de la primera búsqueda
-                packageCard.style.opacity = ''; 
-                packageCard.style.transform = '';
             }
             
             // Renderiza la lista de cursos disponibles
@@ -802,7 +652,6 @@
                 courseSelectButton.classList.remove('text-gray-700', 'hover:border-brand-primary');
 
                 GRADE_KEYS.forEach(key => {
-                    // Accede al valor del grado (ej. school.PREJARDIN) y lo limpia de posibles espacios en blanco
                     const packageInfo = school[key] ? String(school[key]).trim() : '0'; 
                     
                     if (packageInfo && packageInfo !== '0' && packageInfo.toUpperCase() !== 'NULL') {
@@ -814,7 +663,6 @@
                         item.textContent = gradeName;
                         item.addEventListener('click', (e) => {
                             e.preventDefault();
-                            // Pasamos el KEY de la columna ('PREJARDIN') y el nombre para el botón ('Prejardín')
                             handleCourseSelection(key, gradeName, school.ID_COLEGIO);
                             courseDropdownContainer.classList.remove('active');
                         });
@@ -831,20 +679,16 @@
                 }
             }
 
-            // Maneja la selección del curso y llama al API /api/paquete
-            // NOTA: Esta función se mantiene asíncrona pero ya no hace un 'fetch' real,
-            // utiliza los datos ya cargados en 'selectedSchool'.
+            // Maneja la selección del curso y muestra la tarjeta
             async function handleCourseSelection(gradeKey, gradeName, schoolId) {
                 
                 // 1. Actualiza el botón de curso
                 courseSelectButton.innerHTML = gradeName + 
                     `<i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>`;
                 
-                // 2. Oculta la tarjeta y limpia cualquier estilo de animación anterior
-                packageCard.classList.add('hidden');
-                packageCard.style.opacity = ''; 
-                packageCard.style.transform = '';
-
+                // 2. Oculta la tarjeta y limpia el mensaje
+                packageCard.style.display = 'none';
+                
                 // 3. Inicia la animación de búsqueda
                 initialMessage.classList.add('hidden');
                 searchLoading.style.display = 'flex';
@@ -853,18 +697,15 @@
                 await new Promise(resolve => setTimeout(resolve, 800)); // Simula un pequeño retraso
                 
                 try {
-                    // Simulación: El paquete de información ya está en selectedSchool
                     const packageInfo = selectedSchool[gradeKey] ? String(selectedSchool[gradeKey]).trim() : '0';
                     
                     if (packageInfo === '0' || packageInfo.toUpperCase() === 'NULL') {
                         throw new Error("Paquete no disponible");
                     }
 
-                    // Generar cantidad de libros aleatoria (entre 4 y 7)
                     const randomBookCount = Math.floor(Math.random() * (7 - 4 + 1)) + 4;
 
                     searchLoading.style.display = 'none';
-                    // Reutilizamos la función para mostrar la tarjeta con los datos estáticos
                     displayPackageCard(selectedSchool, gradeName, packageInfo, randomBookCount);
                     
                 } catch (error) {
@@ -878,23 +719,15 @@
             // Muestra la tarjeta de resultado
             function displayPackageCard(school, gradeName, packageInfo, bookCount) {
                 
-                // Título del paquete
                 let title = 'KIT EDUCATIVO ÚNICO';
                 if (packageInfo.includes(',')) {
                     title = 'Múltiples Kits Educativos Disponibles';
                 } else if (packageInfo) {
-                    // Intenta limpiar y poner en mayúsculas el nombre del paquete si es único
                     title = packageInfo.toUpperCase().replace('PAQUETE EDUCATIVO', 'KIT'); 
                 }
                 
-                // 1. Llenar la tarjeta
                 document.getElementById('package-title').textContent = title;
                 
-                // Limpiar contenedores
-                packageDetailsSummary.innerHTML = '';
-                packageDetailsKits.innerHTML = '';
-
-                // Actualizar los campos fijos y la nueva Cantidad de libros (usando las clases de color modificadas)
                 packageDetailsSummary.innerHTML = `
                     <p><span class="font-semibold text-gray-800-card-mod">Colegio:</span> <span id="card-colegio">${school.COLEGIO || 'N/A'}</span></p>
                     <p><span class="font-semibold text-gray-800-card-mod">Curso:</span> <span id="card-curso">${gradeName || 'N/A'}</span></p>
@@ -903,13 +736,12 @@
                     <p class="hidden"><span class="font-semibold text-gray-800-card-mod">Ubicación:</span> <a href="${school.UBICACION || '#'}" id="card-ubicacion" target="_blank" class="text-brand-secondary hover:underline">Ver en Mapa</a></p>
                 `;
                 
-                document.getElementById('card-imagen').src = school.IMAGEN || 'https://sbooks.com.co/wp-content/uploads/2024/12/no-image.png'; // Fallback image
+                document.getElementById('card-imagen').src = school.IMAGEN || 'https://sbooks.com.co/wp-content/uploads/2024/12/no-image.png'; 
                 
-                // Agregar los detalles dinámicos del paquete
+                packageDetailsKits.innerHTML = '';
                 if (packageInfo.includes(',')) {
                     const kits = packageInfo.split(',').map(item => item.trim());
                     const ul = document.createElement('ul');
-                    // Cambiamos el color de los elementos de la lista a gris claro
                     ul.className = 'list-disc list-inside mt-2 text-sm text-gray-200 space-y-1 text-left ml-4'; 
                     kits.forEach(kit => {
                         const li = document.createElement('li');
@@ -921,18 +753,16 @@
                     packageDetailsKits.appendChild(ul);
                     
                 } else {
-                    // Si es un solo paquete, mostrar el nombre exacto
                      packageDetailsKits.innerHTML = `<p class="font-semibold text-gray-800-card-mod mt-4">Nombre del Kit:</p><p class="mt-1 text-sm text-gray-200">${packageInfo || 'Kit no especificado'}</p>`;
                 }
                 
                 
                 // 3. Mostrar la tarjeta
-                packageCard.classList.remove('hidden');
+                packageCard.style.display = 'flex'; // Usamos flex para el layout
             }
             
             // --- 4. FUNCIÓN PRINCIPAL DE CARGA DE DATOS ---
             function loadSchools() {
-                // En lugar de fetch, usamos los datos estáticos
                 ALL_SCHOOLS = STATIC_SCHOOL_DATA;
                 
                 // Actualiza el UI al cargar
@@ -944,14 +774,12 @@
                 schoolSearchInput.disabled = false;
                 
                 initialMessage.textContent = 'Por favor, selecciona un colegio para empezar.';
-                
             }
             
             // --- 5. INICIALIZACIÓN ---
-            // Reemplazo de fetchSchools() por loadSchools()
             loadSchools();
-
-            // Script para Scroll Reveal (Mantenido solo para elementos no interactivos)
+            
+            // Script para Scroll Reveal
             const revealElements = document.querySelectorAll('.animate-scroll-reveal');
             const observer = new IntersectionObserver(entries => {
                 entries.forEach(entry => {
