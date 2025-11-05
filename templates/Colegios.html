@@ -84,58 +84,61 @@
             color: #9ca3af;
             cursor: wait !important;
         }
+        
+        /* Estilo para el contenedor del curso antes de aparecer */
+        .course-dropdown-container-hidden {
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: opacity 0.5s ease-out, max-height 0.5s ease-out;
+            margin-top: 0;
+        }
 
-        /* --- ESTILOS DEL NUEVO BANNER (package-card) --- */
+        .course-dropdown-container-visible {
+            opacity: 1;
+            max-height: 200px; /* Ajusta esto según el padding y altura real */
+            transition: opacity 0.5s ease-in, max-height 0.5s ease-in;
+            margin-top: 1.5rem; /* space-y-6 */
+        }
+
+
+        /* --- ESTILOS MEJORADOS DEL NUEVO BANNER (package-card) --- */
         #package-card {
             display: flex; /* Usamos flexbox para el diseño de banner */
             align-items: center;
-            padding: 1.5rem;
+            padding: 2rem; /* Más padding */
             max-width: none; /* De lado a lado */
             border-radius: 0.75rem; /* rounded-xl */
-            /* CAMBIO CLAVE: Fondo Azul con borde amarillo */
-            background-color: #163D6A; /* bg-brand-primary */
-            color: white;
-            border-top: 4px solid #fcd34d; /* Amarillo de acento */
-            transition: all 0.5s ease-in-out; /* Para que la aparición sea suave */
+            background: linear-gradient(135deg, #163D6A 0%, #205797 100%); /* Azul fuerte de fondo */
+            color: white; /* Texto blanco por defecto */
+            border-top: 6px solid #fcd34d; /* Línea amarilla fuerte */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2); /* Sombra intensa */
         }
         
-        /* Ajustes para elementos internos del nuevo banner */
-        #package-card .text-brand-primary, #package-card .text-gray-800 {
-            color: #fcd34d !important; /* Texto amarillo para contraste */
+        /* Ajustes de color dentro de la tarjeta */
+        #package-card h3 {
+            color: #fcd34d; /* Título en amarillo */
         }
         
-        #package-card .text-gray-900 {
-            color: white !important; /* Título blanco */
+        #package-card .text-brand-primary-card-mod {
+            color: #fcd34d; /* Para cantidades y textos importantes */
         }
         
-        #package-card .text-gray-600 {
-            color: #d1d5db !important; /* Gris claro para el detalle */
+        #package-card .text-gray-800-card-mod {
+            color: #d1d5db; /* Texto para labels */
         }
         
         /* Estilo para el botón "Añadir Kit Completo al Carrito" */
         .btn-add-to-cart {
             transition: all 0.3s ease;
-            background-color: #fcd34d !important; /* Amarillo base */
-            color: #1f2937 !important; /* Texto oscuro */
+            background-color: #fcd34d; /* Amarillo base */
+            color: #1f2937; /* Texto oscuro */
+            font-size: 1.125rem; /* text-lg */
         }
         .btn-add-to-cart:hover {
-            background-color: #facc15 !important; /* Amarillo más oscuro */
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1), 0 0 0 4px rgba(252, 211, 77, 0.5); /* Sombra y anillo amarillo más suave */
-        }
-        /* Clase para ocultar con animación */
-        .hidden-animate {
-            display: none !important;
-            opacity: 0;
-            max-height: 0;
-            overflow: hidden;
-            transition: opacity 0.5s ease-out, max-height 0.5s ease-out;
-        }
-        /* Clase para mostrar con animación */
-        .visible-animate {
-            display: block;
-            opacity: 1;
-            max-height: 300px; /* Suficiente altura para el dropdown */
-            transition: opacity 0.5s ease-in, max-height 0.5s ease-in;
+            background-color: #facc15 !important; /* Amarillo 500 */
+            color: #1f2937 !important; /* Texto oscuro */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 0 0 4px #f59e0b; /* Sombra y anillo amarillo más intenso (500) */
         }
     </style>
 </head>
@@ -220,13 +223,13 @@
             </div>
         </div>
     </header>
-
-    <main class="py-16 md:py-24 bg-gray-50"> <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-scroll-reveal">
+    <main class="py-16 md:py-24 bg-gray-50">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-scroll-reveal">
             <h1 class="font-outfit text-5xl sm:text-6xl md:text-7xl font-black text-gray-900 mb-8 leading-tight">
-                ENCUENTRA TU <span class="text-brand-primary">KIT ESCOLAR</span>
+                ENCUENTRA TU <span class="text-brand-primary">COLEGIO</span>
             </h1>
             <p class="text-xl text-gray-600 mb-12">
-                Selecciona tu institución y el curso para ver el kit educativo exacto que necesitas. ¡Fácil y rápido!
+                Selecciona tu institución y el curso para ver el kit educativo exacto que necesitas.
             </p>
 
             <div class="space-y-6">
@@ -245,7 +248,7 @@
                     </div>
                 </div>
 
-                <div id="course-dropdown-container" class="relative course-dropdown z-50 hidden-animate">
+                <div id="course-dropdown-container" class="relative course-dropdown z-50 course-dropdown-container-hidden">
                     <button id="course-select-button" 
                             class="w-full bg-white border border-gray-300 rounded-lg shadow-xl py-4 px-6 text-xl text-left text-gray-500 font-semibold flex items-center justify-between transition duration-300 cursor-not-allowed" disabled>
                         Selecciona el Curso
@@ -267,36 +270,41 @@
                     <p class="text-lg font-outfit font-semibold text-brand-primary">Buscando tu kit...</p>
                 </div>
 
-                <div id="package-card" class="rounded-xl shadow-2xl overflow-hidden w-full hidden text-left flex-col md:flex-row md:space-x-6 items-center">
+                <div id="package-card" class="rounded-xl shadow-2xl border-t-4 overflow-hidden w-full hidden text-left flex-col md:flex-row md:space-x-6 items-center">
                     
                     <div id="card-imagen-container" class="flex-shrink-0 mb-4 md:mb-0">
-                        <img id="card-imagen" src="" alt="Logo del Colegio" class="w-24 h-24 object-contain rounded-full border border-yellow-400 p-1 shadow-inner bg-white"> </div>
+                        <img id="card-imagen" src="" alt="Logo del Colegio" class="w-24 h-24 object-contain rounded-full bg-white p-1 shadow-inner">
+                    </div>
 
                     <div class="flex-grow min-w-0">
-                        <p class="text-xs font-outfit uppercase tracking-widest text-brand-primary font-bold mb-1">Paquete Educativo Encontrado</p>
-                        <h3 id="package-title" class="font-outfit text-xl sm:text-2xl font-black text-white mb-4 leading-snug"></h3>
+                        <p class="text-xs font-outfit uppercase tracking-widest text-brand-secondary font-bold mb-1">Paquete Educativo Encontrado</p>
+                        <h3 id="package-title" class="font-outfit text-xl sm:text-2xl font-black mb-4 leading-snug"></h3>
                         
-                        <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-600 mb-4" id="package-details-summary">
-                            </div>
+                        <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-200 mb-4" id="package-details-summary">
+                            <p><span class="font-semibold text-gray-800-card-mod">Colegio:</span> <span id="card-colegio"></span></p>
+                            <p><span class="font-semibold text-gray-800-card-mod">Curso:</span> <span id="card-curso"></span></p>
+                            <p><span class="font-semibold text-gray-800-card-mod">Libros:</span> <span id="card-cantidad-libros" class="font-bold text-brand-primary-card-mod"></span></p>
+                            <p class="hidden"><span class="font-semibold text-gray-800-card-mod">Ciudad:</span> <span id="card-ciudad"></span></p>
+                            <p class="hidden"><span class="font-semibold text-gray-800-card-mod">Ubicación:</span> <a href="#" id="card-ubicacion" target="_blank" class="text-brand-secondary hover:underline">Ver en Mapa</a></p>
+                        </div>
                         
-                        <div id="package-details-kits" class="text-sm text-gray-600 space-y-2">
+                        <div id="package-details-kits" class="text-sm text-gray-200 space-y-2">
                             </div>
                     </div>
                     
                     <div class="flex-shrink-0 w-full md:w-auto mt-4 md:mt-0">
-                        <a href="#" class="btn-add-to-cart w-full inline-block text-center px-8 py-3 text-lg font-bold rounded-lg transition duration-300 shadow-lg">
+                        <a href="#" class="btn-add-to-cart w-full inline-block text-center px-8 py-3 font-bold rounded-lg shadow-lg transition duration-300">
                             Añadir Kit Completo al Carrito
                         </a>
                     </div>
                 </div>
 
-                <p id="initial-message" class="text-lg text-gray-400 italic">Cargando datos de colegios...</p>
+                <p id="initial-message" class="text-lg text-gray-400 italic">Por favor, selecciona un colegio para empezar.</p>
 
             </div>
 
         </div>
     </main>
-
     <footer class="bg-white py-12 border-t border-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div class="flex flex-col items-start">
@@ -370,8 +378,6 @@
     <a href="https://api.whatsapp.com/send?phone=573115572243" target="_blank" class="whatsapp-float" aria-label="Contactar por WhatsApp">
         <i class="fab fa-whatsapp"></i>
     </a>
-
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             
@@ -759,30 +765,23 @@
             function handleSchoolSelection(school) {
                 selectedSchool = school;
                 
-                // 1. Actualiza el botón de colegio
+                // 1. Oculta el resultado de búsqueda anterior
+                packageCard.classList.add('hidden');
+                
+                // 2. Actualiza el botón de colegio
                 schoolSelectButton.innerHTML = school.COLEGIO + 
                     `<i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>`;
                 schoolSelectButton.classList.remove('text-gray-500');
                 schoolSelectButton.classList.add('text-gray-700', 'hover:border-brand-primary');
                 
-                // 2. Prepara el dropdown de cursos
-                courseSelectButton.innerHTML = `Selecciona el Curso <i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>`;
-                courseDropdownContainer.classList.remove('active');
-                
                 // 3. Muestra los cursos disponibles (renderCourseList)
-                const coursesFound = renderCourseList(school);
+                renderCourseList(school);
                 
-                // 4. MUESTRA EL SEGUNDO DROPDOWN SOLO SI HAY CURSOS
-                if (coursesFound) {
-                    courseDropdownContainer.classList.remove('hidden-animate');
-                    courseDropdownContainer.classList.add('visible-animate');
-                } else {
-                    courseDropdownContainer.classList.remove('visible-animate');
-                    courseDropdownContainer.classList.add('hidden-animate');
-                }
+                // 4. Muestra el dropdown de cursos con una animación (transición)
+                courseDropdownContainer.classList.remove('course-dropdown-container-hidden');
+                courseDropdownContainer.classList.add('course-dropdown-container-visible');
                 
-                // 5. Limpia resultados anteriores
-                packageCard.classList.add('hidden');
+                // 5. Muestra el mensaje de selección de curso
                 initialMessage.textContent = `Selecciona un curso para ${school.COLEGIO}.`;
                 initialMessage.classList.remove('hidden');
                 
@@ -796,6 +795,12 @@
                 courseList.innerHTML = '';
                 let coursesFound = false;
                 
+                // 1. Limpia el botón de curso y el estado anterior
+                courseSelectButton.innerHTML = `Selecciona el Curso <i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>`;
+                courseSelectButton.disabled = true;
+                courseSelectButton.classList.add('text-gray-500', 'cursor-not-allowed');
+                courseSelectButton.classList.remove('text-gray-700', 'hover:border-brand-primary');
+
                 GRADE_KEYS.forEach(key => {
                     // Accede al valor del grado (ej. school.PREJARDIN) y lo limpia de posibles espacios en blanco
                     const packageInfo = school[key] ? String(school[key]).trim() : '0'; 
@@ -822,13 +827,8 @@
                     courseSelectButton.classList.remove('text-gray-500', 'cursor-not-allowed');
                     courseSelectButton.disabled = false;
                 } else {
-                    courseSelectButton.innerHTML = `No hay kits disponibles para este curso <i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>`;
-                    courseSelectButton.classList.add('text-gray-500', 'cursor-not-allowed');
-                    courseSelectButton.classList.remove('text-gray-700', 'hover:border-brand-primary');
-                    courseSelectButton.disabled = true;
+                    courseSelectButton.innerHTML = `No hay cursos disponibles para este colegio <i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>`;
                 }
-                
-                return coursesFound;
             }
 
             // Maneja la selección del curso y llama al API /api/paquete
@@ -894,13 +894,13 @@
                 packageDetailsSummary.innerHTML = '';
                 packageDetailsKits.innerHTML = '';
 
-                // Actualizar los campos fijos y la nueva Cantidad de libros (usando los nuevos estilos)
+                // Actualizar los campos fijos y la nueva Cantidad de libros (usando las clases de color modificadas)
                 packageDetailsSummary.innerHTML = `
-                    <p><span class="font-semibold text-gray-100">Colegio:</span> <span id="card-colegio" class="text-brand-primary">${school.COLEGIO || 'N/A'}</span></p>
-                    <p><span class="font-semibold text-gray-100">Curso:</span> <span id="card-curso" class="text-brand-primary">${gradeName || 'N/A'}</span></p>
-                    <p><span class="font-semibold text-gray-100">Libros:</span> <span id="card-cantidad-libros" class="font-bold text-brand-primary">${bookCount} Libros</span></p>
-                    <p class="hidden"><span class="font-semibold text-gray-100">Ciudad:</span> <span id="card-ciudad" class="text-brand-primary">${school.CIUDAD || 'N/A'}</span></p>
-                    <p class="hidden"><span class="font-semibold text-gray-100">Ubicación:</span> <a href="${school.UBICACION || '#'}" id="card-ubicacion" target="_blank" class="text-brand-primary hover:underline">Ver en Mapa</a></p>
+                    <p><span class="font-semibold text-gray-800-card-mod">Colegio:</span> <span id="card-colegio">${school.COLEGIO || 'N/A'}</span></p>
+                    <p><span class="font-semibold text-gray-800-card-mod">Curso:</span> <span id="card-curso">${gradeName || 'N/A'}</span></p>
+                    <p><span class="font-semibold text-gray-800-card-mod">Libros:</span> <span id="card-cantidad-libros" class="font-bold text-brand-primary-card-mod">${bookCount} Libros</span></p>
+                    <p class="hidden"><span class="font-semibold text-gray-800-card-mod">Ciudad:</span> <span id="card-ciudad">${school.CIUDAD || 'N/A'}</span></p>
+                    <p class="hidden"><span class="font-semibold text-gray-800-card-mod">Ubicación:</span> <a href="${school.UBICACION || '#'}" id="card-ubicacion" target="_blank" class="text-brand-secondary hover:underline">Ver en Mapa</a></p>
                 `;
                 
                 document.getElementById('card-imagen').src = school.IMAGEN || 'https://sbooks.com.co/wp-content/uploads/2024/12/no-image.png'; // Fallback image
@@ -909,19 +909,20 @@
                 if (packageInfo.includes(',')) {
                     const kits = packageInfo.split(',').map(item => item.trim());
                     const ul = document.createElement('ul');
-                    ul.className = 'list-disc list-inside mt-2 text-sm text-gray-200 space-y-1 text-left ml-4'; // Color de texto ajustado
+                    // Cambiamos el color de los elementos de la lista a gris claro
+                    ul.className = 'list-disc list-inside mt-2 text-sm text-gray-200 space-y-1 text-left ml-4'; 
                     kits.forEach(kit => {
                         const li = document.createElement('li');
                         li.textContent = kit;
                         ul.appendChild(li);
                     });
                     
-                    packageDetailsKits.innerHTML = `<p class="font-semibold text-gray-100 mt-4 mb-2">Paquetes Disponibles:</p>`; // Color de texto ajustado
+                    packageDetailsKits.innerHTML = `<p class="font-semibold text-gray-800-card-mod mt-4 mb-2">Paquetes Disponibles:</p>`;
                     packageDetailsKits.appendChild(ul);
                     
                 } else {
                     // Si es un solo paquete, mostrar el nombre exacto
-                     packageDetailsKits.innerHTML = `<p class="font-semibold text-gray-100 mt-4">Nombre del Kit:</p><p class="mt-1 text-sm text-gray-200">${packageInfo || 'Kit no especificado'}</p>`; // Color de texto ajustado
+                     packageDetailsKits.innerHTML = `<p class="font-semibold text-gray-800-card-mod mt-4">Nombre del Kit:</p><p class="mt-1 text-sm text-gray-200">${packageInfo || 'Kit no especificado'}</p>`;
                 }
                 
                 
@@ -943,10 +944,6 @@
                 schoolSearchInput.disabled = false;
                 
                 initialMessage.textContent = 'Por favor, selecciona un colegio para empezar.';
-                
-                // Asegura que el segundo dropdown esté oculto al inicio
-                courseDropdownContainer.classList.remove('visible-animate');
-                courseDropdownContainer.classList.add('hidden-animate');
                 
             }
             
