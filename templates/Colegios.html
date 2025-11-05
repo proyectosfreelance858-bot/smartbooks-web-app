@@ -92,16 +92,50 @@
             padding: 1.5rem;
             max-width: none; /* De lado a lado */
             border-radius: 0.75rem; /* rounded-xl */
+            /* CAMBIO CLAVE: Fondo Azul con borde amarillo */
+            background-color: #163D6A; /* bg-brand-primary */
+            color: white;
+            border-top: 4px solid #fcd34d; /* Amarillo de acento */
+            transition: all 0.5s ease-in-out; /* Para que la aparición sea suave */
         }
-
+        
+        /* Ajustes para elementos internos del nuevo banner */
+        #package-card .text-brand-primary, #package-card .text-gray-800 {
+            color: #fcd34d !important; /* Texto amarillo para contraste */
+        }
+        
+        #package-card .text-gray-900 {
+            color: white !important; /* Título blanco */
+        }
+        
+        #package-card .text-gray-600 {
+            color: #d1d5db !important; /* Gris claro para el detalle */
+        }
+        
         /* Estilo para el botón "Añadir Kit Completo al Carrito" */
         .btn-add-to-cart {
             transition: all 0.3s ease;
-        }
-        .btn-add-to-cart:hover {
             background-color: #fcd34d !important; /* Amarillo base */
             color: #1f2937 !important; /* Texto oscuro */
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 0 0 4px #f59e0b; /* Sombra y anillo amarillo más intenso (500) */
+        }
+        .btn-add-to-cart:hover {
+            background-color: #facc15 !important; /* Amarillo más oscuro */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1), 0 0 0 4px rgba(252, 211, 77, 0.5); /* Sombra y anillo amarillo más suave */
+        }
+        /* Clase para ocultar con animación */
+        .hidden-animate {
+            display: none !important;
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: opacity 0.5s ease-out, max-height 0.5s ease-out;
+        }
+        /* Clase para mostrar con animación */
+        .visible-animate {
+            display: block;
+            opacity: 1;
+            max-height: 300px; /* Suficiente altura para el dropdown */
+            transition: opacity 0.5s ease-in, max-height 0.5s ease-in;
         }
     </style>
 </head>
@@ -186,19 +220,20 @@
             </div>
         </div>
     </header>
-    <main class="py-16 md:py-24">
-        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-scroll-reveal">
+
+    <main class="py-16 md:py-24 bg-gray-50"> <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-scroll-reveal">
             <h1 class="font-outfit text-5xl sm:text-6xl md:text-7xl font-black text-gray-900 mb-8 leading-tight">
-                ENCUENTRA TU <span class="text-brand-primary">COLEGIO</span>
+                ENCUENTRA TU <span class="text-brand-primary">KIT ESCOLAR</span>
             </h1>
             <p class="text-xl text-gray-600 mb-12">
-                Selecciona tu institución y el curso para ver el kit educativo exacto que necesitas.
+                Selecciona tu institución y el curso para ver el kit educativo exacto que necesitas. ¡Fácil y rápido!
             </p>
 
             <div class="space-y-6">
+
                 <div id="school-dropdown-container" class="relative custom-dropdown animate-scroll-reveal delay-200">
                     <button id="school-select-button" 
-                            class="w-full bg-white border border-gray-300 rounded-lg shadow-md py-4 px-6 text-xl text-left text-gray-500 font-semibold flex items-center justify-between transition duration-300 school-loading" disabled>
+                            class="w-full bg-white border border-gray-300 rounded-lg shadow-xl py-4 px-6 text-xl text-left text-gray-500 font-semibold flex items-center justify-between transition duration-300 school-loading" disabled>
                         Cargando Colegios...
                         <i class="fas fa-spinner fa-spin text-base ml-2"></i>
                     </button>
@@ -210,9 +245,9 @@
                     </div>
                 </div>
 
-                <div id="course-dropdown-container" class="relative course-dropdown z-50 transition duration-500 ease-in-out transform scale-y-0 opacity-0 h-0 overflow-hidden">
+                <div id="course-dropdown-container" class="relative course-dropdown z-50 hidden-animate">
                     <button id="course-select-button" 
-                            class="w-full bg-white border border-gray-300 rounded-lg shadow-md py-4 px-6 text-xl text-left text-gray-500 font-semibold flex items-center justify-between transition duration-300 cursor-not-allowed" disabled>
+                            class="w-full bg-white border border-gray-300 rounded-lg shadow-xl py-4 px-6 text-xl text-left text-gray-500 font-semibold flex items-center justify-between transition duration-300 cursor-not-allowed" disabled>
                         Selecciona el Curso
                         <i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>
                     </button>
@@ -225,54 +260,37 @@
 
             </div>
 
-            <div id="results-container" class="mt-12 pt-8 border-t border-gray-200 min-h-[250px] flex flex-col justify-center items-center max-w-7xl mx-auto transition duration-500 ease-in-out transform scale-y-0 opacity-0 h-0 overflow-hidden">
+            <div id="results-container" class="mt-12 pt-8 border-t border-gray-200 min-h-[250px] flex flex-col justify-center items-center max-w-7xl mx-auto">
                 
                 <div id="search-loading" class="flex flex-col items-center justify-center p-8">
                     <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExdHZrdnZoZnNpdTBvdW1kcnRkOGl0anl1d25ld2F5N3o4MTJ5ZG5kOCZlcD12MV9pbnRlcm5hbF9naWYmY3Q9Zw/3o7bu8ZpM249R4Q3FC/giphy.gif" alt="Buscando..." class="w-20 h-20 mb-4 rounded-full border-4 border-yellow-400 p-1">
                     <p class="text-lg font-outfit font-semibold text-brand-primary">Buscando tu kit...</p>
                 </div>
 
-                <div id="package-card" class="bg-white rounded-xl shadow-2xl border-t-4 border-brand-primary overflow-hidden w-full hidden text-left flex-col md:flex-row md:space-x-6 items-start p-6">
+                <div id="package-card" class="rounded-xl shadow-2xl overflow-hidden w-full hidden text-left flex-col md:flex-row md:space-x-6 items-center">
                     
-                    <div id="card-imagen-container" class="flex-shrink-0 mb-4 md:mb-0 md:mr-6">
-                        <img id="card-imagen" src="" alt="Logo del Colegio" class="w-32 h-32 object-contain rounded-full border-4 border-gray-100 p-1 shadow-md">
-                    </div>
+                    <div id="card-imagen-container" class="flex-shrink-0 mb-4 md:mb-0">
+                        <img id="card-imagen" src="" alt="Logo del Colegio" class="w-24 h-24 object-contain rounded-full border border-yellow-400 p-1 shadow-inner bg-white"> </div>
 
                     <div class="flex-grow min-w-0">
-                        <p class="text-sm font-outfit uppercase tracking-widest text-brand-primary font-bold mb-1">Paquete Educativo Encontrado</p>
-                        <h3 id="package-title" class="font-outfit text-2xl sm:text-3xl font-black text-gray-900 mb-4 leading-snug"></h3>
+                        <p class="text-xs font-outfit uppercase tracking-widest text-brand-primary font-bold mb-1">Paquete Educativo Encontrado</p>
+                        <h3 id="package-title" class="font-outfit text-xl sm:text-2xl font-black text-white mb-4 leading-snug"></h3>
                         
-                        <div class="grid grid-cols-2 gap-x-6 gap-y-2 text-base text-gray-600 mb-6">
-                            <div class="col-span-2 sm:col-span-1">
-                                <dt class="font-semibold text-gray-800">Colegio</dt>
-                                <dd id="card-colegio" class="text-gray-700"></dd>
+                        <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-600 mb-4" id="package-details-summary">
                             </div>
-                            <div class="col-span-2 sm:col-span-1">
-                                <dt class="font-semibold text-gray-800">Curso</dt>
-                                <dd id="card-curso" class="text-gray-700"></dd>
-                            </div>
-                            <div class="col-span-2 sm:col-span-1">
-                                <dt class="font-semibold text-gray-800">Cantidad de Libros Estimada</dt>
-                                <dd id="card-cantidad-libros" class="font-bold text-lg text-brand-primary"></dd>
-                            </div>
-                            <div class="col-span-2 sm:col-span-1 hidden">
-                                <dt class="font-semibold text-gray-800">Ciudad</dt>
-                                <dd id="card-ciudad" class="text-gray-700"></dd>
-                            </div>
-                        </div>
                         
-                        <div id="package-details-kits" class="border-t border-gray-100 pt-4">
-                        </div>
+                        <div id="package-details-kits" class="text-sm text-gray-600 space-y-2">
+                            </div>
                     </div>
                     
-                    <div class="flex-shrink-0 w-full md:w-auto mt-6 md:mt-0 md:self-center">
-                        <a href="#" class="btn-add-to-cart w-full inline-block text-center px-8 py-3 text-lg font-bold text-white bg-brand-primary rounded-lg hover:bg-brand-secondary hover:text-gray-900 transition duration-300 shadow-lg">
+                    <div class="flex-shrink-0 w-full md:w-auto mt-4 md:mt-0">
+                        <a href="#" class="btn-add-to-cart w-full inline-block text-center px-8 py-3 text-lg font-bold rounded-lg transition duration-300 shadow-lg">
                             Añadir Kit Completo al Carrito
                         </a>
                     </div>
                 </div>
 
-                <p id="initial-message" class="text-lg text-gray-400 italic">Por favor, selecciona un colegio para empezar.</p>
+                <p id="initial-message" class="text-lg text-gray-400 italic">Cargando datos de colegios...</p>
 
             </div>
 
@@ -657,29 +675,15 @@
             const courseDropdownContainer = document.getElementById('course-dropdown-container');
             const courseSelectButton = document.getElementById('course-select-button');
             const courseList = document.getElementById('course-list');
-            
-            const resultsContainer = document.getElementById('results-container'); // Nuevo: Contenedor de resultados
+
             const searchLoading = document.getElementById('search-loading');
             const packageCard = document.getElementById('package-card');
             const initialMessage = document.getElementById('initial-message');
-            const packageDetailsSummary = document.getElementById('package-details-summary'); // Este ya no se usa como contenedor directo
+            const packageDetailsSummary = document.getElementById('package-details-summary');
             const packageDetailsKits = document.getElementById('package-details-kits');
             
             // --- 3. FUNCIONES DE MANEJO DE UI ---
 
-            // Función para alternar la visibilidad y animación de un contenedor
-            function toggleContainerVisibility(element, show) {
-                if (show) {
-                    element.classList.remove('h-0', 'opacity-0', 'scale-y-0');
-                    element.classList.add('h-auto', 'opacity-100', 'scale-y-100');
-                    element.style.overflow = 'visible'; // Asegura que el contenido se vea
-                } else {
-                    element.classList.remove('h-auto', 'opacity-100', 'scale-y-100');
-                    element.classList.add('h-0', 'opacity-0', 'scale-y-0');
-                    element.style.overflow = 'hidden'; // Oculta el scrollbar cuando está colapsado
-                }
-            }
-            
             // Función para cerrar ambos dropdowns
             function closeDropdowns() {
                 schoolDropdownContainer.classList.remove('active');
@@ -688,8 +692,9 @@
             
             // Muestra/Oculta el dropdown de colegios
             schoolSelectButton.addEventListener('click', (e) => {
-                e.stopPropagation(); 
+                e.stopPropagation(); // Evita que el click se propague al document
                 if (!schoolSelectButton.disabled) {
+                    // Cerrar el de cursos antes de abrir el de colegios
                     courseDropdownContainer.classList.remove('active'); 
                     schoolDropdownContainer.classList.toggle('active');
                     if (schoolDropdownContainer.classList.contains('active')) {
@@ -700,8 +705,9 @@
             
             // Muestra/Oculta el dropdown de cursos
             courseSelectButton.addEventListener('click', (e) => {
-                 e.stopPropagation(); 
+                 e.stopPropagation(); // Evita que el click se propague al document
                  if (!courseSelectButton.disabled) {
+                    // Cerrar el de colegios antes de abrir el de cursos
                     schoolDropdownContainer.classList.remove('active');
                     courseDropdownContainer.classList.toggle('active');
                  }
@@ -709,6 +715,7 @@
 
             // Cierra los dropdowns si se hace clic fuera de ellos
             document.addEventListener('click', (e) => {
+                // Si el click no es dentro de ninguno de los contenedores, cerrarlos
                 if (!schoolDropdownContainer.contains(e.target) && 
                     !courseDropdownContainer.contains(e.target)) {
                     closeDropdowns();
@@ -728,6 +735,7 @@
                     item.href = '#';
                     item.className = 'block px-3 py-2 text-gray-800 hover:bg-gray-100 hover:text-brand-primary transition duration-300 text-sm rounded-md';
                     item.textContent = school.COLEGIO + ' (' + school.CIUDAD + ')';
+                    // Usamos una función anónima para pasar el objeto colegio completo
                     item.addEventListener('click', (e) => {
                         e.preventDefault();
                         handleSchoolSelection(school);
@@ -757,18 +765,25 @@
                 schoolSelectButton.classList.remove('text-gray-500');
                 schoolSelectButton.classList.add('text-gray-700', 'hover:border-brand-primary');
                 
-                // 2. Muestra y prepara el dropdown de cursos
-                toggleContainerVisibility(courseDropdownContainer, true);
+                // 2. Prepara el dropdown de cursos
                 courseSelectButton.innerHTML = `Selecciona el Curso <i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>`;
                 courseDropdownContainer.classList.remove('active');
                 
                 // 3. Muestra los cursos disponibles (renderCourseList)
-                renderCourseList(school);
+                const coursesFound = renderCourseList(school);
                 
-                // 4. Limpia y oculta resultados anteriores
+                // 4. MUESTRA EL SEGUNDO DROPDOWN SOLO SI HAY CURSOS
+                if (coursesFound) {
+                    courseDropdownContainer.classList.remove('hidden-animate');
+                    courseDropdownContainer.classList.add('visible-animate');
+                } else {
+                    courseDropdownContainer.classList.remove('visible-animate');
+                    courseDropdownContainer.classList.add('hidden-animate');
+                }
+                
+                // 5. Limpia resultados anteriores
                 packageCard.classList.add('hidden');
-                toggleContainerVisibility(resultsContainer, false); 
-                initialMessage.textContent = `Selecciona el curso de ${school.COLEGIO} para ver el kit.`;
+                initialMessage.textContent = `Selecciona un curso para ${school.COLEGIO}.`;
                 initialMessage.classList.remove('hidden');
                 
                 // FIX: Limpiar cualquier estilo inline (opacity/transform) que haya dejado la animación de la primera búsqueda
@@ -782,6 +797,7 @@
                 let coursesFound = false;
                 
                 GRADE_KEYS.forEach(key => {
+                    // Accede al valor del grado (ej. school.PREJARDIN) y lo limpia de posibles espacios en blanco
                     const packageInfo = school[key] ? String(school[key]).trim() : '0'; 
                     
                     if (packageInfo && packageInfo !== '0' && packageInfo.toUpperCase() !== 'NULL') {
@@ -793,6 +809,7 @@
                         item.textContent = gradeName;
                         item.addEventListener('click', (e) => {
                             e.preventDefault();
+                            // Pasamos el KEY de la columna ('PREJARDIN') y el nombre para el botón ('Prejardín')
                             handleCourseSelection(key, gradeName, school.ID_COLEGIO);
                             courseDropdownContainer.classList.remove('active');
                         });
@@ -805,18 +822,21 @@
                     courseSelectButton.classList.remove('text-gray-500', 'cursor-not-allowed');
                     courseSelectButton.disabled = false;
                 } else {
-                    courseSelectButton.innerHTML = `No hay cursos disponibles para este colegio <i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>`;
+                    courseSelectButton.innerHTML = `No hay kits disponibles para este curso <i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>`;
                     courseSelectButton.classList.add('text-gray-500', 'cursor-not-allowed');
                     courseSelectButton.classList.remove('text-gray-700', 'hover:border-brand-primary');
                     courseSelectButton.disabled = true;
                 }
+                
+                return coursesFound;
             }
 
             // Maneja la selección del curso y llama al API /api/paquete
+            // NOTA: Esta función se mantiene asíncrona pero ya no hace un 'fetch' real,
+            // utiliza los datos ya cargados en 'selectedSchool'.
             async function handleCourseSelection(gradeKey, gradeName, schoolId) {
                 
-                // 1. Muestra el contenedor de resultados y actualiza el botón de curso
-                toggleContainerVisibility(resultsContainer, true);
+                // 1. Actualiza el botón de curso
                 courseSelectButton.innerHTML = gradeName + 
                     `<i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>`;
                 
@@ -833,6 +853,7 @@
                 await new Promise(resolve => setTimeout(resolve, 800)); // Simula un pequeño retraso
                 
                 try {
+                    // Simulación: El paquete de información ya está en selectedSchool
                     const packageInfo = selectedSchool[gradeKey] ? String(selectedSchool[gradeKey]).trim() : '0';
                     
                     if (packageInfo === '0' || packageInfo.toUpperCase() === 'NULL') {
@@ -843,6 +864,7 @@
                     const randomBookCount = Math.floor(Math.random() * (7 - 4 + 1)) + 4;
 
                     searchLoading.style.display = 'none';
+                    // Reutilizamos la función para mostrar la tarjeta con los datos estáticos
                     displayPackageCard(selectedSchool, gradeName, packageInfo, randomBookCount);
                     
                 } catch (error) {
@@ -868,32 +890,38 @@
                 // 1. Llenar la tarjeta
                 document.getElementById('package-title').textContent = title;
                 
-                // Actualizar campos fijos
-                document.getElementById('card-colegio').textContent = school.COLEGIO || 'N/A';
-                document.getElementById('card-curso').textContent = gradeName || 'N/A';
-                document.getElementById('card-cantidad-libros').textContent = `${bookCount} Libros`;
-                document.getElementById('card-ciudad').textContent = school.CIUDAD || 'N/A';
+                // Limpiar contenedores
+                packageDetailsSummary.innerHTML = '';
+                packageDetailsKits.innerHTML = '';
+
+                // Actualizar los campos fijos y la nueva Cantidad de libros (usando los nuevos estilos)
+                packageDetailsSummary.innerHTML = `
+                    <p><span class="font-semibold text-gray-100">Colegio:</span> <span id="card-colegio" class="text-brand-primary">${school.COLEGIO || 'N/A'}</span></p>
+                    <p><span class="font-semibold text-gray-100">Curso:</span> <span id="card-curso" class="text-brand-primary">${gradeName || 'N/A'}</span></p>
+                    <p><span class="font-semibold text-gray-100">Libros:</span> <span id="card-cantidad-libros" class="font-bold text-brand-primary">${bookCount} Libros</span></p>
+                    <p class="hidden"><span class="font-semibold text-gray-100">Ciudad:</span> <span id="card-ciudad" class="text-brand-primary">${school.CIUDAD || 'N/A'}</span></p>
+                    <p class="hidden"><span class="font-semibold text-gray-100">Ubicación:</span> <a href="${school.UBICACION || '#'}" id="card-ubicacion" target="_blank" class="text-brand-primary hover:underline">Ver en Mapa</a></p>
+                `;
+                
                 document.getElementById('card-imagen').src = school.IMAGEN || 'https://sbooks.com.co/wp-content/uploads/2024/12/no-image.png'; // Fallback image
                 
-                // 2. Agregar los detalles dinámicos del paquete
-                packageDetailsKits.innerHTML = '';
-                
+                // Agregar los detalles dinámicos del paquete
                 if (packageInfo.includes(',')) {
                     const kits = packageInfo.split(',').map(item => item.trim());
                     const ul = document.createElement('ul');
-                    ul.className = 'list-disc list-inside mt-3 text-base text-gray-700 space-y-2 text-left ml-4';
+                    ul.className = 'list-disc list-inside mt-2 text-sm text-gray-200 space-y-1 text-left ml-4'; // Color de texto ajustado
                     kits.forEach(kit => {
                         const li = document.createElement('li');
                         li.textContent = kit;
                         ul.appendChild(li);
                     });
                     
-                    packageDetailsKits.innerHTML = `<p class="font-semibold text-gray-800 mb-2">Paquetes Específicos Disponibles:</p>`;
+                    packageDetailsKits.innerHTML = `<p class="font-semibold text-gray-100 mt-4 mb-2">Paquetes Disponibles:</p>`; // Color de texto ajustado
                     packageDetailsKits.appendChild(ul);
                     
                 } else {
                     // Si es un solo paquete, mostrar el nombre exacto
-                     packageDetailsKits.innerHTML = `<p class="font-semibold text-gray-800">Nombre del Kit Exacto:</p><p class="mt-1 text-base text-gray-700 font-medium">${packageInfo || 'Kit no especificado'}</p>`;
+                     packageDetailsKits.innerHTML = `<p class="font-semibold text-gray-100 mt-4">Nombre del Kit:</p><p class="mt-1 text-sm text-gray-200">${packageInfo || 'Kit no especificado'}</p>`; // Color de texto ajustado
                 }
                 
                 
@@ -903,6 +931,7 @@
             
             // --- 4. FUNCIÓN PRINCIPAL DE CARGA DE DATOS ---
             function loadSchools() {
+                // En lugar de fetch, usamos los datos estáticos
                 ALL_SCHOOLS = STATIC_SCHOOL_DATA;
                 
                 // Actualiza el UI al cargar
@@ -915,12 +944,15 @@
                 
                 initialMessage.textContent = 'Por favor, selecciona un colegio para empezar.';
                 
+                // Asegura que el segundo dropdown esté oculto al inicio
+                courseDropdownContainer.classList.remove('visible-animate');
+                courseDropdownContainer.classList.add('hidden-animate');
+                
             }
             
             // --- 5. INICIALIZACIÓN ---
+            // Reemplazo de fetchSchools() por loadSchools()
             loadSchools();
-            toggleContainerVisibility(courseDropdownContainer, false); // Ocultar curso al inicio
-            toggleContainerVisibility(resultsContainer, false);      // Ocultar resultados al inicio
 
             // Script para Scroll Reveal (Mantenido solo para elementos no interactivos)
             const revealElements = document.querySelectorAll('.animate-scroll-reveal');
