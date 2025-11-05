@@ -76,7 +76,12 @@
             overflow-y: auto; /* Permite scroll cuando está activo */
         }
         
-        #search-loading { display: none; transition: opacity 0.3s; }
+        #search-loading { 
+            display: none; 
+            transition: opacity 0.3s; 
+            /* Agregamos una altura mínima para el loading para que no se vea feo al cargar */
+            min-height: 150px; 
+        }
         
         /* Estilo para el botón de colegio al cargar */
         .school-loading { 
@@ -263,8 +268,10 @@
 
             </div>
 
-            <div id="results-container" class="mt-12 pt-8 border-t border-gray-200 min-h-[250px] flex flex-col justify-center items-center max-w-7xl mx-auto">
+            <div id="results-container" class="mt-12 pt-8 border-t border-gray-200 flex flex-col justify-center items-center max-w-7xl mx-auto">
                 
+                <p id="initial-message" class="text-lg text-gray-400 italic mb-6">Por favor, selecciona un colegio para empezar.</p>
+
                 <div id="search-loading" class="flex flex-col items-center justify-center p-8">
                     <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExdHZrdnZoZnNpdTBvdW1kcnRkOGl0anl1d25ld2F5N3o4MTJ5ZG5kOCZlcD12MV9pbnRlcm5hbF9naWYmY3Q9Zw/3o7bu8ZpM249R4Q3FC/giphy.gif" alt="Buscando..." class="w-20 h-20 mb-4 rounded-full border-4 border-yellow-400 p-1">
                     <p class="text-lg font-outfit font-semibold text-brand-primary">Buscando tu kit...</p>
@@ -298,8 +305,6 @@
                         </a>
                     </div>
                 </div>
-
-                <p id="initial-message" class="text-lg text-gray-400 italic">Por favor, selecciona un colegio para empezar.</p>
 
             </div>
 
@@ -765,9 +770,9 @@
             function handleSchoolSelection(school) {
                 selectedSchool = school;
                 
-                // 1. Oculta el resultado de búsqueda anterior y la animación
+                // 1. OCULTAR TODOS LOS RESULTADOS Y ESTADOS DE CARGA
                 packageCard.classList.add('hidden');
-                searchLoading.style.display = 'none'; // Asegura que no haya loading si se cambia de colegio
+                searchLoading.style.display = 'none'; 
                 
                 // 2. Actualiza el botón de colegio
                 schoolSelectButton.innerHTML = school.COLEGIO + 
@@ -785,10 +790,6 @@
                 // 5. Muestra el mensaje de selección de curso
                 initialMessage.textContent = `Selecciona un curso para ${school.COLEGIO}.`;
                 initialMessage.classList.remove('hidden');
-                
-                // FIX: Limpiar cualquier estilo inline (opacity/transform) que haya dejado la animación de la primera búsqueda
-                packageCard.style.opacity = ''; 
-                packageCard.style.transform = '';
             }
             
             // Renderiza la lista de cursos disponibles
@@ -839,13 +840,11 @@
                 courseSelectButton.innerHTML = gradeName + 
                     `<i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>`;
                 
-                // 2. Oculta la tarjeta y limpia cualquier estilo de animación anterior
+                // 2. Oculta la tarjeta y el mensaje inicial
                 packageCard.classList.add('hidden');
-                packageCard.style.opacity = ''; 
-                packageCard.style.transform = '';
+                initialMessage.classList.add('hidden');
 
                 // 3. Inicia la animación de búsqueda
-                initialMessage.classList.add('hidden');
                 searchLoading.style.display = 'flex';
                 
                 // SIMULACION de la llamada API para obtener el paquete
