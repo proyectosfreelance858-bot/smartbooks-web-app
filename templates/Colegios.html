@@ -196,131 +196,113 @@
 
         <div class="bg-white border-t border-gray-100 hidden lg:block shadow-sm h-14">
             <div class="max-w-7xl mx-auto px-4 h-full">
-                <nav class="flex justify-center h-full">
+                <nav class="flex justify-center space-x-10 font-outfit text-gray-800 font-semibold text-base h-full">
+                    <a href="/" class="menu-item">Inicio</a>
+                    
                     <div class="dropdown relative h-full">
-                        <a href="/textos-escolares" class="menu-item active"> Textos Escolares </a>
-                    </div>
-                    <div class="dropdown relative h-full">
-                        <a href="#" class="menu-item flex items-center"> Novedades <i class="fas fa-chevron-down text-xs ml-1 transition-transform transform group-hover:rotate-180"></i> </a>
-                        <div class="dropdown-menu absolute bg-white shadow-xl rounded-b-md w-56 border-t-2 border-brand-accent top-full">
-                            <a href="/lanzamientos" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Lanzamientos</a>
-                            <a href="/promociones" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Promociones</a>
-                            <a href="/eventos" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Eventos</a>
-                        </div>
-                    </div>
-                    <div class="dropdown relative h-full">
-                        <a href="/quienes-somos" class="menu-item"> Quiénes Somos </a>
-                    </div>
-                    <div class="dropdown relative h-full">
-                        <a href="#" class="menu-item flex items-center"> Ayuda <i class="fas fa-chevron-down text-xs ml-1 transition-transform transform group-hover:rotate-180"></i> </a>
+                        <a href="/quienes-somos" class="menu-item flex items-center">
+                            Nosotros <i class="fas fa-chevron-down text-xs ml-1 transition-transform transform group-hover:rotate-180"></i>
+                        </a>
                         <div class="dropdown-menu absolute bg-white shadow-xl rounded-b-md w-56 border-t-2 border-brand-accent top-full">
                             <a href="/quienes-somos" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Quienes Somos</a>
                             <a href="/terminos-y-condiciones" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Términos y Condiciones</a>
                             <a href="/preguntas-frecuentes" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Preguntas Frecuentes – FAQ</a>
                         </div>
                     </div>
+                    
                     <div class="dropdown relative h-full">
-                        <a href="#" class="menu-item flex items-center"> Aliados <i class="fas fa-chevron-down text-xs ml-1 transition-transform transform group-hover:rotate-180"></i> </a>
+                        <a href="#" class="menu-item flex items-center">
+                            Aliados <i class="fas fa-chevron-down text-xs ml-1 transition-transform transform group-hover:rotate-180"></i>
+                        </a>
                         <div class="dropdown-menu absolute bg-white shadow-xl rounded-b-md w-40 border-t-2 border-brand-accent top-full">
                             <a href="/aliados/castillo" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Castillo</a>
-                            <a href="/aliados/macmillan" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">Macmillan</a>
-                            <a href="/aliados/sm" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">SM</a>
+                            <a href="/aliados/macmillan" class="block px-5 py-3 text-gray-800 hover:bg-gray-100 hover:text-active transition duration-300 text-sm">MacMillan</a>
                         </div>
                     </div>
+
+                    <a href="/tienda" class="menu-item">Tienda</a>
+                    <a href="/colegios" class="menu-item active">Colegios</a>
+                    <a href="/contactanos" class="menu-item">Contáctanos</a>
+                    <a href="/intranet" class="menu-item">Intranet</a>
                 </nav>
             </div>
         </div>
     </header>
+    <main class="py-16 md:py-24 bg-gray-50">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-scroll-reveal">
+            <h1 class="font-outfit text-5xl sm:text-6xl md:text-7xl font-black text-gray-900 mb-8 leading-tight">
+                ENCUENTRA TU <span class="text-brand-primary">COLEGIO</span>
+            </h1>
+            <p class="text-xl text-gray-600 mb-12">
+                Selecciona tu institución y el curso para ver el kit educativo exacto que necesitas.
+            </p>
 
-    <main class="py-12 md:py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="space-y-6">
 
-            <div class="text-center mb-12 animate-scroll-reveal" style="animation-delay: 0.1s;">
-                <h1 class="font-outfit text-4xl sm:text-5xl font-extrabold text-brand-primary mb-3">
-                    Encuentra tus Textos Escolares
-                </h1>
-                <p class="text-gray-600 text-xl font-instrument">
-                    Selecciona tu colegio y curso para ver el paquete educativo exacto.
-                </p>
+                <div id="school-dropdown-container" class="relative custom-dropdown animate-scroll-reveal delay-200">
+                    <button id="school-select-button" 
+                            class="w-full bg-white border border-gray-300 rounded-lg shadow-xl py-4 px-6 text-xl text-left text-gray-500 font-semibold flex items-center justify-between transition duration-300 school-loading" disabled>
+                        Cargando Colegios...
+                        <i class="fas fa-spinner fa-spin text-base ml-2"></i>
+                    </button>
+                    
+                    <div id="school-dropdown-menu" class="custom-dropdown-menu absolute bg-white shadow-2xl rounded-b-lg w-full mt-1 border border-brand-primary border-t-0 p-3">
+                        <input type="text" id="school-search-input" placeholder="Buscar colegio..." class="w-full p-3 mb-3 border border-gray-300 rounded-md outline-none focus:border-brand-primary transition duration-300" disabled>
+                        <div id="school-list" class="space-y-1">
+                            </div>
+                    </div>
+                </div>
+
+                <div id="course-dropdown-container" class="relative course-dropdown z-50 course-dropdown-container-hidden">
+                    <button id="course-select-button" 
+                            class="w-full bg-white border border-gray-300 rounded-lg shadow-xl py-4 px-6 text-xl text-left text-gray-500 font-semibold flex items-center justify-between transition duration-300 cursor-not-allowed" disabled>
+                        Selecciona el Curso
+                        <i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>
+                    </button>
+
+                    <div id="course-dropdown-menu" class="course-dropdown-menu absolute bg-white shadow-2xl rounded-b-lg w-full mt-1 border border-brand-primary border-t-0 p-3">
+                        <div id="course-list" class="space-y-1">
+                            </div>
+                    </div>
+                </div>
+
             </div>
 
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24 bg-white shadow-2xl rounded-2xl border border-gray-100 animate-scroll-reveal" style="animation-delay: 0.3s;">
+            <div id="results-container" class="mt-12 pt-8 border-t border-gray-200 flex flex-col justify-center items-center max-w-7xl mx-auto">
                 
-                <h2 class="font-outfit text-3xl font-bold text-gray-800 mb-8 text-center">
-                    Localiza tu Kit Educativo
-                </h2>
+                <p id="initial-message" class="text-lg text-gray-400 italic mb-6">Por favor, selecciona un colegio para empezar.</p>
 
-                <div class="mb-6 custom-dropdown relative z-60" id="school-dropdown-container">
-                    <label for="school-select-button" class="block text-sm font-medium text-gray-700 mb-2">Paso 1: Selecciona tu Colegio</label>
-                    <div class="relative">
-                        <button type="button" id="school-select-button" class="w-full text-left bg-gray-50 border border-gray-300 rounded-lg shadow-sm px-4 py-3 text-lg font-semibold text-gray-700 hover:border-brand-primary transition duration-300 flex justify-between items-center" aria-haspopup="true" aria-expanded="false" aria-controls="school-list">
-                            <span id="selected-school-name">Busca o selecciona un colegio</span>
-                            <i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>
-                        </button>
-                        <div id="school-dropdown-menu" class="custom-dropdown-menu absolute mt-1 w-full rounded-lg shadow-xl bg-white border border-gray-200 p-2 transform origin-top-right" role="menu" aria-orientation="vertical" aria-labelledby="school-select-button">
-                            <input type="text" id="school-search-input" placeholder="Escribe el nombre del colegio..." class="search-input text-sm mb-2" onfocus="this.value=''" autocomplete="off">
-                            <div id="school-list" class="space-y-1">
-                                <p id="school-loading" class="text-center p-3 text-gray-500">Cargando colegios...</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="course-dropdown-container-hidden" id="course-dropdown-container">
-                    <div class="course-dropdown relative z-50">
-                        <label for="course-select-button" class="block text-sm font-medium text-gray-700 mb-2">Paso 2: Selecciona tu Curso</label>
-                        <button type="button" id="course-select-button" class="w-full text-left bg-white border border-gray-300 rounded-lg shadow-sm px-4 py-3 text-lg font-semibold text-gray-500 hover:border-brand-primary transition duration-300 flex justify-between items-center" aria-haspopup="true" aria-expanded="false" disabled>
-                            <span id="selected-course-name">Selecciona un curso</span>
-                            <i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>
-                        </button>
-                        <div id="course-dropdown-menu" class="course-dropdown-menu absolute mt-1 w-full rounded-lg shadow-xl bg-white border border-gray-200 p-2 transform origin-top-right" role="menu" aria-orientation="vertical" aria-labelledby="course-select-button">
-                            <div id="course-list" class="space-y-1">
-                                </div>
-                        </div>
-                    </div>
+                <div id="search-loading" class="flex flex-col items-center justify-center p-8">
+                    <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExdHZrdnZoZnNpdTBvdW1kcnRkOGl0anl1d25ld2F5N3o4MTJ5ZG5kOCZlcD12MV9pbnRlcm5hbF9naWYmY3Q9Zw/3o7bu8ZpM249R4Q3FC/giphy.gif" alt="Buscando..." class="w-20 h-20 mb-4 rounded-full border-4 border-yellow-400 p-1">
+                    <p class="text-lg font-outfit font-semibold text-brand-primary">Buscando tu kit...</p>
                 </div>
                 
-                <div class="mt-8 text-center" id="result-container">
-                    <p id="initial-message" class="text-xl text-gray-500 font-instrument">
-                        Por favor, selecciona un colegio para empezar.
-                    </p>
+                <div id="package-card" class="rounded-xl shadow-2xl border-t-4 overflow-hidden w-full hidden text-left flex-col md:flex-row md:space-x-6 items-center">
                     
-                    <div id="search-loading" class="flex flex-col items-center justify-center p-8 text-brand-primary">
-                        <i class="fas fa-spinner fa-spin text-4xl mb-3"></i>
-                        <p class="text-lg font-semibold">Buscando paquete educativo...</p>
+                    <div id="card-imagen-container" class="flex-shrink-0 mb-4 md:mb-0">
+                        <img id="card-imagen" src="" alt="Logo del Colegio" class="w-24 h-24 object-contain rounded-full bg-white p-1 shadow-inner">
                     </div>
 
-                    <div id="package-card" class="mt-12 animate-scroll-reveal hidden" style="animation-delay: 0.5s;">
-                        <div id="card-content" class="md:flex md:space-x-8 items-start justify-between w-full">
-                            
-                            <div class="flex flex-col items-center flex-shrink-0 mb-6 md:mb-0 md:items-start w-full md:w-auto">
-                                <div id="card-imagen-container" class="flex-shrink-0 mb-4 md:mb-0">
-                                    <img id="card-imagen" src="" alt="Logo del Colegio" class="w-24 h-24 object-contain rounded-full bg-white p-1 shadow-inner">
-                                </div>
-                                <div class="flex-grow min-w-0 text-center md:text-left">
-                                    <p class="text-xs font-outfit uppercase tracking-widest text-brand-secondary font-bold mb-1">Paquete Educativo Encontrado</p>
-                                    <h3 id="package-title" class="font-outfit text-xl sm:text-2xl font-black mb-4 leading-snug"></h3>
-                                    <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-200 mb-4 justify-center md:justify-start" id="package-details-summary">
-                                        <p><span class="font-semibold text-gray-800-card-mod">Colegio:</span> <span id="card-colegio"></span></p>
-                                        <p><span class="font-semibold text-gray-800-card-mod">Curso:</span> <span id="card-curso"></span></p>
-                                        <p><span class="font-semibold text-gray-800-card-mod">Libros:</span> <span id="card-cantidad-libros" class="font-bold text-brand-primary-card-mod"></span></p>
-                                    </div>
-                                    <a href="#" id="card-map-link" target="_blank" class="text-brand-secondary hover:text-yellow-300 transition duration-300 text-sm font-semibold flex items-center justify-center md:justify-start">
-                                        <i class="fas fa-map-marker-alt mr-2"></i> Ver Ubicación del Colegio
-                                    </a>
-                                </div>
-                            </div>
-                            
-                            <div class="md:w-1/2 w-full text-center md:text-left">
-                                <p class="font-semibold text-white mb-2">Libros incluidos en tu paquete:</p>
-                                <div id="kits-detail-list" class="max-h-40 overflow-y-auto custom-scrollbar pr-2">
-                                    </div>
-
-                                <button class="btn-add-to-cart w-full md:w-auto mt-6 px-8 py-3 rounded-xl font-outfit font-black uppercase shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 transition duration-300">
-                                    <i class="fas fa-cart-plus mr-2"></i> Añadir Kit Completo al Carrito
-                                </button>
-                            </div>
+                    <div class="flex-grow min-w-0">
+                        <p class="text-xs font-outfit uppercase tracking-widest text-brand-secondary font-bold mb-1">Paquete Educativo Encontrado</p>
+                        <h3 id="package-title" class="font-outfit text-xl sm:text-2xl font-black mb-4 leading-snug"></h3>
+                        
+                        <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-200 mb-4" id="package-details-summary">
+                            <p><span class="font-semibold text-gray-800-card-mod">Colegio:</span> <span id="card-colegio"></span></p>
+                            <p><span class="font-semibold text-gray-800-card-mod">Curso:</span> <span id="card-curso"></span></p>
+                            <p><span class="font-semibold text-gray-800-card-mod">Libros:</span> <span id="card-cantidad-libros" class="font-bold text-brand-primary-card-mod"></span></p>
+                            <p class="hidden"><span class="font-semibold text-gray-800-card-mod">Ciudad:</span> <span id="card-ciudad"></span></p>
+                            <p class="hidden"><span class="font-semibold text-gray-800-card-mod">Ubicación:</span> <a href="#" id="card-ubicacion" target="_blank" class="text-brand-secondary hover:underline">Ver en Mapa</a></p>
                         </div>
+                        
+                        <div id="package-details-kits" class="text-sm text-gray-200 space-y-2">
+                            </div>
+                    </div>
+                    
+                    <div class="flex-shrink-0 w-full md:w-auto mt-4 md:mt-0">
+                        <a href="#" class="btn-add-to-cart w-full inline-block text-center px-8 py-3 font-bold rounded-lg shadow-lg transition duration-300">
+                            Añadir Kit Completo al Carrito
+                        </a>
                     </div>
                 </div>
 
@@ -328,125 +310,431 @@
 
         </div>
     </main>
-    
-    <a href="https://wa.me/573017777777" class="whatsapp-float" target="_blank" title="Contáctanos por WhatsApp">
-        <i class="fab fa-whatsapp"></i>
-    </a>
-    
-    <footer class="bg-gray-800 text-white mt-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div class="lg:col-span-1">
-                    <img src="https://sbooks.com.co/wp-content/uploads/2022/10/Logo-Blanco-2048x1078.png" alt="Logo Smart Books Holding Blanco" class="h-16 w-auto mb-4">
-                    <p class="text-sm text-gray-400">Distribución de textos escolares y material educativo de las mejores casas editoriales.</p>
+    <footer class="bg-white py-12 border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="flex flex-col items-start">
+                <img src="https://sbooks.com.co/wp-content/uploads/2022/10/Logo-Azul-2048x1078.png" alt="Logo Smart Books" class="h-10 mb-4">
+                <p class="text-sm text-gray-600 mb-2">¿Tienes preguntas? ¡Llámanos!</p>
+                <a href="tel:+573336025029" class="text-brand-accent font-outfit text-2xl font-bold mb-4 hover:text-red-700 transition duration-300">
+                    +57 (333) 602 50 29
+                </a>
+                <div class="flex space-x-4 text-gray-500">
+                    <a href="https://www.facebook.com/smartbookscol" target="_blank" class="hover:text-brand-primary transition duration-300"><i class="fab fa-facebook-f text-lg"></i></a>
+                    <a href="https://www.instagram.com/smartbookscol" target="_blank" class="hover:text-brand-primary transition duration-300"><i class="fab fa-instagram text-lg"></i></a>
+                    <a href="https://www.linkedin.com/company/smartbookscol/" target="_blank" class="hover:text-brand-primary transition duration-300"><i class="fab fa-linkedin-in text-lg"></i></a>
+                    <a href="#" class="hover:text-brand-primary transition duration-300"><i class="fab fa-pinterest-p text-lg"></i></a>
                 </div>
-                <div class="lg:col-span-1">
-                    <h4 class="font-outfit text-lg font-semibold text-white mb-4">Explorar</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="/textos-escolares" class="hover:text-brand-secondary transition duration-300">Textos Escolares</a></li>
-                        <li><a href="/quienes-somos" class="hover:text-brand-secondary transition duration-300">Quiénes Somos</a></li>
-                        <li><a href="/novedades" class="hover:text-brand-secondary transition duration-300">Novedades</a></li>
-                        <li><a href="/contacto" class="hover:text-brand-secondary transition duration-300">Contacto</a></li>
-                    </ul>
-                </div>
-                <div class="lg:col-span-1">
-                    <h4 class="font-outfit text-lg font-semibold text-white mb-4">Ayuda</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="/preguntas-frecuentes" class="hover:text-brand-secondary transition duration-300">Preguntas Frecuentes</a></li>
-                        <li><a href="/terminos-y-condiciones" class="hover:text-brand-secondary transition duration-300">Términos y Condiciones</a></li>
-                        <li><a href="/politica-privacidad" class="hover:text-brand-secondary transition duration-300">Política de Privacidad</a></li>
-                    </ul>
-                </div>
-                <div class="lg:col-span-1">
-                    <h4 class="font-outfit text-lg font-semibold text-gray-900 mb-4">Encuéntranos</h4>
-                    <div class="w-full rounded-lg overflow-hidden shadow-md">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d618.676350650165!2d-74.05854276815452!3d4.753396005441487!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f85a3816c4b63%3A0xbdecd40be274ea2!2sSmart%20Books%20Colombia!5e1!3m2!1ses-419!2sco!4v1760823591513!5m2!1ses-4" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-                    </div>
-                </div>
+                <a href="/intranet" class="mt-6 text-sm text-gray-700 border border-gray-300 rounded-md px-5 py-2 hover:bg-gray-100 hover:text-brand-primary transition duration-300">
+                    Iniciar Sesión
+                </a>
             </div>
-            <div class="border-t border-gray-700 mt-8 pt-6 flex justify-between items-center text-sm text-gray-500">
-                <p>&copy; 2025 Smart Books. Todos los derechos reservados.</p>
-                <div class="flex space-x-3">
-                    <a href="https://www.facebook.com/smartbookscol" target="_blank" class="hover:text-white"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://www.instagram.com/smartbookscol" target="_blank" class="hover:text-white"><i class="fab fa-instagram"></i></a>
-                    <a href="https://www.linkedin.com/company/smartbookscol/" target="_blank" class="hover:text-white"><i class="fab fa-linkedin-in"></i></a>
+            <div>
+                <h4 class="font-outfit text-lg font-semibold text-gray-900 mb-4">Información de Contacto</h4>
+                <ul class="space-y-2 text-sm text-gray-600">
+                    <li>
+                        <p class="font-semibold text-gray-800">Bogotá:</p>
+                        <p>Carrera 58 No 164A-55, C.C Punto 170 Local 113</p>
+                        <p>(Cerrado Temporalmente)</p>
+                        <p>Calle 159A # 21A – 39 – Barrio Magdalena – Casa Blanca</p>
+                        <p>PBX: 333 602 50 29</p>
+                    </li>
+                    <li>
+                        <p class="font-semibold text-gray-800">Medellín, Antioquia:</p>
+                        <p>Edificio San Sebastian de La 70</p>
+                        <p>DQ 2 # 70 – 24 – INT 202</p>
+                        <p>LAURELES</p>
+                        <p>PBX: 333 602 50 29 EXT: 1100</p>
+                    </li>
+                    <li>
+                        <a href="mailto:contacto@smartbooks.com.co" class="text-brand-primary hover:underline">contacto@smartbooks.com.co</a>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-outfit text-lg font-semibold text-gray-900 mb-4">Explorar</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="/quienes-somos" class="text-gray-600 hover:text-brand-primary transition duration-300">Quienes Somos</a></li>
+                    <li><a href="/tienda" class="text-gray-600 hover:text-brand-primary transition duration-300">Nuestros Productos</a></li>
+                    <li><a href="/colegios" class="text-gray-600 hover:text-brand-primary transition duration-300">Colegios</a></li>
+                    <li><a href="/blog" class="text-gray-600 hover:text-brand-primary transition duration-300">Blog</a></li>
+                    <li><a href="/intranet" class="text-gray-600 hover:text-brand-primary transition duration-300">Intranet (Iniciar Sesión)</a></li>
+                </ul>
+            </div>
+            <div class="lg:col-span-1">
+                <h4 class="font-outfit text-lg font-semibold text-gray-900 mb-4">Encuéntranos</h4>
+                <div class="w-full rounded-lg overflow-hidden shadow-md">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d618.676350650165!2d-74.05854276815452!3d4.753396005441487!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f85a3816c4b63%3A0xbdecd40be274ea2!2sSmart%20Books%20Colombia!5e1!3m2!1ses-419!2sco!4v1760823591513!5m2!1ses-419!2sco" 
+                        width="100%" 
+                        height="200" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade"
+                        class="rounded-lg">
+                    </iframe>
                 </div>
             </div>
         </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t border-gray-100 text-sm text-gray-500 text-center">
+            <p>© 2024 Smart Books. Todos los derechos reservados. | Diseñado con ❤️</p>
+        </div>
     </footer>
-    
-
+    <a href="https://api.whatsapp.com/send?phone=573115572243" target="_blank" class="whatsapp-float" aria-label="Contactar por WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', function() {
             
-            // --- 1. REFERENCIAS DE ELEMENTOS DOM ---
+            // --- 1. CONFIGURACIÓN Y DATOS ---
+            let ALL_SCHOOLS = [];
+            let selectedSchool = null;
+
+            const GRADES_MAP = {
+                'PREJARDIN': 'Prejardín', 'JARDIN': 'Jardín', 'TRANSICION': 'Transición', 
+                'PRIMERO': '1° (Primero)', 'SEGUNDO': '2° (Segundo)', 'TERCERO': '3° (Tercero)', 
+                'CUARTO': '4° (Cuarto)', 'QUINTO': '5° (Quinto)', 'SEXTO': '6° (Sexto)', 
+                'SEPTIMO': '7° (Séptimo)', 'OCTAVO': '8° (Octavo)', 'NOVENO': '9° (Noveno)', 
+                'DECIMO': '10° (Décimo)', 'ONCE': '11° (Once)'
+            };
+            const GRADE_KEYS = Object.keys(GRADES_MAP);
+
+            // DATOS ESTATICOS INYECTADOS
+            const STATIC_SCHOOL_DATA = [
+                {
+                    ID_COLEGIO: '0001',
+                    COLEGIO: 'Cosmo Schools',
+                    CIUDAD: 'MEDELLIN',
+                    PREJARDIN: '0',
+                    JARDIN: 'PAQUETE DE INGLÉS Cosmo- JARDÍN',
+                    TRANSICION: 'PAQUETE DE INGLÉS Cosmo – TRANSICIÓN°°',
+                    PRIMERO: 'PAQUETE DE INGLÉS Cosmo – 1°°',
+                    SEGUNDO: 'PAQUETE DE INGLÉS Cosmo – 2°°',
+                    TERCERO: 'PAQUETE DE INGLÉS Cosmo – 3°°',
+                    CUARTO: 'PAQUETE DE INGLÉS Cosmo – 4°°',
+                    QUINTO: 'PAQUETE DE INGLÉS Cosmo – 5°°',
+                    SEXTO: 'PAQUETE DE INGLÉS Cosmo – 6°°',
+                    SEPTIMO: 'PAQUETE DE INGLÉS Cosmo – 7°°',
+                    OCTAVO: 'PAQUETE DE INGLÉS Cosmo – 8°°', // Corregido el error de duplicación de SEPTIMO
+                    NOVENO: 'PAQUETE DE INGLÉS Cosmo – 9°°',
+                    DECIMO: 'PAQUETE DE INGLÉS Cosmo – 10°°',
+                    ONCE: 'PAQUETE DE INGLÉS Cosmo – 11°°',
+                    IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2024/11/LOGO-COLEGIO.png',
+                    UBICACION: 'https://www.google.com/maps/place/Cosmo+Schools+Laureles/@6.2494378,-75.5975453,82m/data=!3m1!1e3!4m6!3m5!1s0x8e44290054b4d00f:0x4ce9077585d3e1f3!8m2!3d6.2495572!4d-75.5974375!16s%2Fg%2F11w95xns5b?entry=ttu&g_ep=EgoyMDI1MTAyOS4yIKXMDSoASAFQAw%3D%3D'
+                },
+                {
+                    ID_COLEGIO: '0002',
+                    COLEGIO: 'GIMNASIO SAN ANGELO',
+                    CIUDAD: 'BOGOTA',
+                    PREJARDIN: 'PAQUETE EDUCATIVO San Angelo - PREJARDIN',
+                    JARDIN: 'PAQUETE EDUCATIVO San Angelo - JARDIN',
+                    TRANSICION: 'PAQUETE EDUCATIVO San Angelo - TRANSICIÓN',
+                    PRIMERO: 'PAQUETE EDUCATIVO San Angelo - 1°',
+                    SEGUNDO: 'PAQUETE EDUCATIVO San Angelo - 2°',
+                    TERCERO: 'PAQUETE EDUCATIVO San Angelo - 3°',
+                    CUARTO: 'PAQUETE EDUCATIVO San Angelo - 4°',
+                    QUINTO: 'PAQUETE EDUCATIVO San Angelo - 5°',
+                    SEXTO: 'PAQUETE EDUCATIVO San Angelo - 6°',
+                    SEPTIMO: 'PAQUETE EDUCATIVO San Angelo - 7°',
+                    OCTAVO: 'PAQUETE EDUCATIVO San Angelo - 8°',
+                    NOVENO: 'PAQUETE EDUCATIVO San Angelo - 9°',
+                    DECIMO: 'PAQUETE EDUCATIVO San Angelo - 10°',
+                    ONCE: 'PAQUETE EDUCATIVO San Angelo - 11°',
+                    IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2024/12/3-6-150x150.png',
+                    UBICACION: 'https://www.google.com/maps/place/Gimnasio+San+Angelo/@4.8013523,-74.0463802,1104m/data=!3m1!1e3!4m6!3m5!1s0x8e3f8616da249b53:0xab6aeb0b622dcf1!8m2!3d4.8013655!4d-74.0448845!16s%2Fg%2F11b6g89sgp?entry=ttu&g_ep=EgoyMDI1MTAyOS4yIKXMDSoASAFQAw%3D%3D'
+                },
+                {
+                    ID_COLEGIO: '0003',
+                    COLEGIO: 'CAFAM',
+                    CIUDAD: 'BOGOTA',
+                    PREJARDIN: '0',
+                    JARDIN: '0',
+                    TRANSICION: 'PAQUETE EDUCATIVO CAFAM 68 - TRANSICIÓN, PAQUETE EDUCATIVO CAFAM CAMPESTRE - TRANSICIÓN',
+                    PRIMERO: 'PAQUETE EDUCATIVO CAFAM 68- 1°, PAQUETE EDUCATIVO CAFAM CAMPESTRE- 1°',
+                    SEGUNDO: 'PAQUETE EDUCATIVO CAFAM 68- 2°, PAQUETE EDUCATIVO CAFAM CAMPESTRE- 2°',
+                    TERCERO: 'PAQUETE EDUCATIVO CAFAM 68- 3°, PAQUETE EDUCATIVO CAFAM CAMPESTRE- 3°',
+                    CUARTO: 'PAQUETE EDUCATIVO CAFAM 68- 4°, PAQUETE EDUCATIVO CAFAM CAMPESTRE- 4°',
+                    QUINTO: 'PAQUETE EDUCATIVO CAFAM 68- 5°, PAQUETE EDUCATIVO CAFAM CAMPESTRE- 5°',
+                    SEXTO: 'PAQUETE EDUCATIVO CAFAM 68- 6°, PAQUETE EDUCATIVO CAFAM CAMPESTRE- 6°',
+                    SEPTIMO: 'PAQUETE EDUCATIVO CAFAM 68- 7°, PAQUETE EDUCATIVO CAFAM CAMPESTRE- 7°',
+                    OCTAVO: 'PAQUETE EDUCATIVO CAFAM 68- 8°, PAQUETE EDUCATIVO CAFAM CAMPESTRE- 8°',
+                    NOVENO: 'PAQUETE EDUCATIVO CAFAM 68- 9°, PAQUETE EDUCATIVO CAFAM CAMPESTRE- 9°',
+                    DECIMO: 'PAQUETE EDUCATIVO CAFAM 68- 10°, PAQUETE EDUCATIVO CAFAM CAMPESTRE- 10°',
+                    ONCE: 'PAQUETE EDUCATIVO CAFAM 68- 11°, PAQUETE EDUCATIVO CAFAM CAMPESTRE- 11°',
+                    IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2024/12/1-6.png',
+                    UBICACION: 'https://maps.app.goo.gl/dpxuP9SRRmcr7fx97'
+                },
+                {
+                    ID_COLEGIO: '0004',
+                    COLEGIO: 'LICEO PARROQUIAL SAN JOSE',
+                    CIUDAD: 'BOGOTA',
+                    PREJARDIN: '0',
+                    JARDIN: '0',
+                    TRANSICION: '0',
+                    PRIMERO: 'PAQUETE EDUCATIVO PARROQUIAL SAN JOSÉ- 1°',
+                    SEGUNDO: 'PAQUETE EDUCATIVO PARROQUIAL SAN JOSÉ- 2°',
+                    TERCERO: 'PAQUETE EDUCATIVO PARROQUIAL SAN JOSÉ- 3°',
+                    CUARTO: 'PAQUETE EDUCATIVO PARROQUIAL SAN JOSÉ- 4°',
+                    QUINTO: 'PAQUETE EDUCATIVO PARROQUIAL SAN JOSÉ- 5°',
+                    SEXTO: 'PAQUETE EDUCATIVO PARROQUIAL SAN JOSÉ- 6°',
+                    SEPTIMO: 'PAQUETE EDUCATIVO PARROQUIAL SAN JOSÉ- 7°',
+                    OCTAVO: 'PAQUETE EDUCATIVO PARROQUIAL SAN JOSÉ- 8°',
+                    NOVENO: 'PAQUETE EDUCATIVO PARROQUIAL SAN JOSÉ- 9°',
+                    DECIMO: 'PAQUETE EDUCATIVO PARROQUIAL SAN JOSÉ- 10°',
+                    ONCE: 'PAQUETE EDUCATIVO PARROQUIAL SAN JOSÉ- 11°',
+                    IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2024/12/2-6.png',
+                    UBICACION: 'https://maps.app.goo.gl/JpyxsWPErC3i8oXp6'
+                },
+                // --- NUEVOS COLEGIOS INYECTADOS ---
+                {
+                    ID_COLEGIO: '0005',
+                    COLEGIO: 'CENTRO EDUCATIVO LOS ANDES',
+                    CIUDAD: 'BOGOTA',
+                    PREJARDIN: '0',
+                    JARDIN: '0',
+                    TRANSICION: '0',
+                    PRIMERO: 'PAQUETE EDUCATIVO Andes Almendros - 1°',
+                    SEGUNDO: 'PAQUETE EDUCATIVO Andes Almendros - 2°',
+                    TERCERO: 'PAQUETE EDUCATIVO Andes Almendros - 3°',
+                    CUARTO: 'PAQUETE EDUCATIVO Andes Almendros - 4°',
+                    QUINTO: 'PAQUETE EDUCATIVO Andes Almendros - 5°',
+                    SEXTO: 'PAQUETE EDUCATIVO Andes Almendros - 6°',
+                    SEPTIMO: 'PAQUETE EDUCATIVO Andes Almendros - 7°',
+                    OCTAVO: 'PAQUETE EDUCATIVO Andes Almendros - 8°',
+                    NOVENO: 'PAQUETE EDUCATIVO Andes Almendros - 9°',
+                    DECIMO: 'PAQUETE EDUCATIVO Andes Almendros - 10°',
+                    ONCE: 'PAQUETE EDUCATIVO Andes Almendros - 11°',
+                    IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2024/12/unnamed.jpg',
+                    UBICACION: 'https://maps.app.goo.gl/T8cpLrY6u5RumhCp6'
+                },
+                {
+                    ID_COLEGIO: '0006',
+                    COLEGIO: 'EMMANUEL DALZON',
+                    CIUDAD: 'BOGOTA',
+                    PREJARDIN: '0',
+                    JARDIN: 'PAQUETE EDUCATIVO Emmanuel Dalzon - JARDIN',
+                    TRANSICION: 'PAQUETE EDUCATIVO Emmanuel Dalzon - TRANSICIÓN',
+                    PRIMERO: 'PAQUETE EDUCATIVO Emmanuel Dalzon - 1°',
+                    SEGUNDO: 'PAQUETE EDUCATIVO Emmanuel Dalzon - 2°',
+                    TERCERO: 'PAQUETE EDUCATIVO Emmanuel Dalzon - 3°',
+                    CUARTO: 'PAQUETE EDUCATIVO Emmanuel Dalzon - 4°',
+                    QUINTO: 'PAQUETE EDUCATIVO Emmanuel Dalzon - 5°',
+                    SEXTO: 'PAQUETE EDUCATIVO Emmanuel Dalzon - 6°',
+                    SEPTIMO: 'PAQUETE EDUCATIVO Emmanuel Dalzon - 7°',
+                    OCTAVO: 'PAQUETE EDUCATIVO Emmanuel Dalzon - 8°',
+                    NOVENO: 'PAQUETE EDUCATIVO Emmanuel Dalzon - 9°',
+                    DECIMO: 'PAQUETE EDUCATIVO Emmanuel Dalzon - 10°',
+                    ONCE: 'PAQUETE EDUCATIVO Emmanuel Dalzon - 11°',
+                    IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2024/12/emma-769x1024.jpg',
+                    UBICACION: 'https://maps.app.goo.gl/8U1anggHH6MjraXJ7'
+                },
+                {
+                    ID_COLEGIO: '0007',
+                    COLEGIO: 'JORDAN DE SAJONIA',
+                    CIUDAD: 'BOGOTA',
+                    PREJARDIN: '0',
+                    JARDIN: '0',
+                    TRANSICION: 'PAQUETE EDUCATIVO Jordan de Sajonia - TRANSICIÓN',
+                    PRIMERO: 'PAQUETE EDUCATIVO Jordan de Sajonia - 1°',
+                    SEGUNDO: 'PAQUETE EDUCATIVO Jordan de Sajonia - 2°',
+                    TERCERO: 'PAQUETE EDUCATIVO Jordan de Sajonia - 3°',
+                    CUARTO: 'PAQUETE EDUCATIVO Jordan de Sajonia - 4°',
+                    QUINTO: 'PAQUETE EDUCATIVO Jordan de Sajonia - 5°',
+                    SEXTO: '0',
+                    SEPTIMO: '0',
+                    OCTAVO: '0',
+                    NOVENO: '0',
+                    DECIMO: '0',
+                    ONCE: '0',
+                    IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2024/12/sajonia.jpg',
+                    UBICACION: 'https://maps.app.goo.gl/KjvajaqftYoyjbSu9'
+                },
+                {
+                    ID_COLEGIO: '0008',
+                    COLEGIO: 'MAYOR DE INGLATERRA',
+                    CIUDAD: 'BOGOTA',
+                    PREJARDIN: '0',
+                    JARDIN: '0',
+                    TRANSICION: '0',
+                    PRIMERO: 'PAQUETE EDUCATIVO Mayor de Inglaterra - 1°',
+                    SEGUNDO: 'PAQUETE EDUCATIVO Mayor de Inglaterra - 2°',
+                    TERCERO: 'PAQUETE EDUCATIVO Mayor de Inglaterra - 3°',
+                    CUARTO: 'PAQUETE EDUCATIVO Mayor de Inglaterra - 4°',
+                    QUINTO: 'PAQUETE EDUCATIVO Mayor de Inglaterra - 5°',
+                    SEXTO: 'PAQUETE EDUCATIVO Mayor de Inglaterra - 6°',
+                    SEPTIMO: 'PAQUETE EDUCATIVO Mayor de Inglaterra - 7°',
+                    OCTAVO: 'PAQUETE EDUCATIVO Mayor de Inglaterra - 8°',
+                    NOVENO: 'PAQUETE EDUCATIVO Mayor de Inglaterra - 9°',
+                    DECIMO: 'PAQUETE EDUCATIVO Mayor de Inglaterra - 10°',
+                    ONCE: 'PAQUETE EDUCATIVO Mayor de Inglaterra - 11°',
+                    IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2024/12/MAYOR-DE-INGLATERRA.webp',
+                    UBICACION: 'https://maps.app.goo.gl/9nZ2V4m5ymJGvSu49'
+                },
+                {
+                    ID_COLEGIO: '0009',
+                    COLEGIO: 'SAN JUAN DE LOS PASTOS',
+                    CIUDAD: 'BOGOTA',
+                    PREJARDIN: '0',
+                    JARDIN: 'PAQUETE EDUCATIVO San Juan de los Pastos - JARDIN',
+                    TRANSICION: 'PAQUETE EDUCATIVO San Juan de los Pastos - TRANSICIÓN',
+                    PRIMERO: 'PAQUETE EDUCATIVO San Juan de los Pastos - 1°',
+                    SEGUNDO: 'PAQUETE EDUCATIVO San Juan de los Pastos - 2°',
+                    TERCERO: 'PAQUETE EDUCATIVO San Juan de los Pastos - 3°',
+                    CUARTO: 'PAQUETE EDUCATIVO San Juan de los Pastos - 4°',
+                    QUINTO: 'PAQUETE EDUCATIVO San Juan de los Pastos - 5°',
+                    SEXTO: 'PAQUETE EDUCATIVO San Juan de los Pastos - 6°',
+                    SEPTIMO: 'PAQUETE EDUCATIVO San Juan de los Pastos - 7°',
+                    OCTAVO: 'PAQUETE EDUCATIVO San Juan de los Pastos - 8°',
+                    NOVENO: 'PAQUETE EDUCATIVO San Juan de los Pastos - 9°',
+                    DECIMO: 'PAQUETE EDUCATIVO San Juan de los Pastos - 10°',
+                    ONCE: 'PAQUETE EDUCATIVO San Juan de los Pastos - 11°',
+                    IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2024/12/no-image.png', // Imagen no provista, usando fallback
+                    UBICACION: 'http://googleusercontent.com/maps.google.com/no-pastos' // Ubicación no provista, usando fallback
+                },
+                {
+                    ID_COLEGIO: '0010',
+                    COLEGIO: 'LA SALETTE',
+                    CIUDAD: 'BOGOTA',
+                    PREJARDIN: 'PAQUETE EDUCATIVO La Salette - PREJARDÍN',
+                    JARDIN: 'PAQUETE EDUCATIVO La Salette - JARDÍN',
+                    TRANSICION: 'PAQUETE EDUCATIVO La Salette - TRANSICIÓN',
+                    PRIMERO: '0',
+                    SEGUNDO: '0',
+                    TERCERO: '0',
+                    CUARTO: '0',
+                    QUINTO: '0',
+                    SEXTO: 'PAQUETE EDUCATIVO La Salette - 6°',
+                    SEPTIMO: 'PAQUETE EDUCATIVO La Salette - 7°',
+                    OCTAVO: 'PAQUETE EDUCATIVO La Salette - 8°',
+                    NOVENO: 'PAQUETE EDUCATIVO La Salette - 9°',
+                    DECIMO: 'PAQUETE EDUCATIVO La Salette - 10°',
+                    ONCE: 'PAQUETE EDUCATIVO La Salette - 11°',
+                    IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2025/01/la-salette.jpg',
+                    UBICACION: 'https://maps.app.goo.gl/Ge7Rzfc7c5S33p4P7'
+                },
+                {
+                    ID_COLEGIO: '0011',
+                    COLEGIO: 'SAN JUAN DE LA AVILA',
+                    CIUDAD: 'BOGOTA',
+                    PREJARDIN: 'PAQUETE EDUCATIVO San Juan De Ávila- PREJARDÍN',
+                    JARDIN: 'PAQUETE EDUCATIVO San Juan De Ávila- JARDIN',
+                    TRANSICION: 'PAQUETE EDUCATIVO San Juan De Ávila- TRANSICIÓN',
+                    PRIMERO: 'PAQUETE EDUCATIVO San Juan De Ávila- 1°',
+                    SEGUNDO: 'PAQUETE EDUCATIVO San Juan De Ávila- 2°',
+                    TERCERO: 'PAQUETE EDUCATIVO San Juan De Ávila- 3°',
+                    CUARTO: 'PAQUETE EDUCATIVO San Juan De Ávila- 4°',
+                    QUINTO: 'PAQUETE EDUCATIVO San Juan De Ávila- 5°',
+                    SEXTO: '0',
+                    SEPTIMO: '0',
+                    OCTAVO: '0',
+                    NOVENO: '0',
+                    DECIMO: '0',
+                    ONCE: '0',
+                    IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2025/01/328278769_1106333190034701_15577413265298029_n.jpg',
+                    UBICACION: 'https://maps.app.goo.gl/WfesjJHsGTxLknM9A'
+                },
+                {
+                    ID_COLEGIO: '0012',
+                    COLEGIO: 'PSICOPEDAGOGICO DE SUBA',
+                    CIUDAD: 'BOGOTA',
+                    PREJARDIN: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - PREJARDÍN',
+                    JARDIN: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - JARDIN',
+                    TRANSICION: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - TRANSICIÓN',
+                    PRIMERO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 1°',
+                    SEGUNDO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 2°',
+                    TERCERO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 3°',
+                    CUARTO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 4°',
+                    QUINTO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 5°',
+                    SEXTO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 6°',
+                    SEPTIMO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 7°',
+                    OCTAVO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 8°',
+                    NOVENO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 9°',
+                    DECIMO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 10°',
+                    ONCE: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 11°',
+                    IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2025/02/psicopeda.jpg',
+                    UBICACION: 'https://maps.app.goo.gl/NQ8H69rLrKxZcmsK6'
+                },
+                {
+                    ID_COLEGIO: '0013',
+                    COLEGIO: 'TECNOLOGICO DEL SUR',
+                    CIUDAD: 'BOGOTA',
+                    PREJARDIN: '0',
+                    JARDIN: '0',
+                    TRANSICION: '0',
+                    PRIMERO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 1°',
+                    SEGUNDO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 2°',
+                    TERCERO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 3°',
+                    CUARTO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 4°',
+                    QUINTO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 5°',
+                    SEXTO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 6°',
+                    SEPTIMO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 7°',
+                    OCTAVO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 8°',
+                    NOVENO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 9°',
+                    DECIMO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 10°',
+                    ONCE: 'PAQUETE DE INGLÉS Tecnológico del Sur - 11°',
+                    IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2025/02/ESCUDO-COLEGIO-FITS-2023.png',
+                    UBICACION: 'https://maps.app.goo.gl/hxQoJqjZ4oJ3REdx6'
+                }
+            ];
+
+            // --- 2. REFERENCIAS DE ELEMENTOS ---
             const schoolDropdownContainer = document.getElementById('school-dropdown-container');
             const schoolSelectButton = document.getElementById('school-select-button');
             const schoolSearchInput = document.getElementById('school-search-input');
             const schoolList = document.getElementById('school-list');
-            const selectedSchoolName = document.getElementById('selected-school-name');
 
             const courseDropdownContainer = document.getElementById('course-dropdown-container');
             const courseSelectButton = document.getElementById('course-select-button');
-            const courseDropdownMenu = document.getElementById('course-dropdown-menu');
             const courseList = document.getElementById('course-list');
-            const selectedCourseName = document.getElementById('selected-course-name');
-            
-            const initialMessage = document.getElementById('initial-message');
+
             const searchLoading = document.getElementById('search-loading');
-            const packageCard = document.getElementById('package-card'); // La tarjeta principal
+            const packageCard = document.getElementById('package-card');
+            const initialMessage = document.getElementById('initial-message');
+            const packageDetailsSummary = document.getElementById('package-details-summary');
+            const packageDetailsKits = document.getElementById('package-details-kits');
             
-            // --- 2. DATOS SIMULADOS DEL BACKEND ---
-            // Simulación de los datos de los colegios
-            const ALL_SCHOOLS = [
-                { ID_COLEGIO: '0001', COLEGIO: 'INSTITUTO SAN JUAN BOSCO', CIUDAD: 'BOGOTA', PREJARDIN: 'PAQUETE EDUCATIVO San Juan Bosco - PRE JARDÍN', JARDIN: 'PAQUETE EDUCATIVO San Juan Bosco - JARDÍN', TRANSICION: 'PAQUETE EDUCATIVO San Juan Bosco - TRANSICIÓN', PRIMERO: 'PAQUETE EDUCATIVO San Juan Bosco - 1°', SEGUNDO: 'PAQUETE EDUCATIVO San Juan Bosco - 2°', TERCERO: 'PAQUETE EDUCATIVO San Juan Bosco - 3°', CUARTO: 'PAQUETE EDUCATIVO San Juan Bosco - 4°', QUINTO: 'PAQUETE EDUCATIVO San Juan Bosco - 5°', SEXTO: 'PAQUETE EDUCATIVO San Juan Bosco - 6°', SEPTIMO: 'PAQUETE EDUCATIVO San Juan Bosco - 7°', OCTAVO: 'PAQUETE EDUCATIVO San Juan Bosco - 8°', NOVENO: 'PAQUETE EDUCATIVO San Juan Bosco - 9°', DECIMO: 'PAQUETE EDUCATIVO San Juan Bosco - 10°', ONCE: 'PAQUETE EDUCATIVO San Juan Bosco - 11°', IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2024/12/sanjuanbosco.jpg', UBICACION: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d618.676350650165!2d-74.05854276815452!3d4.753396005441487!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f85a3816c4b63%3A0xbdecd40be274ea2!2sSmart%20Books%20Colombia!5e1!3m2!1ses-419!2sco!4v1760823591513!5m2!1ses-4' },
-                { ID_COLEGIO: '0012', COLEGIO: 'PSICOPEDAGÓGICO DE SUBA', CIUDAD: 'BOGOTA', PREJARDIN: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - PRE JARDÍN', JARDIN: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - JARDÍN', TRANSICION: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - TRANSICIÓN', PRIMERO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 1°', SEGUNDO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 2°', TERCERO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 3°', CUARTO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 4°', QUINTO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 5°', SEXTO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 6°', SEPTIMO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 7°', OCTAVO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 8°', NOVENO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 9°', DECIMO: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 10°', ONCE: 'PAQUETE EDUCATIVO Psicopedagógico de Suba - 11°', IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2025/02/psicopeda.jpg', UBICACION: 'https://maps.app.goo.gl/NQ8H69rLrKxZcmsK6' },
-                { ID_COLEGIO: '0002', COLEGIO: 'COLEGIO DE LA SALLE', CIUDAD: 'BOGOTA', PREJARDIN: '0', JARDIN: 'PAQUETE EDUCATIVO La Salle - JARDÍN', TRANSICION: 'PAQUETE EDUCATIVO La Salle - TRANSICIÓN', PRIMERO: 'PAQUETE EDUCATIVO La Salle - 1°', SEGUNDO: 'PAQUETE EDUCATIVO La Salle - 2°', TERCERO: 'PAQUETE EDUCATIVO La Salle - 3°', CUARTO: 'PAQUETE EDUCATIVO La Salle - 4°', QUINTO: 'PAQUETE EDUCATIVO La Salle - 5°', SEXTO: 'PAQUETE EDUCATIVO La Salle - 6°', SEPTIMO: 'PAQUETE EDUCATIVO La Salle - 7°', OCTAVO: 'PAQUETE EDUCATIVO La Salle - 8°', NOVENO: 'PAQUETE EDUCATIVO La Salle - 9°', DECIMO: 'PAQUETE EDUCATIVO La Salle - 10°', ONCE: 'PAQUETE EDUCATIVO La Salle - 11°', IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2022/11/lasalle.png', UBICACION: 'https://www.google.com/maps/place/Gimnasio+San+Angelo/@4.8013523,-74.0463802,1104m/data=!3m1!1e3!4m6!3m5!1s0x8e3f8616da249b53:0xab6aeb0b622dcf1!8m2!3d4.8013655!4d-74.0448845!16s%2Fg%2F11b6g89sgp?entry=ttu&g_ep=EgoyMDI1MTAyOS4yIKXMDSoASAFQAw%3D%3D' },
-                { ID_COLEGIO: '0003', COLEGIO: 'CAFAM', CIUDAD: 'BOGOTA', PREJARDIN: '0', JARDIN: '0', TRANSICION: 'PAQUETE EDUCATIVO CAFAM 68 - TRANSICIÓN', PRIMERO: 'PAQUETE EDUCATIVO CAFAM 68 - 1°', SEGUNDO: 'PAQUETE EDUCATIVO CAFAM 68 - 2°', TERCERO: 'PAQUETE EDUCATIVO CAFAM 68 - 3°', CUARTO: 'PAQUETE EDUCATIVO CAFAM 68 - 4°', QUINTO: 'PAQUETE EDUCATIVO CAFAM 68 - 5°', SEXTO: 'PAQUETE EDUCATIVO CAFAM 68 - 6°', SEPTIMO: 'PAQUETE EDUCATIVO CAFAM 68 - 7°', OCTAVO: 'PAQUETE EDUCATIVO CAFAM 68 - 8°', NOVENO: 'PAQUETE EDUCATIVO CAFAM 68 - 9°', DECIMO: 'PAQUETE EDUCATIVO CAFAM 68 - 10°', ONCE: 'PAQUETE EDUCATIVO CAFAM 68 - 11°', IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2024/12/no-image.png', UBICACION: 'http://googleusercontent.com/maps.google.com/cafam' },
-                { ID_COLEGIO: '0011', COLEGIO: 'TECNOLOGICO DEL SUR', CIUDAD: 'BOGOTA', PREJARDIN: '0', JARDIN: '0', TRANSICION: '0', PRIMERO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 1°', SEGUNDO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 2°', TERCERO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 3°', CUARTO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 4°', QUINTO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 5°', SEXTO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 6°', SEPTIMO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 7°', OCTAVO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 8°', NOVENO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 9°', DECIMO: 'PAQUETE DE INGLÉS Tecnológico del Sur - 10°', ONCE: 'PAQUETE DE INGLÉS Tecnológico del Sur - 11°', IMAGEN: 'https://sbooks.com.co/wp-content/uploads/2024/12/no-image.png', UBICACION: 'http://googleusercontent.com/maps.google.com/tecnologico' },
-            ];
-            
-            // Mapeo de las llaves del JSON a nombres legibles para el usuario
-            const GRADE_MAP = {
-                PREJARDIN: 'Pre-Jardín',
-                JARDIN: 'Jardín',
-                TRANSICION: 'Transición',
-                PRIMERO: '1° Primero',
-                SEGUNDO: '2° Segundo',
-                TERCERO: '3° Tercero',
-                CUARTO: '4° Cuarto',
-                QUINTO: '5° Quinto',
-                SEXTO: '6° Sexto',
-                SEPTIMO: '7° Séptimo',
-                OCTAVO: '8° Octavo',
-                NOVENO: '9° Noveno',
-                DECIMO: '10° Décimo',
-                ONCE: '11° Once'
-            };
+            // --- 3. FUNCIONES DE MANEJO DE UI ---
 
-            let selectedSchool = null; // Variable global para el colegio seleccionado
-
-            // --- 3. FUNCIONES DE LÓGICA ---
-            
-            // Carga inicial y simulación de API
-            function loadSchools() {
-                // Simula una carga de 1.5 segundos
-                setTimeout(() => {
-                    renderSchoolList(ALL_SCHOOLS);
-                    document.getElementById('school-loading').style.display = 'none';
-
-                    // Reactivar el botón después de la carga
-                    schoolSelectButton.classList.remove('school-loading', 'text-gray-500');
-                    schoolSelectButton.classList.add('text-gray-700', 'hover:border-brand-primary');
-                    schoolSelectButton.disabled = false;
-                    schoolSearchInput.disabled = false;
-                    
-                    initialMessage.textContent = 'Por favor, selecciona un colegio para empezar.';
-                }, 1500);
+            // Función para cerrar ambos dropdowns
+            function closeDropdowns() {
+                schoolDropdownContainer.classList.remove('active');
+                courseDropdownContainer.classList.remove('active');
             }
+            
+            // Muestra/Oculta el dropdown de colegios
+            schoolSelectButton.addEventListener('click', (e) => {
+                e.stopPropagation(); // Evita que el click se propague al document
+                if (!schoolSelectButton.disabled) {
+                    // Cerrar el de cursos antes de abrir el de colegios
+                    courseDropdownContainer.classList.remove('active'); 
+                    schoolDropdownContainer.classList.toggle('active');
+                    if (schoolDropdownContainer.classList.contains('active')) {
+                         schoolSearchInput.focus();
+                    }
+                }
+            });
+            
+            // Muestra/Oculta el dropdown de cursos
+            courseSelectButton.addEventListener('click', (e) => {
+                 e.stopPropagation(); // Evita que el click se propague al document
+                 if (!courseSelectButton.disabled) {
+                    // Cerrar el de colegios antes de abrir el de cursos
+                    schoolDropdownContainer.classList.remove('active');
+                    courseDropdownContainer.classList.toggle('active');
+                 }
+            });
+
+            // Cierra los dropdowns si se hace clic fuera de ellos
+            document.addEventListener('click', (e) => {
+                // Si el click no es dentro de ninguno de los contenedores, cerrarlos
+                if (!schoolDropdownContainer.contains(e.target) && 
+                    !courseDropdownContainer.contains(e.target)) {
+                    closeDropdowns();
+                }
+            });
 
 
-            // Renderiza la lista de colegios en el dropdown (basada en el array filtrado)
+            // Función para renderizar la lista de colegios (usada también para la búsqueda)
             function renderSchoolList(schools) {
                 schoolList.innerHTML = '';
                 if (schools.length === 0) {
@@ -458,7 +746,6 @@
                     item.href = '#';
                     item.className = 'block px-3 py-2 text-gray-800 hover:bg-gray-100 hover:text-brand-primary transition duration-300 text-sm rounded-md';
                     item.textContent = school.COLEGIO + ' (' + school.CIUDAD + ')';
-                    
                     // Usamos una función anónima para pasar el objeto colegio completo
                     item.addEventListener('click', (e) => {
                         e.preventDefault();
@@ -469,160 +756,6 @@
                 });
             }
 
-            // Maneja la selección de colegio (Muestra Dropdown 2)
-            function handleSchoolSelection(school) {
-                selectedSchool = school;
-                
-                // 1. Actualiza el botón de colegio
-                selectedSchoolName.textContent = school.COLEGIO;
-                
-                // 2. Muestra y habilita el dropdown de curso
-                courseDropdownContainer.classList.remove('course-dropdown-container-hidden');
-                courseDropdownContainer.classList.add('course-dropdown-container-visible');
-                courseSelectButton.disabled = false;
-                courseSelectButton.classList.remove('text-gray-500');
-                courseSelectButton.classList.add('text-gray-700', 'hover:border-brand-primary');
-
-                // 3. Renderiza la lista de cursos disponibles
-                renderCourseList(school);
-                
-                // 4. Resetear la selección de curso y ocultar resultados
-                selectedCourseName.textContent = 'Selecciona un curso';
-                courseSelectButton.innerHTML = 'Selecciona un curso' + `<i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>`;
-                packageCard.classList.add('hidden');
-                initialMessage.classList.remove('hidden');
-                initialMessage.textContent = `Colegio seleccionado: ${school.COLEGIO}. Ahora selecciona tu curso.`;
-                searchLoading.style.display = 'none';
-
-            }
-
-            // Renderiza los cursos disponibles para el colegio seleccionado
-            function renderCourseList(school) {
-                courseList.innerHTML = '';
-                
-                // Itera sobre el mapa de grados y verifica si el colegio tiene un paquete para ese grado
-                Object.keys(GRADE_MAP).forEach(gradeKey => {
-                    // El valor es diferente de '0' o una cadena vacía
-                    if (school[gradeKey] && school[gradeKey] !== '0') {
-                        const gradeName = GRADE_MAP[gradeKey];
-                        const item = document.createElement('a');
-                        item.href = '#';
-                        item.className = 'block px-3 py-2 text-gray-800 hover:bg-gray-100 hover:text-brand-primary transition duration-300 text-sm rounded-md';
-                        item.textContent = gradeName;
-
-                        item.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            handleCourseSelection(gradeKey, gradeName, school.ID_COLEGIO);
-                            courseDropdownContainer.classList.remove('active'); // Oculta el dropdown de cursos
-                            courseDropdownMenu.classList.remove('active'); // Oculta el menú
-                        });
-                        courseList.appendChild(item);
-                    }
-                });
-
-                if (courseList.children.length === 0) {
-                    courseList.innerHTML = '<p class="text-center p-3 text-gray-500">No hay cursos disponibles con paquete en este momento.</p>';
-                    courseSelectButton.disabled = true;
-                    courseSelectButton.innerHTML = 'No hay cursos disponibles' + `<i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>`;
-                }
-            }
-
-
-            // Maneja la selección del curso (Muestra la Tarjeta de Resultado)
-            async function handleCourseSelection(gradeKey, gradeName, schoolId) {
-                // 1. Actualiza el botón de curso
-                courseSelectButton.innerHTML = gradeName + `<i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>`;
-                
-                // 2. Oculta la tarjeta y el mensaje inicial (para el estado de carga)
-                packageCard.classList.add('hidden');
-                initialMessage.classList.add('hidden');
-
-                // 3. Inicia la animación de búsqueda
-                searchLoading.style.display = 'flex'; 
-
-                // SIMULACION de la llamada API para obtener el paquete
-                await new Promise(resolve => setTimeout(resolve, 800)); // Simula un pequeño retraso
-
-                try {
-                    // Simulación: El paquete de información ya está en selectedSchool
-                    const packageInfo = selectedSchool[gradeKey] ? String(selectedSchool[gradeKey]).trim() : '0';
-                    
-                    searchLoading.style.display = 'none';
-
-                    if (packageInfo && packageInfo !== '0') {
-                        // Paquete encontrado
-                        const [title, details] = packageInfo.split(' - ');
-                        const kits = details.split(',').map(item => item.trim());
-                        
-                        document.getElementById('package-title').textContent = title.trim();
-                        document.getElementById('card-colegio').textContent = selectedSchool.COLEGIO;
-                        document.getElementById('card-curso').textContent = gradeName;
-                        document.getElementById('card-cantidad-libros').textContent = kits.length + ' Libros';
-                        document.getElementById('card-imagen').src = selectedSchool.IMAGEN;
-                        document.getElementById('card-map-link').href = selectedSchool.UBICACION;
-
-                        // Muestra el detalle de kits
-                        const kitsContainer = document.getElementById('kits-detail-list');
-                        kitsContainer.innerHTML = '';
-                        const ul = document.createElement('ul');
-                        // Cambiamos el color de los elementos de la lista a gris claro
-                        ul.className = 'list-disc list-inside mt-2 text-sm text-gray-200 space-y-1 text-left ml-4';
-                        kits.forEach(kit => {
-                            const li = document.createElement('li');
-                            li.textContent = kit;
-                            ul.appendChild(li);
-                        });
-                        kitsContainer.appendChild(ul);
-
-                        // Muestra el mensaje de éxito y la tarjeta
-                        initialMessage.textContent = '¡Felicidades! Encontramos el paquete educativo para ti.';
-                        initialMessage.classList.remove('hidden');
-                        packageCard.classList.remove('hidden'); // CRUCIAL: Muestra la tarjeta
-
-                    } else {
-                        // Paquete NO encontrado (o valor '0')
-                        initialMessage.textContent = 'Lo sentimos, no encontramos un paquete educativo asociado a este curso. Intenta seleccionando otro curso o contáctanos.';
-                        initialMessage.classList.remove('hidden');
-                        packageCard.classList.add('hidden'); // Asegura que se mantenga oculta
-                    }
-
-                } catch (error) {
-                    searchLoading.style.display = 'none';
-                    console.error("Error al procesar la selección del curso:", error);
-                    initialMessage.textContent = 'Ocurrió un error al buscar el paquete. Por favor, inténtalo de nuevo.';
-                    initialMessage.classList.remove('hidden');
-                    packageCard.classList.add('hidden');
-                }
-            }
-
-
-            // --- 4. MANEJO DE EVENTOS ---
-            
-            // Toggle del dropdown de Colegio
-            schoolSelectButton.addEventListener('click', () => {
-                schoolDropdownContainer.classList.toggle('active');
-                if (courseDropdownContainer.classList.contains('active')) {
-                    courseDropdownContainer.classList.remove('active');
-                }
-            });
-
-            // Toggle del dropdown de Curso
-            courseSelectButton.addEventListener('click', () => {
-                if (!courseSelectButton.disabled) {
-                    courseDropdownContainer.classList.toggle('active');
-                }
-            });
-            
-            // Ocultar dropdowns al hacer clic fuera
-            document.addEventListener('click', (e) => {
-                if (!schoolDropdownContainer.contains(e.target)) {
-                    schoolDropdownContainer.classList.remove('active');
-                }
-                if (!courseDropdownContainer.contains(e.target) && !courseSelectButton.disabled) {
-                    courseDropdownContainer.classList.remove('active');
-                }
-            });
-
             // Funcionalidad de búsqueda en el dropdown de colegios (filtra la lista local)
             schoolSearchInput.addEventListener('keyup', (e) => {
                 const searchTerm = e.target.value.toLowerCase();
@@ -632,6 +765,185 @@
                 );
                 renderSchoolList(filteredSchools);
             });
+            
+            // Maneja la selección de colegio (Muestra Dropdown 2)
+            function handleSchoolSelection(school) {
+                selectedSchool = school;
+                
+                // 1. OCULTAR TODOS LOS RESULTADOS Y ESTADOS DE CARGA
+                packageCard.classList.add('hidden'); // Ocultar tarjeta al cambiar de colegio
+                searchLoading.style.display = 'none'; 
+                
+                // 2. Actualiza el botón de colegio
+                schoolSelectButton.innerHTML = school.COLEGIO + 
+                    `<i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>`;
+                schoolSelectButton.classList.remove('text-gray-500');
+                schoolSelectButton.classList.add('text-gray-700', 'hover:border-brand-primary');
+                
+                // 3. Muestra los cursos disponibles (renderCourseList)
+                renderCourseList(school);
+                
+                // 4. Muestra el dropdown de cursos con una animación (transición)
+                courseDropdownContainer.classList.remove('course-dropdown-container-hidden');
+                courseDropdownContainer.classList.add('course-dropdown-container-visible');
+                
+                // 5. Muestra el mensaje de selección de curso
+                initialMessage.textContent = `Selecciona un curso para ${school.COLEGIO}.`;
+                initialMessage.classList.remove('hidden');
+            }
+            
+            // Renderiza la lista de cursos disponibles
+            function renderCourseList(school) {
+                courseList.innerHTML = '';
+                let coursesFound = false;
+                
+                // 1. Limpia el botón de curso y el estado anterior
+                courseSelectButton.innerHTML = `Selecciona el Curso <i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>`;
+                courseSelectButton.disabled = true;
+                courseSelectButton.classList.add('text-gray-500', 'cursor-not-allowed');
+                courseSelectButton.classList.remove('text-gray-700', 'hover:border-brand-primary');
+
+                GRADE_KEYS.forEach(key => {
+                    // Accede al valor del grado (ej. school.PREJARDIN) y lo limpia de posibles espacios en blanco
+                    const packageInfo = school[key] ? String(school[key]).trim() : '0'; 
+                    
+                    if (packageInfo && packageInfo !== '0' && packageInfo.toUpperCase() !== 'NULL') {
+                        coursesFound = true;
+                        const gradeName = GRADES_MAP[key];
+                        const item = document.createElement('a');
+                        item.href = '#';
+                        item.className = 'block px-3 py-2 text-gray-800 hover:bg-gray-100 hover:text-brand-primary transition duration-300 text-sm rounded-md';
+                        item.textContent = gradeName;
+                        item.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            // Pasamos el KEY de la columna ('PREJARDIN') y el nombre para el botón ('Prejardín')
+                            handleCourseSelection(key, gradeName, school.ID_COLEGIO);
+                            courseDropdownContainer.classList.remove('active');
+                        });
+                        courseList.appendChild(item);
+                    }
+                });
+                
+                if (coursesFound) {
+                    courseSelectButton.classList.add('text-gray-700', 'hover:border-brand-primary');
+                    courseSelectButton.classList.remove('text-gray-500', 'cursor-not-allowed');
+                    courseSelectButton.disabled = false;
+                } else {
+                    courseSelectButton.innerHTML = `No hay cursos disponibles para este colegio <i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>`;
+                }
+            }
+
+            // Maneja la selección del curso (Muestra la Tarjeta de Resultado)
+            async function handleCourseSelection(gradeKey, gradeName, schoolId) {
+                
+                // 1. Actualiza el botón de curso
+                courseSelectButton.innerHTML = gradeName + 
+                    `<i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>`;
+                
+                // 2. Oculta la tarjeta y el mensaje inicial
+                packageCard.classList.add('hidden');
+                initialMessage.classList.add('hidden');
+
+                // 3. Inicia la animación de búsqueda
+                searchLoading.style.display = 'flex';
+                
+                // SIMULACION de la llamada API para obtener el paquete
+                await new Promise(resolve => setTimeout(resolve, 800)); // Simula un pequeño retraso
+                
+                try {
+                    // Simulación: El paquete de información ya está en selectedSchool
+                    const packageInfo = selectedSchool[gradeKey] ? String(selectedSchool[gradeKey]).trim() : '0';
+                    
+                    if (packageInfo === '0' || packageInfo.toUpperCase() === 'NULL') {
+                        throw new Error("Paquete no disponible");
+                    }
+
+                    // Generar cantidad de libros aleatoria (entre 4 y 7)
+                    const randomBookCount = Math.floor(Math.random() * (7 - 4 + 1)) + 4;
+
+                    searchLoading.style.display = 'none';
+                    // Reutilizamos la función para mostrar la tarjeta con los datos estáticos
+                    displayPackageCard(selectedSchool, gradeName, packageInfo, randomBookCount);
+                    
+                } catch (error) {
+                    console.error('Error al obtener el paquete:', error);
+                    searchLoading.style.display = 'none';
+                    initialMessage.textContent = 'Lo sentimos, no pudimos cargar la información del kit educativo para este curso/colegio. Intenta de nuevo más tarde.';
+                    initialMessage.classList.remove('hidden');
+                }
+            }
+            
+            // Muestra la tarjeta de resultado
+            function displayPackageCard(school, gradeName, packageInfo, bookCount) {
+                
+                // Título del paquete
+                let title = 'KIT EDUCATIVO ÚNICO';
+                if (packageInfo.includes(',')) {
+                    title = 'Múltiples Kits Educativos Disponibles';
+                } else if (packageInfo) {
+                    // Intenta limpiar y poner en mayúsculas el nombre del paquete si es único
+                    title = packageInfo.toUpperCase().replace('PAQUETE EDUCATIVO', 'KIT'); 
+                }
+                
+                // 1. Llenar la tarjeta
+                document.getElementById('package-title').textContent = title;
+                
+                // Limpiar contenedores
+                packageDetailsSummary.innerHTML = '';
+                packageDetailsKits.innerHTML = '';
+
+                // Actualizar los campos fijos y la nueva Cantidad de libros (usando las clases de color modificadas)
+                packageDetailsSummary.innerHTML = `
+                    <p><span class="font-semibold text-gray-800-card-mod">Colegio:</span> <span id="card-colegio">${school.COLEGIO || 'N/A'}</span></p>
+                    <p><span class="font-semibold text-gray-800-card-mod">Curso:</span> <span id="card-curso">${gradeName || 'N/A'}</span></p>
+                    <p><span class="font-semibold text-gray-800-card-mod">Libros:</span> <span id="card-cantidad-libros" class="font-bold text-brand-primary-card-mod">${bookCount} Libros</span></p>
+                    <p class="hidden"><span class="font-semibold text-gray-800-card-mod">Ciudad:</span> <span id="card-ciudad">${school.CIUDAD || 'N/A'}</span></p>
+                    <p class="hidden"><span class="font-semibold text-gray-800-card-mod">Ubicación:</span> <a href="${school.UBICACION || '#'}" id="card-ubicacion" target="_blank" class="text-brand-secondary hover:underline">Ver en Mapa</a></p>
+                `;
+                
+                document.getElementById('card-imagen').src = school.IMAGEN || 'https://sbooks.com.co/wp-content/uploads/2024/12/no-image.png'; // Fallback image
+                
+                // Agregar los detalles dinámicos del paquete
+                if (packageInfo.includes(',')) {
+                    const kits = packageInfo.split(',').map(item => item.trim());
+                    const ul = document.createElement('ul');
+                    // Cambiamos el color de los elementos de la lista a gris claro
+                    ul.className = 'list-disc list-inside mt-2 text-sm text-gray-200 space-y-1 text-left ml-4'; 
+                    kits.forEach(kit => {
+                        const li = document.createElement('li');
+                        li.textContent = kit;
+                        ul.appendChild(li);
+                    });
+                    
+                    packageDetailsKits.innerHTML = `<p class="font-semibold text-gray-800-card-mod mt-4 mb-2">Paquetes Disponibles:</p>`;
+                    packageDetailsKits.appendChild(ul);
+                    
+                } else {
+                    // Si es un solo paquete, mostrar el nombre exacto
+                     packageDetailsKits.innerHTML = `<p class="font-semibold text-gray-800-card-mod mt-4">Nombre del Kit:</p><p class="mt-1 text-sm text-gray-200">${packageInfo || 'Kit no especificado'}</p>`;
+                }
+                
+                
+                // 3. Mostrar la tarjeta
+                packageCard.classList.remove('hidden');
+            }
+            
+            // --- 4. FUNCIÓN PRINCIPAL DE CARGA DE DATOS ---
+            function loadSchools() {
+                // En lugar de fetch, usamos los datos estáticos
+                ALL_SCHOOLS = STATIC_SCHOOL_DATA;
+                
+                // Actualiza el UI al cargar
+                renderSchoolList(ALL_SCHOOLS);
+                schoolSelectButton.innerHTML = `Selecciona tu Colegio <i class="fas fa-chevron-down text-base ml-2 transition-transform duration-300"></i>`;
+                schoolSelectButton.classList.remove('school-loading', 'text-gray-500');
+                schoolSelectButton.classList.add('text-gray-700', 'hover:border-brand-primary');
+                schoolSelectButton.disabled = false;
+                schoolSearchInput.disabled = false;
+                
+                initialMessage.textContent = 'Por favor, selecciona un colegio para empezar.';
+                
+            }
             
             // --- 5. INICIALIZACIÓN ---
             // Reemplazo de fetchSchools() por loadSchools()
